@@ -1,0 +1,2418 @@
+Renesas Optimizing Linker (W3.07.00 )             12-Mar-2026 15:16:38
+
+*** Options ***
+
+-subcommand=DefaultBuild\TEST_128K_USER.clnk
+-Input=DefaultBuild\cstart.obj
+-Input=DefaultBuild\stkinit.obj
+-Input=DefaultBuild\r_main.obj
+-Input=DefaultBuild\r_systeminit.obj
+-Input=DefaultBuild\r_cg_cgc.obj
+-Input=DefaultBuild\r_cg_cgc_user.obj
+-Input=DefaultBuild\r_cg_wdt.obj
+-Input=DefaultBuild\r_cg_wdt_user.obj
+-Input=DefaultBuild\r_cg_port.obj
+-Input=DefaultBuild\r_cg_port_user.obj
+-Input=DefaultBuild\r_cg_intc.obj
+-Input=DefaultBuild\r_cg_intc_user.obj
+-Input=DefaultBuild\r_cg_serial.obj
+-Input=DefaultBuild\r_cg_serial_user.obj
+-Input=DefaultBuild\r_cg_adc.obj
+-Input=DefaultBuild\r_cg_adc_user.obj
+-Input=DefaultBuild\r_cg_timer.obj
+-Input=DefaultBuild\r_cg_timer_user.obj
+-Input=DefaultBuild\r_cg_rtc.obj
+-Input=DefaultBuild\r_cg_rtc_user.obj
+-Input=DefaultBuild\u_interrupts.obj
+-Input=DefaultBuild\u_ram_vector.obj
+-Input=DefaultBuild\N_IIC.obj
+-Input=DefaultBuild\N_EEPROM.obj
+-Input=DefaultBuild\N_GPS.obj
+-Input=DefaultBuild\N_GSM.obj
+-Input=DefaultBuild\N_DELAY.obj
+-Input=DefaultBuild\V_Control.obj
+-Input=DefaultBuild\N_Serial.obj
+-Input=DefaultBuild\GSM_INTZ_AND_SMS_HANDLING.obj
+-Input=DefaultBuild\N_GSM_RESPONSE_HANDLE.obj
+-Input=DefaultBuild\FIRMWARE_HANDLING.obj
+-Input=DefaultBuild\N_IEEPROM.obj
+-Input=DefaultBuild\r_cg_pfdl.obj
+-LIBrary=User_Files\V1.05\lib\pfdl.lib
+-LIBrary=User_Files\V1.05\librl78\pfdl.lib
+-SECURITY_ID=00000000000000000000
+-DEVICE=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF
+-DEBug
+-NOCOmpress
+-NOOPtimize
+-OUtput=DefaultBuild\TEST_128K_USER.abs
+-LIBrary=C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.15.00\lib\rl78cm4s.lib
+-LIBrary=C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.15.00\lib\malloc_n.lib
+-LIBrary=C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.15.00\lib\rl78cm4r.lib
+-OCDBG=84
+-DEBUG_MONITOR=FE00-FFFF
+-USER_OPT_BYTE=7EFFE8
+-LISt=DefaultBuild\TEST_128K_USER.map
+-SHow=Total_size,VECTOR,STRUCT
+-AUTO_SECTION_LAYOUT
+-ROm=.data=.dataR
+-ROm=.sdata=.sdataR
+-NOMessage
+-STACk
+-Total_size
+-NOLOgo
+-end
+
+*** Error information ***
+
+W0561320:Duplicate symbol "PFDL_Open" in "User_Files\V1.05\lib\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "PFDL_Open" in "User_Files\V1.05\librl78\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "_PFDL_Open" in "User_Files\V1.05\lib\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "_PFDL_Open" in "User_Files\V1.05\librl78\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "PFDL_Execute" in "User_Files\V1.05\lib\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "PFDL_Execute" in "User_Files\V1.05\librl78\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "_PFDL_Execute" in "User_Files\V1.05\lib\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "_PFDL_Execute" in "User_Files\V1.05\librl78\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "PFDL_Handler" in "User_Files\V1.05\lib\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "PFDL_Handler" in "User_Files\V1.05\librl78\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "_PFDL_Handler" in "User_Files\V1.05\lib\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "_PFDL_Handler" in "User_Files\V1.05\librl78\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "PFDL_Close" in "User_Files\V1.05\lib\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "PFDL_Close" in "User_Files\V1.05\librl78\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "_PFDL_Close" in "User_Files\V1.05\lib\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "_PFDL_Close" in "User_Files\V1.05\librl78\pfdl.lib(pfdl)"
+W0561320:Duplicate symbol "PFDL_GetVersionString" in "User_Files\V1.05\lib\pfdl.lib(pfdl_version)"
+W0561320:Duplicate symbol "PFDL_GetVersionString" in "User_Files\V1.05\librl78\pfdl.lib(pfdl_version)"
+W0561320:Duplicate symbol "_PFDL_GetVersionString" in "User_Files\V1.05\lib\pfdl.lib(pfdl_version)"
+W0561320:Duplicate symbol "_PFDL_GetVersionString" in "User_Files\V1.05\librl78\pfdl.lib(pfdl_version)"
+W0561320:Duplicate symbol "_PFDL_VERSION_STRING" in "User_Files\V1.05\lib\pfdl.lib(pfdl_version)"
+W0561320:Duplicate symbol "_PFDL_VERSION_STRING" in "User_Files\V1.05\librl78\pfdl.lib(pfdl_version)"
+
+*** Mapping List ***
+
+SECTION                            START      END         SIZE   ALIGN
+.vect
+                                  00000000  0000007f        80   0
+.constf
+                                  00000080  00000080         0   2
+.sdata
+                                  00000080  00000080         0   2
+.option_byte
+                                  000000c0  000000c3         4   1
+.security_id
+                                  000000c4  000000cd         a   1
+.SLIB
+                                  000000c4  000000c4         0   1
+.monitor1
+                                  000000ce  000000d7         a   1
+.data
+                                  000000d8  00000243       16c   2
+.text
+                                  00000244  0000067d       43a   1
+PFDL_COD
+                                  0000067e  0000070b        8e   2
+.RLIB
+                                  0000070c  00000a3e       333   1
+.const
+                                  00002000  000034be      14bf   2
+.textf
+                                  000034bf  0000c18f      8cd1   1
+.monitor2
+                                  0000fe00  0000ffff       200   1
+.bss
+                                  000fef00  000ff870       971   2
+.dataR
+                                  000ff872  000ff9dd       16c   2
+RAM_VECT_n
+                                  000ff9de  000ffa71        94   2
+.sbss
+                                  000ffe20  000ffe20         0   2
+.sdataR
+                                  000ffe20  000ffe20         0   2
+
+*** Total Section Size ***
+
+RAMDATA SECTION:  00000b71 Byte(s)
+ROMDATA SECTION:  000018c3 Byte(s)
+PROGRAM SECTION:  000094cc Byte(s)
+
+*** Symbol List ***
+
+SECTION=
+FILE=                               START        END    SIZE
+  SYMBOL                            ADDR        SIZE    INFO      COUNTS  OPT
+    STRUCT                                      SIZE
+      MEMBER                        ADDR        SIZE    INFO
+
+SECTION=.vect
+FILE=rlink_generates_04
+                                  00000000  0000007f        80
+
+SECTION=.option_byte
+FILE=rlink_generates_01
+                                  000000c0  000000c3         4
+
+SECTION=.security_id
+FILE=rlink_generates_03
+                                  000000c4  000000cd         a
+
+SECTION=.monitor1
+FILE=rlink_generates_02
+                                  000000ce  000000d7         a
+
+SECTION=.data
+FILE=DefaultBuild\r_main.obj
+                                  000000d8  000000d8         1
+FILE=DefaultBuild\N_EEPROM.obj
+                                  000000da  000000e3         a
+FILE=DefaultBuild\N_GPS.obj
+                                  000000e4  0000014c        69
+FILE=DefaultBuild\N_GSM.obj
+                                  0000014e  00000243        f6
+
+SECTION=.text
+FILE=DefaultBuild\cstart.obj
+                                  00000244  0000029d        5a
+  _start
+                                  00000244         0   none ,g         0
+  _exit
+                                  0000029c         0   none ,g         1
+FILE=DefaultBuild\u_interrupts.obj
+                                  0000029e  0000067d       3e0
+  _watchdog_intrpt@1
+                                  0000029e        20   func ,l         0
+  _lvi_intrpt@1
+                                  000002be        20   func ,l         0
+  _intp0_intrpt@1
+                                  000002de        20   func ,l         0
+  _intp1_intrpt@1
+                                  000002fe        20   func ,l         0
+  _intp2_intrpt@1
+                                  0000031e        20   func ,l         0
+  _intp3_intrpt@1
+                                  0000033e        20   func ,l         0
+  _intp4_intrpt@1
+                                  0000035e        20   func ,l         0
+  _intp5_intrpt@1
+                                  0000037e        20   func ,l         0
+  _intst2_interrupt@1
+                                  0000039e        20   func ,l         0
+  _intsr2_interrupt@1
+                                  000003be        20   func ,l         0
+  _intsre2_interrupt@1
+                                  000003de        20   func ,l         0
+  _intst0_interrupt@1
+                                  000003fe        20   func ,l         0
+  _intsr0_interrupt@1
+                                  0000041e        20   func ,l         0
+  _intsre0_interrupt@1
+                                  0000043e        20   func ,l         0
+  _intst1_interrupt@1
+                                  0000045e        20   func ,l         0
+  _intsr1_interrupt@1
+                                  0000047e        20   func ,l         0
+  _intsre1_interrupt@1
+                                  0000049e        20   func ,l         0
+  _intsic_interrupt@1
+                                  000004be        20   func ,l         0
+  _inttm00_interrupt@1
+                                  000004de        20   func ,l         0
+  _inttm01_interrupt@1
+                                  000004fe        20   func ,l         0
+  _inttm02_interrupt@1
+                                  0000051e        20   func ,l         0
+  _inttm03_interrupt@1
+                                  0000053e        20   func ,l         0
+  _intad_interrupt@1
+                                  0000055e        20   func ,l         0
+  _intrtc_interrrupt@1
+                                  0000057e        20   func ,l         0
+  _intit_interrrupt@1
+                                  0000059e        20   func ,l         0
+  _intkr_interrupt@1
+                                  000005be        20   func ,l         0
+  _inttm04_interrupt@1
+                                  000005de        20   func ,l         0
+  _inttm05_interrupt@1
+                                  000005fe        20   func ,l         0
+  _inttm06_interrupt@1
+                                  0000061e        20   func ,l         0
+  _inttm07_interrupt@1
+                                  0000063e        20   func ,l         0
+  _intfl_interrupt@1
+                                  0000065e        20   func ,l         0
+
+SECTION=PFDL_COD
+FILE=pfdl
+                                  0000067e  0000070b        8e
+  _PFDL_Open
+                                  0000067e         0   none ,g         2
+  PFDL_Open
+                                  0000067e         0   none ,g         0
+  _PFDL_Execute
+                                  00000699         0   none ,g         9
+  PFDL_Execute
+                                  00000699         0   none ,g         0
+  PFDL_Execute_firmware
+                                  000006cf         0   none ,l         1
+  PFDL_Execute_erase
+                                  000006d9         0   none ,l         1
+  PFDL_Execute_read
+                                  000006ea         0   none ,l         1
+  PFDL_Execute_read_next
+                                  000006ee         0   none ,l         1
+  PFDL_Execute_exit
+                                  000006f9         0   none ,l         1
+  _PFDL_Handler
+                                  000006fa         0   none ,g         b
+  PFDL_Handler
+                                  000006fa         0   none ,g         0
+  _PFDL_Close
+                                  00000700         0   none ,g         1
+  PFDL_Close
+                                  00000700         0   none ,g         0
+
+SECTION=.RLIB
+FILE=_COM_fdiv
+                                  0000070c  00000898       18d
+  __COM_fdiv
+                                  0000076b         0   none ,g         1
+FILE=_COM_ftoul
+                                  00000899  000008a4         c
+  __COM_ftoul
+                                  00000899         0   none ,g         1
+FILE=_COM_uidiv
+                                  000008a5  000008ce        2a
+  __COM_uidiv
+                                  000008a7         0   none ,g        33
+FILE=_COM_uirem
+                                  000008cf  000008f7        29
+  __COM_uirem
+                                  000008cf         0   none ,g        37
+FILE=_COM_uldiv
+                                  000008f8  00000933        3c
+  __COM_uldiv
+                                  000008fd         0   none ,g        1b
+FILE=_COM_ulrem
+                                  00000934  0000096d        3a
+  __COM_ulrem
+                                  00000936         0   none ,g        1c
+FILE=_COM_ultof
+                                  0000096e  00000973         6
+  __COM_ultof
+                                  0000096e         0   none ,g         1
+FILE=_REL_ftol
+                                  00000974  000009a8        35
+  __REL_ftol
+                                  00000974         0   none ,g         1
+FILE=_REL_f_inf
+                                  000009a9  000009b0         8
+  __REL_f_inf
+                                  000009a9         0   none ,g         2
+FILE=_REL_f_norm
+                                  000009b1  000009c0        10
+  __REL_f_norm
+                                  000009b1         0   none ,g         2
+FILE=_REL_f_round
+                                  000009c1  000009d3        13
+  __REL_f_round
+                                  000009c1         0   none ,g         1
+FILE=_REL_ltof
+                                  000009d4  00000a1d        4a
+  __REL_ltof
+                                  000009d4         0   none ,g         1
+FILE=_COM_lshr
+                                  00000a1e  00000a3e        21
+  __COM_lshr
+                                  00000a28         0   none ,g         1
+
+SECTION=.const
+FILE=DefaultBuild\r_main.obj
+                                  00002000  000020d3        d4
+FILE=DefaultBuild\N_GPS.obj
+                                  000020d4  00002120        4d
+FILE=DefaultBuild\N_GSM.obj
+                                  00002122  00002d8e       c6d
+  _OK_ACK
+                                  00002122         2   data ,g         1
+  _ERROR_ACK
+                                  00002124         5   data ,g         1
+  _VODAFONE_ACK
+                                  00002129         f   data ,g         1
+  _VODAFONE_ACK_V
+                                  00002138         f   data ,g         1
+  _GET_IN_SMS
+                                  00002147         4   data ,g         0
+  _CONNECT_ACK
+                                  0000214b         7   data ,g         1
+  _CONNECT_FAIL_ACK
+                                  00002152         c   data ,g         1
+  _ALREADY_CONNECT_ACK
+                                  0000215e         f   data ,g         1
+  _SIGNAL_STRENGTH_ACK
+                                  0000216d         5   data ,g         1
+  _NW_DIS_CONNECT
+                                  00002172         9   data ,g         1
+  _PANIC_MOBILE_NUMBER_ACK
+                                  0000217b        12   data ,g         1
+  _HTTP_RESPONSE_FAIL
+                                  0000218d         4   data ,g         1
+  _V_RESTART
+                                  00002191         3   data ,g         0
+  _VN_ACK
+                                  00002194         3   data ,g         1
+  _FIRM_UPDATE_CTRL
+                                  00002197         3   data ,g         1
+  _SETTINGS_UPDATE_CTRL
+                                  0000219a         3   data ,g         0
+  _NETMODE_UPDATE_CTRL
+                                  0000219d         3   data ,g         0
+  _PANIC_CTRL
+                                  000021a0         4   data ,g         1
+  _IGNITION_CTRL
+                                  000021a4         4   data ,g         1
+  _IMEI_ACK
+                                  000021a8         9   data ,g         1
+  _GSM_NW_REG
+                                  000021b1         8   data ,g         1
+  _GPRS_NW_REG
+                                  000021b9         9   data ,g         1
+  _CPIN_READY
+                                  000021c2         b   data ,g         1
+  _HTTP_DOWNLOAD
+                                  000021cd         8   data ,g         1
+  _FTP_ADDRESS_ACK
+                                  000021d5         8   data ,g         1
+  _FILE_DOWNLOAD_ACK
+                                  000021dd         8   data ,g         1
+  _SET_TCP_FRAME
+                                  000021e5         8   data ,g         1
+  _SETTING_CMD_FRAME
+                                  000021ed         d   data ,g         1
+  _ENGINEER_MODE_FRAME_1
+                                  000021fa         9   data ,g         1
+  _ENGINEER_MODE_FRAME_2
+                                  00002203         a   data ,g         1
+  _NEW_SMS_FRAME
+                                  0000220d         b   data ,g         1
+  _PHONE_NUMBER_OF_SENDER_FRAME
+                                  00002218        17   data ,g         1
+  _GET_IMEI_SMS_CMD
+                                  0000222f         d   data ,g         1
+  _DEVICE_RESET_CMD_FRAME
+                                  0000223c         e   data ,g         1
+  _SET_APN_FRAME
+                                  0000224a         8   data ,g         0
+  _APN_S_FRAME
+                                  00002252         6   data ,g         0
+  _GET_SMS_FRAME
+                                  00002258         c   data ,g         1
+  _GET_VERSION_CMD
+                                  00002264         c   data ,g         0
+  _GET_ACT_MESSAGE
+                                  00002270         5   data ,g         1
+  _GET_HEALTH_MESSAGE_FRAME
+                                  00002275         5   data ,g         1
+  _PNET_CMD_FRAME
+                                  0000227a         9   data ,g         1
+  _SNET_CMD_FRAME
+                                  00002283         9   data ,g         1
+  _NWA_CMD_FRAME
+                                  0000228c         a   data ,g         1
+  _NWI_CMD_FRAME
+                                  00002296         a   data ,g         1
+  _NWS_CMD_FRAME
+                                  000022a0         a   data ,g         1
+  _QST_CMD_FRAME
+                                  000022aa         8   data ,g         1
+  _DEVICE_RESTART_ACK
+                                  000022b2         c   data ,g         1
+  _GET_GPS_CLEAR_S_FRAME
+                                  000022be         9   data ,g         1
+  _NW_NAME_ACK
+                                  000022c7         5   data ,g         1
+FILE=DefaultBuild\V_Control.obj
+                                  00002d90  00002ec7       138
+FILE=DefaultBuild\GSM_INTZ_AND_SMS_HANDLING.obj
+                                  00002ec8  000033f0       529
+FILE=DefaultBuild\N_GSM_RESPONSE_HANDLE.obj
+                                  000033f2  00003482        91
+  _SET_HEALTH_FRAME
+                                  000033f2         f   data ,g         1
+  _GET_VERSION_FRAME
+                                  00003401         c   data ,g         1
+  _GET_VLT_IMEI_PH_FRAME
+                                  0000340d        13   data ,g         1
+  _SET_HACL_FRAME
+                                  00003420        14   data ,g         1
+  _SET_HBRK_FRAME
+                                  00003434        14   data ,g         1
+  _SET_HTRN_FRAME
+                                  00003448        14   data ,g         1
+  _SET_LBAT_FRAME
+                                  0000345c        14   data ,g         1
+  _SET_APN_FRAME2
+                                  00003470        13   data ,g         1
+FILE=DefaultBuild\FIRMWARE_HANDLING.obj
+                                  00003484  000034be        3b
+
+SECTION=.textf
+FILE=DefaultBuild\stkinit.obj
+                                  000034bf  00003502        44
+  _stkinit
+                                  000034bf         0   none ,g         1
+  LSTINIT1
+                                  000034cd         0   none ,l         1
+  LSTINIT2
+                                  000034f7         0   none ,l         2
+  LSTINIT3
+                                  00003502         0   none ,l         2
+FILE=DefaultBuild\r_main.obj
+                                  00003503  0000384b       349
+  _convert
+                                  00003503        cf   func ,g         0
+  _main
+                                  000035d2        32   func ,g         1
+  _R_MAIN_UserInit
+                                  00003604       213   func ,g         1
+  _READ_DEVICE_ID
+                                  00003817        35   func ,g         1
+FILE=DefaultBuild\r_systeminit.obj
+                                  0000384c  00003917        cc
+  _R_Systeminit
+                                  0000384c        2f   func ,g         1
+  _hdwinit
+                                  0000387b        9d   func ,g         1
+FILE=DefaultBuild\r_cg_cgc.obj
+                                  00003918  00003957        40
+  _R_CGC_Create
+                                  00003918        40   func ,g         1
+FILE=DefaultBuild\r_cg_cgc_user.obj
+                                  00003958  0000395a         3
+  _R_CGC_Get_ResetSource
+                                  00003958         3   func ,g         1
+FILE=DefaultBuild\r_cg_wdt.obj
+                                  0000395b  00003965         b
+  _R_WDT_Create
+                                  0000395b         7   func ,g         1
+  _R_WDT_Restart
+                                  00003962         4   func ,g         2
+FILE=DefaultBuild\r_cg_wdt_user.obj
+                                  00003966  00003975        10
+  _WATCHDOG_ON
+                                  00003966         8   func ,g        11
+  _WATCHDOG_OFF
+                                  0000396e         8   func ,g         f
+FILE=DefaultBuild\r_cg_port.obj
+                                  00003976  000039a6        31
+  _R_PORT_Create
+                                  00003976        31   func ,g         1
+FILE=DefaultBuild\r_cg_intc.obj
+                                  000039a7  00003a38        92
+  _R_INTC_Create
+                                  000039a7        5a   func ,g         1
+  _R_INTC1_Start
+                                  00003a01         7   func ,g         2
+  _R_INTC1_Stop
+                                  00003a08         7   func ,g         0
+  _R_INTC2_Start
+                                  00003a0f         7   func ,g         0
+  _R_INTC2_Stop
+                                  00003a16         7   func ,g         0
+  _R_INTC3_Start
+                                  00003a1d         7   func ,g         2
+  _R_INTC3_Stop
+                                  00003a24         7   func ,g         0
+  _R_INTC4_Start
+                                  00003a2b         7   func ,g         1
+  _R_INTC4_Stop
+                                  00003a32         7   func ,g         0
+FILE=DefaultBuild\r_cg_intc_user.obj
+                                  00003a39  00003aa0        68
+  _r_intc1_interrupt
+                                  00003a39        5c   func ,g         2
+  _r_intc3_interrupt
+                                  00003a95         4   func ,g         2
+  _r_intc4_interrupt
+                                  00003a99         4   func ,g         2
+  _r_intc2_interrupt
+                                  00003a9d         4   func ,g         2
+FILE=DefaultBuild\r_cg_serial.obj
+                                  00003aa1  00003d83       2e3
+  _R_SAU0_Create
+                                  00003aa1        15   func ,g         1
+  _R_UART1_Create
+                                  00003ab6        74   func ,g         1
+  _R_UART1_Start
+                                  00003b2a        26   func ,g         5
+  _R_UART1_Stop
+                                  00003b50        1e   func ,g         5
+  _R_UART1_Receive
+                                  00003b6e        18   func ,g         0
+  _R_UART1_Send
+                                  00003b86        26   func ,g         0
+  _R_CSI00_Create
+                                  00003bac        5b   func ,g         1
+  _R_CSI00_Start
+                                  00003c07        26   func ,g         1
+  _R_CSI00_Stop
+                                  00003c2d        18   func ,g         0
+  _R_CSI00_Send_Receive
+                                  00003c45        35   func ,g         4
+  _R_SAU1_Create
+                                  00003c7a        12   func ,g         1
+  _R_UART2_Create
+                                  00003c8c        76   func ,g         1
+  _R_UART2_Start
+                                  00003d02        26   func ,g         1
+  _R_UART2_Stop
+                                  00003d28        1e   func ,g         0
+  _R_UART2_Receive
+                                  00003d46        18   func ,g         0
+  _R_UART2_Send
+                                  00003d5e        26   func ,g         0
+FILE=DefaultBuild\r_cg_serial_user.obj
+                                  00003d84  00003ee7       164
+  _r_uart1_callback_receiveend@1
+                                  00003d84         1   func ,l         1
+  _r_uart1_callback_softwareoverrun@1
+                                  00003d85        25   func ,l         1
+  _r_uart1_callback_sendend@1
+                                  00003daa         1   func ,l         1
+  _r_uart1_callback_error@1
+                                  00003dab         1   func ,l         1
+  _r_csi00_callback_receiveend@1
+                                  00003dac         1   func ,l         1
+  _r_csi00_callback_error@1
+                                  00003dad         1   func ,l         1
+  _r_csi00_callback_sendend@1
+                                  00003dae         1   func ,l         1
+  _r_uart2_callback_receiveend@1
+                                  00003daf         1   func ,l         1
+  _r_uart2_callback_softwareoverrun@1
+                                  00003db0         6   func ,l         1
+  _r_uart2_callback_sendend@1
+                                  00003db6         1   func ,l         1
+  _r_uart2_callback_error@1
+                                  00003db7         1   func ,l         1
+  _r_uart1_interrupt_receive
+                                  00003db8        47   func ,g         2
+  _r_uart1_interrupt_send
+                                  00003dff        18   func ,g         2
+  _r_uart2_interrupt_receive
+                                  00003e17        47   func ,g         2
+  _r_uart2_interrupt_send
+                                  00003e5e        18   func ,g         2
+  _r_csi00_interrupt
+                                  00003e76        72   func ,g         2
+FILE=DefaultBuild\r_cg_adc.obj
+                                  00003ee8  00003f46        5f
+  _R_ADC_Create
+                                  00003ee8        3c   func ,g         2
+  _R_ADC_Start
+                                  00003f24         a   func ,g         2
+  _R_ADC_Stop
+                                  00003f2e         a   func ,g         0
+  _R_ADC_Set_OperationOn
+                                  00003f38         4   func ,g         1
+  _R_ADC_Set_OperationOff
+                                  00003f3c         4   func ,g         0
+  _R_ADC_Get_Result
+                                  00003f40         7   func ,g         0
+FILE=DefaultBuild\r_cg_adc_user.obj
+                                  00003f47  00003f4e         8
+  _r_adc_interrupt
+                                  00003f47         8   func ,g         2
+FILE=DefaultBuild\r_cg_timer.obj
+                                  00003f4f  00004110       1c2
+  _R_TAU0_Create
+                                  00003f4f       122   func ,g         1
+  _R_TAU0_Channel0_Start
+                                  00004071        10   func ,g         7
+  _R_TAU0_Channel0_Stop
+                                  00004081        10   func ,g         4
+  _R_TAU0_Channel1_Start
+                                  00004091        10   func ,g         1
+  _R_TAU0_Channel1_Stop
+                                  000040a1        10   func ,g         1
+  _R_TAU0_Channel2_Start
+                                  000040b1        10   func ,g         1
+  _R_TAU0_Channel2_Stop
+                                  000040c1        10   func ,g         0
+  _R_TAU0_Channel3_Start
+                                  000040d1        10   func ,g         1
+  _R_TAU0_Channel3_Stop
+                                  000040e1        10   func ,g         1
+  _R_TAU0_Channel4_Start
+                                  000040f1        10   func ,g         1
+  _R_TAU0_Channel4_Stop
+                                  00004101        10   func ,g         0
+FILE=DefaultBuild\r_cg_timer_user.obj
+                                  00004111  000042b9       1a9
+  _r_tau0_channel0_interrupt
+                                  00004111         4   func ,g         2
+  _r_tau0_channel1_interrupt
+                                  00004115         4   func ,g         2
+  _r_tau0_channel2_interrupt
+                                  00004119       16b   func ,g         2
+  _r_tau0_channel3_interrupt
+                                  00004284         4   func ,g         2
+  _r_tau0_channel4_interrupt
+                                  00004288        32   func ,g         2
+FILE=DefaultBuild\r_cg_rtc.obj
+                                  000042ba  000043be       105
+  _R_RTC_Create
+                                  000042ba        26   func ,g         1
+  _R_RTC_Start
+                                  000042e0         4   func ,g         1
+  _R_RTC_Stop
+                                  000042e4         4   func ,g         0
+  _R_RTC_Get_CounterValue
+                                  000042e8        4f   func ,g         0
+  _R_RTC_Set_CounterValue
+                                  00004337        88   func ,g         0
+FILE=DefaultBuild\N_IIC.obj
+                                  000043bf  000044d8       11a
+  _i2c_delay
+                                  000043bf         e   func ,g        17
+  _i2c_start
+                                  000043cd        1f   func ,g         7
+  _i2c_stop
+                                  000043ec        19   func ,g         5
+  _i2c_wbyte
+                                  00004405        4b   func ,g        12
+  _i2c_rbyte
+                                  00004450        3f   func ,g         2
+  _i2c_ack
+                                  0000448f        34   func ,g        12
+  _i2c_nack
+                                  000044c3        16   func ,g         2
+FILE=DefaultBuild\N_EEPROM.obj
+                                  000044d9  00004639       161
+  _i2c_writen
+                                  000044d9        38   func ,g        32
+  _i2c_readn
+                                  00004511        47   func ,g        34
+  _i2c_PAGE_WRITE
+                                  00004558        6f   func ,g         0
+  _i2c_writen_2
+                                  000045c7        38   func ,g         5
+  _i2c_readn_3
+                                  000045ff        3b   func ,g         7
+FILE=DefaultBuild\N_GPS.obj
+                                  0000463a  00004c68       62f
+  _GPS_NAVIGATION_MODE
+                                  0000463a        64   func ,g         0
+  _GPS_STATIONARY_MODE
+                                  0000469e        3f   func ,g         0
+  _BAUD_RATE_AND_INITIAL_SETTINGS
+                                  000046dd         1   func ,g         6
+  _GPS_NORMAL_MODE
+                                  000046de        67   func ,g         0
+  _GET_GPS_DATA
+                                  00004745        e2   func ,g         2
+  _GPS_UART_RX_1
+                                  00004827       1a0   func ,g         1
+  _GPS_UART_RX_2
+                                  000049c7        da   func ,g         1
+  _GPS_UART_RX_3
+                                  00004aa1        98   func ,g         1
+  _GPS_UART_RX_4
+                                  00004b39        1f   func ,g         1
+  _GPS_UART_RX_5
+                                  00004b58        9f   func ,g         1
+  _RTC_SET
+                                  00004bf7        71   func ,g         1
+  _GPS_SLEEP_MODE
+                                  00004c68         1   func ,g         0
+FILE=DefaultBuild\N_GSM.obj
+                                  00004c69  00008702      3a9a
+  _GPRS_DISCONNECT
+                                  00004c69        2e   func ,g         3
+  _UPDATE_SETTING
+                                  00004c97        1e   func ,g         0
+  _GET_SIGNAL_STRENGTH
+                                  00004cb5        32   func ,g         4
+  _GET_NETWORK_NAME
+                                  00004ce7        2f   func ,g         2
+  _DEVICE_REPLY_IN_SMS
+                                  00004d16       e5f   func ,g         e
+  _BATTERY_PERCENTAGE_CALCULATE
+                                  00005b75        cb   func ,g         0
+  _GET_TIME
+                                  00005c40        1f   func ,g         4
+  _PRINT_ZEROS
+                                  00005c5f        23   func ,g         e
+  _PRINT_ZEROS_2
+                                  00005c82        23   func ,g         a
+  _GET_DEGREES
+                                  00005ca5        37   func ,g         4
+  _GET_SPEED_DATA
+                                  00005cdc        9c   func ,g         5
+  _GET_IMEI
+                                  00005d78        82   func ,g         5
+  _GET_MCC_MNC_LAC_CELL_ID
+                                  00005dfa        56   func ,g         3
+  _WELCOME_STRING
+                                  00005e50        d6   func ,g         3
+  _BOOT_STRING
+                                  00005f26        23   func ,g         0
+  _STORE_LAST_LOCATION
+                                  00005f49        ab   func ,g         1
+  _READ_LAST_LOCATION
+                                  00005ff4       108   func ,g         1
+  _DATA_PRINT
+                                  000060fc       b20   func ,g         1
+  _UPDATE_ONLINE_DATA_FRAME
+                                  00006c1c       a95   func ,g         a
+  _HEALTH_STRING
+                                  000076b1       451   func ,g         1
+  _DATA_TO_ARRAY
+                                  00007b02       882   func ,g         1
+  _SEND_WREN_COMMAND
+                                  00008384        1d   func ,g         2
+  _WRITE_STATUS_REGISTER
+                                  000083a1        22   func ,g         0
+  _READ_STATUS_REGISTER
+                                  000083c3        22   func ,g         0
+  _CHIP_ERASE
+                                  000083e5        2a   func ,g         1
+  _WAIT_UNTILL_FLASH_BUSY
+                                  0000840f        2b   func ,g         1
+  _SEND_COMMA_TO_ARRAY
+                                  0000843a         9   func ,g        15
+  _FLASH_WRITE
+                                  00008443        cc   func ,g         1
+  _READ_FLASH_MEM
+                                  0000850f       1f4   func ,g         0
+FILE=DefaultBuild\N_DELAY.obj
+                                  00008703  0000872e        2c
+  _MS_TIMER
+                                  00008703        16   func ,g       14d
+  _US_TIMER
+                                  00008719        16   func ,g         0
+FILE=DefaultBuild\V_Control.obj
+                                  0000872f  00008c8a       55c
+  _SYSTEM_STATUS
+                                  0000872f        96   func ,g         1
+  _VLT_RUNNING_MODE
+                                  000087c5       149   func ,g         1
+  _SYSTEM_ALERT_CHECK
+                                  0000890e       178   func ,g         2
+  _BATTERY_PERCENTAGE_CALC
+                                  00008a86        cb   func ,g         1
+  _ACC_GRY_INTZ
+                                  00008b51        56   func ,g         0
+  _ACC_GYRO_READ
+                                  00008ba7        e4   func ,g         0
+FILE=DefaultBuild\N_Serial.obj
+                                  00008c8b  00008de0       156
+  _R_UART2_SEND_User
+                                  00008c8b        73   func ,g        c5
+  _R_UART2_SEND
+                                  00008cfe        1d   func ,g       178
+  _R_UART1_Send_1_User
+                                  00008d1b        11   func ,g         1
+  _R_UART1_SEND
+                                  00008d2c        1d   func ,g         4
+  _R_CSI00_SEND
+                                  00008d49         e   func ,g        10
+  _SEND_TO_ARRAY
+                                  00008d57        1d   func ,g        1a
+  _SEND_TO_ARRAY_Value
+                                  00008d74        6d   func ,g        29
+FILE=DefaultBuild\GSM_INTZ_AND_SMS_HANDLING.obj
+                                  00008de1  00009a3f       c5f
+  _QSTK
+                                  00008de1        1d   func ,g         4
+  _MANUAL_NET
+                                  00008dfe        b7   func ,g         2
+  _NEW_SMS_READ
+                                  00008eb5       55e   func ,g         1
+  _InitM95
+                                  00009413        38   func ,g         0
+  _SwitchNetwork
+                                  0000944b        b9   func ,g         1
+  _GSM_INTZ
+                                  00009504       53c   func ,g         8
+FILE=DefaultBuild\N_GSM_RESPONSE_HANDLE.obj
+                                  00009a40  0000bd2e      22ef
+  _ACK_RX
+                                  00009a40       2ad   func ,g        3d
+  _CMD_DATA_READ_IN_EEPROM
+                                  00009ced       61b   func ,g         1
+  _PIN_CHECK
+                                  0000a308        e2   func ,g         4
+  _CMD_DATA_WRITE_IN_EEROM
+                                  0000a3ea       588   func ,g        1e
+  _GSM_UART_RX
+                                  0000a972      13bd   func ,g         1
+FILE=DefaultBuild\FIRMWARE_HANDLING.obj
+                                  0000bd2f  0000bf36       208
+  _ADDRESS_INC
+                                  0000bd2f        1b   func ,g         0
+  _EEPROM_FILE_WRITE
+                                  0000bd4a        a7   func ,g         1
+  _FILE_CLOSE
+                                  0000bdf1        5c   func ,g         2
+  _FIRMWARE_DOWNLOAD_FROM_M95
+                                  0000be4d        ea   func ,g         1
+FILE=DefaultBuild\N_IEEPROM.obj
+                                  0000bf37  0000c082       14c
+  _fdl_clcok_init
+                                  0000bf37        3b   func ,g         0
+  _blank_check
+                                  0000bf72        47   func ,g         0
+  _block_erase
+                                  0000bfb9        2f   func ,g         0
+  _fdl_write
+                                  0000bfe8        48   func ,g         0
+  _fdl_read
+                                  0000c030        4a   func ,g         0
+  _delay
+                                  0000c07a         9   func ,g         1
+FILE=DefaultBuild\r_cg_pfdl.obj
+                                  0000c083  0000c18f       10d
+  _R_FDL_Create
+                                  0000c083         8   func ,g         0
+  _R_FDL_Write
+                                  0000c08b        36   func ,g         0
+  _R_FDL_Read
+                                  0000c0c1        25   func ,g         0
+  _R_FDL_Erase
+                                  0000c0e6        2c   func ,g         0
+  _R_FDL_Open
+                                  0000c112        12   func ,g         0
+  _R_FDL_Close
+                                  0000c124         8   func ,g         0
+  _R_FDL_BlankCheck
+                                  0000c12c        32   func ,g         0
+  _R_FDL_IVerify
+                                  0000c15e        32   func ,g         0
+
+SECTION=.monitor2
+FILE=rlink_generates_02
+                                  0000fe00  0000ffff       200
+
+SECTION=.bss
+FILE=DefaultBuild\r_main.obj
+                                  000fef00  000fef2b        2c
+  _UPDATE_TIME
+                                  000fef00         2   data ,g         0
+  _WATCH_DOG_KILL
+                                  000fef02         2   data ,g         7
+  _t_count
+                                  000fef04         2   data ,g        39
+  _MINUTE
+                                  000fef06         2   data ,g         5
+  _BOOT_FLAG
+                                  000fef08         1   data ,g         4
+  _RTC_DONE
+                                  000fef09         1   data ,g         1
+  _ONCE_RESTART
+                                  000fef0a         1   data ,g         0
+  _EEPROM_WORKING
+                                  000fef0b         1   data ,g         0
+  _IGNITION_CONTROL_STATE
+                                  000fef0c         1   data ,g         1
+  _LOW_BATTER_ALERT_SEND
+                                  000fef0d         1   data ,g         0
+  _SYSTEM_READY
+                                  000fef0e         1   data ,g         7
+  _FIRMWARE_UPDATE
+                                  000fef0f         1   data ,g         8
+  _GPS_RMC_DATA_RX
+                                  000fef10         1   data ,g         3
+  _GPS_GGA_DATA_RX
+                                  000fef11         1   data ,g         3
+  _GPS_VTG_DATA_RX
+                                  000fef12         1   data ,g         4
+  _POWER_SOURCE
+                                  000fef13         1   data ,g         2
+  _WELCOME_STRING_FRAME
+                                  000fef14         1   data ,g         5
+  _PANIC_ALERT_PACKET
+                                  000fef15         1   data ,g         6
+  _IGNITION_ON_PACKET
+                                  000fef16         1   data ,g         e
+  _IGNITION_OFF_PACKET
+                                  000fef17         1   data ,g         9
+  _POWER_SOURCE_PACKET
+                                  000fef18         1   data ,g         6
+  _LOW_BATTERY_ALERT_PACKET
+                                  000fef19         1   data ,g         6
+  _IGNITION
+                                  000fef1a         1   data ,g         a
+  _a
+                                  000fef1c         2   data ,g         3
+  _b
+                                  000fef1e         2   data ,g         3
+  _c
+                                  000fef20         2   data ,g         2
+  _d
+                                  000fef22         2   data ,g         2
+  _z
+                                  000fef24         2   data ,g         2
+  _l
+                                  000fef26         2   data ,g         2
+  _a0
+                                  000fef28         2   data ,g         1
+  _p
+                                  000fef2a         2   data ,g         0
+FILE=DefaultBuild\r_cg_intc_user.obj
+                                  000fef2c  000fef2f         4
+  _INT_COUNT
+                                  000fef2c         1   data ,g         1
+  _HA_ALERT
+                                  000fef2e         2   data ,g         5
+FILE=DefaultBuild\r_cg_serial.obj
+                                  000fef30  000fef4f        20
+  _gp_uart1_tx_address
+                                  000fef30         2   data ,g         5
+  _g_uart1_tx_count
+                                  000fef32         2   data ,g         4
+  _gp_uart1_rx_address
+                                  000fef34         2   data ,g         3
+  _g_uart1_rx_count
+                                  000fef36         2   data ,g         4
+  _g_uart1_rx_length
+                                  000fef38         2   data ,g         3
+  _gp_csi00_rx_address
+                                  000fef3a         2   data ,g         4
+  _g_csi00_rx_length
+                                  000fef3c         2   data ,g         0
+  _g_csi00_rx_count
+                                  000fef3e         2   data ,g         0
+  _gp_csi00_tx_address
+                                  000fef40         2   data ,g         5
+  _g_csi00_send_length
+                                  000fef42         2   data ,g         0
+  _g_csi00_tx_count
+                                  000fef44         2   data ,g         5
+  _gp_uart2_tx_address
+                                  000fef46         2   data ,g         5
+  _g_uart2_tx_count
+                                  000fef48         2   data ,g         4
+  _gp_uart2_rx_address
+                                  000fef4a         2   data ,g         3
+  _g_uart2_rx_count
+                                  000fef4c         2   data ,g         4
+  _g_uart2_rx_length
+                                  000fef4e         2   data ,g         3
+FILE=DefaultBuild\r_cg_serial_user.obj
+                                  000fef50  000fef50         1
+  _NAVIGATION_RX
+                                  000fef50         1   data ,g         7
+FILE=DefaultBuild\r_cg_timer_user.obj
+                                  000fef52  000fef6a        19
+  _SELECTION
+                                  000fef52         1   data ,g         3
+  _WATCH_DOG
+                                  000fef53         1   data ,g         9
+  _HOOTER_COUNT
+                                  000fef54         2   data ,g         5
+  _ADC_COUNT
+                                  000fef56         2   data ,g         4
+  _RTC_UPDATE
+                                  000fef58         2   data ,g         3
+  _CHECKING
+                                  000fef5a         2   data ,g         1
+  _GPS_RESET_COUNT
+                                  000fef5c         2   data ,g         2
+  _BLINK_COUNT
+                                  000fef5e         2   data ,g         6
+  _T_SECONDS
+                                  000fef60         2   data ,g         3
+  _T_MINUTE
+                                  000fef62         2   data ,g         3
+  _T_HOUR
+                                  000fef64         2   data ,g         3
+  _PANIC_COUNT
+                                  000fef66         2   data ,g         3
+  _I_HOURS
+                                  000fef68         2   data ,g         2
+  _MAIN_BAT_STATUS
+                                  000fef6a         1   data ,g         a
+FILE=DefaultBuild\N_EEPROM.obj
+                                  000fef6c  000ff021        b6
+  _FOR_5
+                                  000fef6c         2   data ,g         0
+  _NEXT
+                                  000fef6e         2   data ,g         0
+  _DATA
+                                  000fef70         2   data ,g         0
+  _READ_ADDRESS
+                                  000fef72         2   data ,g         0
+  _WRITE_ADDRESS
+                                  000fef74         2   data ,g         9
+  _TEMPS
+                                  000fef76         2   data ,g         0
+  _WRITE_ADDRESS_MSB
+                                  000fef78         2   data ,g         4
+  _WRITE_ADDRESS_LSB
+                                  000fef7a         2   data ,g         4
+  _TIME
+                                  000fef7c         a   data ,g        10
+  _FIRM_DATA
+                                  000fef86        96   data ,g         6
+  _STOP_WRITING
+                                  000ff01c         1   data ,g         3
+  _BYTE
+                                  000ff01e         2   data ,g         5
+  _EEPROM_ADDRESS
+                                  000ff020         2   data ,g         3
+FILE=DefaultBuild\N_GPS.obj
+                                  000ff022  000ff067        46
+  _GPS_RMC_RX
+                                  000ff022         1   data ,g         7
+  _data_count
+                                  000ff023         1   data ,g         8
+  _RMC_DATA
+                                  000ff024         1   data ,g         3
+  _HOURS_MSB
+                                  000ff025         1   data ,g         2
+  _HOURS_LSB
+                                  000ff026         1   data ,g         2
+  _MIN_MSB
+                                  000ff027         1   data ,g         2
+  _MIN_LSB
+                                  000ff028         1   data ,g         2
+  _SEC_MSB
+                                  000ff029         1   data ,g         2
+  _SEC_LSB
+                                  000ff02a         1   data ,g         2
+  _GPS_DIRECTION_DATA_VALID
+                                  000ff02b         1   data ,g        17
+  _GPS_BUSY
+                                  000ff02c         1   data ,g         8
+  _R
+                                  000ff02d         1   data ,g         7
+  _DATE_MSB
+                                  000ff02e         1   data ,g         2
+  _DATE_LSB
+                                  000ff02f         1   data ,g         2
+  _MONTH_MSB
+                                  000ff030         1   data ,g         2
+  _MONTH_LSB
+                                  000ff031         1   data ,g         2
+  _YEAR_MSB
+                                  000ff032         1   data ,g         2
+  _YEAR_LSB
+                                  000ff033         1   data ,g         2
+  _L
+                                  000ff034         1   data ,g         4
+  _NAVIGATION_ACK
+                                  000ff035         1   data ,g         3
+  _O
+                                  000ff036         1   data ,g         3
+  _GPS_RESTART
+                                  000ff037         1   data ,g         9
+  _RR
+                                  000ff038         2   data ,g         0
+  _FOR_2
+                                  000ff03a         1   data ,g         0
+  _COMMA
+                                  000ff03b         1   data ,g         4
+  _COMMA_1
+                                  000ff03c         1   data ,g         6
+  _VTG_FRAME_ACK
+                                  000ff03d         1   data ,g         5
+  _S
+                                  000ff03e         1   data ,g         5
+  _GPGA_FRAME_ACK
+                                  000ff03f         1   data ,g         6
+  _A
+                                  000ff040         1   data ,g         6
+  _B
+                                  000ff041         1   data ,g         6
+  _GPS_GGA_RX
+                                  000ff042         1   data ,g         0
+  _HDOP
+                                  000ff043         5   data ,g        19
+  _NO_OF_SAT
+                                  000ff048         1   data ,g         8
+  _data_count_2
+                                  000ff049         1   data ,g         0
+  _GGA_DATA
+                                  000ff04a         1   data ,g         0
+  _Q
+                                  000ff04c         2   data ,g         7
+  _W
+                                  000ff04e         2   data ,g         6
+  _COMMA_5
+                                  000ff050         2   data ,g         6
+  _UART1_BUFFER_4
+                                  000ff052         2   data ,g         0
+  _PDOP_DATA_RX
+                                  000ff054        10   data ,g        1a
+  _GSA_FRAME_ACK
+                                  000ff064         2   data ,g         5
+  _GPS_GSA_DATA_RX
+                                  000ff066         2   data ,g         3
+FILE=DefaultBuild\N_GSM.obj
+                                  000ff068  000ff7ab       744
+  _V_NO_LEN
+                                  000ff068         1   data ,g         4
+  _VN_ACK_RX
+                                  000ff069         1   data ,g         5
+  _PANIC_NUMBER_RX
+                                  000ff06a         1   data ,g         4
+  _TEMP_SET
+                                  000ff06b        ff   data ,g         1
+  _TEMP_TCP
+                                  000ff16a        ff   data ,g         1
+  _SET_TCP_FRAME_RX
+                                  000ff269         1   data ,g         9
+  _SETTING_CMD_FRAME_RX
+                                  000ff26a         1   data ,g         9
+  _RX_ACK_Frame
+                                  000ff26b         1   data ,g         0
+  _ACK
+                                  000ff26c         1   data ,g        2d
+  _ERROR_OCCURED
+                                  000ff26d         1   data ,g        29
+  _RX_SMS_CMD
+                                  000ff26e         1   data ,g         0
+  _t
+                                  000ff26f         1   data ,g        19
+  _SMS_FAIL_COUNT
+                                  000ff270         1   data ,g         7
+  _SMS_FAIL
+                                  000ff271         1   data ,g        18
+  _NETWORK_NAME_RX
+                                  000ff272         1   data ,g         3
+  _BATTERY_MEASUREMENT
+                                  000ff273         1   data ,g         b
+  _IGNITION_CTRL_RX
+                                  000ff274         1   data ,g         4
+  _INITIAL_MESSAGE
+                                  000ff275         1   data ,g         3
+  _P_LAT_DM_RX
+                                  000ff276         1   data ,g         1
+  _FILE_CLOSE_ATTEMPT
+                                  000ff277         1   data ,g         3
+  _GSM_REG
+                                  000ff278         1   data ,g         6
+  _GPRS_REG
+                                  000ff279         1   data ,g         6
+  _GET_SS
+                                  000ff27a         1   data ,g         3
+  _dBm
+                                  000ff27b         1   data ,g         4
+  _GPRS_CONNECTED
+                                  000ff27c         1   data ,g         6
+  _INTERNET_CONNECTED
+                                  000ff27d         1   data ,g        19
+  _DISCONNECT
+                                  000ff27e         1   data ,g        17
+  _LOW_BATTERY_ALERT
+                                  000ff27f         1   data ,g         0
+  _HTTP_CONNECT_COUNT
+                                  000ff280         1   data ,g         b
+  _NW_NAME_RX
+                                  000ff281         1   data ,g         8
+  _i
+                                  000ff282         1   data ,g         7
+  _SMS
+                                  000ff283         1   data ,g         2
+  _NETWORK_FAILURE
+                                  000ff284         1   data ,g         9
+  _HTTP_PRINT
+                                  000ff285         1   data ,g         8
+  _SPEED_DATA
+                                  000ff286         a   data ,g         b
+  _SS_DATA_RX
+                                  000ff290         1   data ,g         7
+  _CPIN
+                                  000ff291         1   data ,g         4
+  _P_TIME
+                                  000ff292         a   data ,g         0
+  _P_SEND_TIME
+                                  000ff29c         a   data ,g         0
+  _P_SEND_LOG_DM
+                                  000ff2a6         a   data ,g         0
+  _P_SEND_LAT_DM
+                                  000ff2b0         a   data ,g         0
+  _FTP_ADDRESS
+                                  000ff2ba         8   data ,g         3
+  _FTP_CONNECT_COUNT
+                                  000ff2c2         1   data ,g         3
+  _FILE_ADDR
+                                  000ff2c3         1   data ,g         5
+  _FIRMWARE_VERSION_RX
+                                  000ff2c4         1   data ,g         0
+  _I
+                                  000ff2c5        64   data ,g        e2
+  _IMEI_EEPROM
+                                  000ff329        10   data ,g         b
+  _PANIC_CTRL_RX
+                                  000ff339         1   data ,g         4
+  _PANIC_CONTROL_STATE
+                                  000ff33a         1   data ,g         4
+  _PANIC_CONTROL_RX
+                                  000ff33b         1   data ,g         0
+  _FIRM_UPDATE_CTRL_RX
+                                  000ff33c         1   data ,g         4
+  _FIRM_UPDATE_CONTROL_STATE
+                                  000ff33d         1   data ,g         2
+  _FIRM_UPDATE_CONTROL_RX
+                                  000ff33e         1   data ,g         0
+  _FILE
+                                  000ff33f        96   data ,g         4
+  _K
+                                  000ff3d6         2   data ,g         3
+  _TEMP_EMGT_TIME
+                                  000ff3d8         2   data ,g         6
+  _FOR_1
+                                  000ff3da         2   data ,g       16f
+  _FOR_3
+                                  000ff3dc         2   data ,g         0
+  _Address_1
+                                  000ff3de         2   data ,g         1
+  _NW_REGN_COUNT
+                                  000ff3e0         2   data ,g         c
+  _FLASH_MEMORY
+                                  000ff3e2         2   data ,g         1
+  _GPRS_REG_COUNT
+                                  000ff3e4         2   data ,g         5
+  _MAIN_BATTERY_VOLTAGE
+                                  000ff3e6         2   data ,g         9
+  _ADC_BUFFER
+                                  000ff3e8         2   data ,g         2
+  _BACKUP_BATTERY_VOLTAGE
+                                  000ff3ea         2   data ,g        1a
+  _GPRS_REG_ROAMING
+                                  000ff3ec         2   data ,g         5
+  _GSM_REG_ROAMING
+                                  000ff3ee         2   data ,g         6
+  _T_SPEED
+                                  000ff3f0         2   data ,g         3
+  _FILTER
+                                  000ff3f2         2   data ,g         1
+  _DATA_HEADER
+                                  000ff3f4         2   data ,g         8
+  _TEMP_VERSION
+                                  000ff3f6         2   data ,g         0
+  _CHECKSUM_BYTE
+                                  000ff3f8         2   data ,g         6
+  _MN
+                                  000ff3fa         2   data ,g         3
+  _VERSION_TEMP
+                                  000ff3fc         2   data ,g         0
+  _FRM_VERSION
+                                  000ff3fe         2   data ,g         1
+  _CURRENT_FRM_VERSION
+                                  000ff400         2   data ,g         c
+  _HEX
+                                  000ff402         2   data ,g         0
+  _TEMP_3
+                                  000ff404         2   data ,g         8
+  _VOLT
+                                  000ff406         2   data ,g        11
+  _TEMP_MAIN_BATTERY_VOLTAGE
+                                  000ff408         2   data ,g         0
+  _J
+                                  000ff40a         2   data ,g         3
+  _RESTART
+                                  000ff40c         2   data ,g        71
+  _FRAME_NUMBER
+                                  000ff40e         4   data ,g         8
+  _TEMP_FRAME_NUMBER
+                                  000ff412         4   data ,g        50
+  _TEMP_FRM_VERSION
+                                  000ff416         4   data ,g        14
+  _GPS_RST_FLAG
+                                  000ff41a         1   data ,g         5
+  _DEVICE_RESTART_RX_1
+                                  000ff41b         1   data ,g         5
+  _WELCOME_STRING_FRAME_BOOT
+                                  000ff41c         1   data ,g         4
+  _SET_OTA_UPDATE
+                                  000ff41d         1   data ,g         2
+  _SETTING_CMD
+                                  000ff41e         1   data ,g         3
+  _SET_APN
+                                  000ff41f         1   data ,g         2
+  _SET_TCP
+                                  000ff420         1   data ,g         3
+  _BSNL_CONNECT_FLAG
+                                  000ff421         1   data ,g         4
+  _BSNL_CONNECT
+                                  000ff422         1   data ,g         3
+  _CONNECT_FAIL
+                                  000ff423         1   data ,g         3
+  _ALREADY_CONNECT
+                                  000ff424         1   data ,g         8
+  _ALREADY_CONNECT_FLAG
+                                  000ff425         1   data ,g         0
+  _QST_CMD_FLAG
+                                  000ff426         1   data ,g         3
+  _HARSH_BRAKE_PACKET
+                                  000ff427         1   data ,g         3
+  _HARSH_TURN_PACKET
+                                  000ff428         1   data ,g         3
+  _HARSH_ACC_PACKET
+                                  000ff429         1   data ,g         3
+  _BATTERY_CHARGED_PACKET
+                                  000ff42a         1   data ,g         3
+  _REFRESH
+                                  000ff42b         1   data ,g         3
+  _PRIMARY_IP
+                                  000ff42c         1   data ,g         0
+  _SECONDARY_IP
+                                  000ff42d         1   data ,g         0
+  _PRI_IP_PN_SMS
+                                  000ff42e         1   data ,g         3
+  _SEC_IP_PN_SMS
+                                  000ff42f         1   data ,g         1
+  _HEALTH_CMD2
+                                  000ff430         1   data ,g         3
+  _DATA_SEND
+                                  000ff431         1   data ,g         1
+  _k
+                                  000ff432         1   data ,g         0
+  _HEALTH_CMD_FRAME_RX
+                                  000ff433         1   data ,g         9
+  _SET_SETTINGS_FRAME_RX
+                                  000ff434         1   data ,g         0
+  _HEALTH_ON_DURATON_RX
+                                  000ff435         1   data ,g         0
+  _PANIC_ON_DURATON_RX
+                                  000ff436         1   data ,g         0
+  _PANIC_ON_DURATON_S_RX
+                                  000ff437         1   data ,g         0
+  _HEALTH_ON_DURATON_S_RX
+                                  000ff438         1   data ,g         0
+  _APN_S_RX
+                                  000ff439         1   data ,g         0
+  _TEMP_APN2
+                                  000ff43a        ff   data ,g         2
+  _GET_SMS_RX
+                                  000ff539         1   data ,g         0
+  _GET_PIP_S_RX
+                                  000ff53a         1   data ,g         0
+  _GET_SIP_S_RX
+                                  000ff53b         1   data ,g         0
+  _SET_PIP_PN_RX
+                                  000ff53c         1   data ,g         0
+  _SET_SIP_PN_RX
+                                  000ff53d         1   data ,g         0
+  _SET_SLEEP_ON_RX
+                                  000ff53e         1   data ,g         0
+  _SET_SLEEP_OF_RX
+                                  000ff53f         1   data ,g         0
+  _SET_OVERSPEED_RX
+                                  000ff540         1   data ,g         0
+  _GET_OVER_SPEED_RX
+                                  000ff541         1   data ,g         0
+  _GET_SLEEP_TIME_RX
+                                  000ff542         1   data ,g         0
+  _GET_SLEEP_OFF_TIME_RX
+                                  000ff543         1   data ,g         0
+  _DECIMAL_POINT_CAME_STOP_TX
+                                  000ff544         1   data ,g         8
+  _POWER_SOURCE_RECONNECT_PACKET
+                                  000ff545         1   data ,g         5
+  _GET_MCC_MNC_LAC_CELL_ID_RX
+                                  000ff546         1   data ,g         3
+  _ADD_ZERO_TO_SPEED
+                                  000ff547         1   data ,g         7
+  _SMS_PIN_WRONG
+                                  000ff548         1   data ,g         e
+  _NEW_SMS_RX_FRAME_RX
+                                  000ff549         1   data ,g         8
+  _PHONE_NUMBER_OF_SENDER_RX
+                                  000ff54a         1   data ,g         6
+  _DEVICE_RESET_CMD_FRAME_RX
+                                  000ff54b         1   data ,g         6
+  _DEVICE_RESET_CMD
+                                  000ff54c         1   data ,g         4
+  _SERVER_UPDATE_TIME_CMD_FRAME_RX
+                                  000ff54d         1   data ,g         0
+  _SET_EMERGENCY_NUMBER_FRAME_CMD
+                                  000ff54e         1   data ,g         1
+  _SET_REGN_NUMBER_FRAME_CMD
+                                  000ff54f         1   data ,g         1
+  _UPDATE_EMERGENCY_NUMBER
+                                  000ff550         1   data ,g         3
+  _UPDATE_IP
+                                  000ff551         1   data ,g         0
+  _SET_IP_FRAME_CMD
+                                  000ff552         1   data ,g         3
+  _URL_PRINT
+                                  000ff553         1   data ,g         3
+  _MESSAGE_READ
+                                  000ff554         1   data ,g         0
+  _SET_SLEEP_OFF_CMD
+                                  000ff555         1   data ,g         2
+  _SET_SLEEP_ON_CMD
+                                  000ff556         1   data ,g         2
+  _OVER_SPEED_CMD
+                                  000ff557         1   data ,g         2
+  _GET_EMGT_TIME_CMD
+                                  000ff558         1   data ,g         2
+  _ACTIVATION_CMD
+                                  000ff559         1   data ,g         3
+  _HEALTH_AND_ACTIVATION_CMD
+                                  000ff55a         1   data ,g         4
+  _PANIC_CONTROL_STATE_1
+                                  000ff55b         1   data ,g         4
+  _GSM_NW_REG_CHECK
+                                  000ff55c         1   data ,g         3
+  _GPRS_REG_CHECK
+                                  000ff55d         1   data ,g         3
+  _GET_SIGNAL_STRENGTH_CHECK
+                                  000ff55e         1   data ,g         3
+  _CPIN_READY_CHECK
+                                  000ff55f         1   data ,g         3
+  _DECIMAL_POINT
+                                  000ff560         1   data ,g         c
+  _UPDATE_RP_NO
+                                  000ff561         1   data ,g         2
+  _VLT_STARTUP
+                                  000ff562         1   data ,g         9
+  _NORMAL_PACKET
+                                  000ff563         1   data ,g         d
+  _DEVICE_CLEAR_CMD_FRAME_RX
+                                  000ff564         1   data ,g         0
+  _DEVICE_CLEAR_CMD
+                                  000ff565         1   data ,g         3
+  _HARSH_BRAKE_CMD_RX
+                                  000ff566         1   data ,g         5
+  _HARSH_TURN_CMD_RX
+                                  000ff567         1   data ,g         2
+  _HARSH_ACCEL_CMD_RX
+                                  000ff568         1   data ,g         0
+  _HEALTH_ON_DURATON_CMD
+                                  000ff569         1   data ,g         4
+  _PANIC_ON_DURATON_CMD
+                                  000ff56a         1   data ,g         3
+  _PANIC_TIME_START
+                                  000ff56b         1   data ,g         6
+  _PANIC_SERVER_COUNT
+                                  000ff56c         1   data ,g         3
+  _HEALTH_PACKET_TO_SERVER
+                                  000ff56d         1   data ,g         6
+  _GET_SMS_CMD
+                                  000ff56e         1   data ,g         5
+  _GET_PIP_CMD
+                                  000ff56f         1   data ,g         2
+  _GET_SIP_CMD
+                                  000ff570         1   data ,g         2
+  _GET_PPT_S_CMD
+                                  000ff571         1   data ,g         0
+  _GET_SPT_S_CMD
+                                  000ff572         1   data ,g         0
+  _GPS_STANDBY
+                                  000ff573         1   data ,g         3
+  _WATCH_DOG_FORCE_KILL
+                                  000ff574         1   data ,g         3
+  _HTTP_DOWNLOAD_ACK
+                                  000ff575         1   data ,g         3
+  _FTP_ACK
+                                  000ff576         1   data ,g         4
+  _FTP_DOWNLOAD_ACK
+                                  000ff577         1   data ,g         3
+  _FIRMWARE_DOWNLOADED
+                                  000ff578         1   data ,g         3
+  _FILE_ACK
+                                  000ff579         1   data ,g         7
+  _FILE_DOWNLOAD
+                                  000ff57a         1   data ,g         3
+  _FLAG
+                                  000ff57b         1   data ,g         4
+  _STOP_FILE_READING
+                                  000ff57c         1   data ,g         3
+  _IMEI_RX
+                                  000ff57d         1   data ,g         3
+  _IMEI_ACK_RX
+                                  000ff57e         1   data ,g         5
+  _DEVICE_RESTART_RX
+                                  000ff57f         1   data ,g         5
+  _HARSH_BRAKE_CMD
+                                  000ff580         1   data ,g         1
+  _HARSH_TURN_CMD
+                                  000ff581         1   data ,g         6
+  _HARSH_ACCEL_CMD
+                                  000ff582         1   data ,g         6
+  _AD
+                                  000ff584         2   data ,g         8
+  _resend
+                                  000ff586         2   data ,g         0
+  _p1
+                                  000ff588         1   data ,g         0
+  _p2
+                                  000ff589         1   data ,g         0
+  _p3
+                                  000ff58a         1   data ,g         0
+  _p4
+                                  000ff58b         1   data ,g         0
+  _MCC_MNC_LAC_CELL_ID_LENGTH
+                                  000ff58c         1   data ,g         1
+  _FOR_7
+                                  000ff58d         1   data ,g         4
+  _ALTITUDE_VALUE_COUNT
+                                  000ff58e         1   data ,g        15
+  _NEW_SMS_INBOX_ADDRESS
+                                  000ff58f        14   data ,g         5
+  _NEW_SMS
+                                  000ff5a3         1   data ,g         a
+  _PHONE_NUMBER_OF_SENDER
+                                  000ff5a4         c   data ,g         4
+  _TEMP_REGN_NUMBER
+                                  000ff5b0         f   data ,g         1
+  _SET_APN_FRAME_RX
+                                  000ff5bf         1   data ,g         6
+  _IGNITION_ON_TIME_RX
+                                  000ff5c0         1   data ,g         0
+  _IGNITION_OFF_TIME_RX
+                                  000ff5c1         1   data ,g         0
+  _URL_COUNT
+                                  000ff5c2         2   data ,g         0
+  _VEICHLE_REG_COUNT
+                                  000ff5c4         2   data ,g         0
+  _IGNITION_ON_UPDATE_TIME
+                                  000ff5c6         2   data ,g         a
+  _IGNITION_OFF_UPDATE_TIME
+                                  000ff5c8         2   data ,g         a
+  _UPDATE_TIME_ON_TIME
+                                  000ff5ca         2   data ,g         2
+  _UPDATE_TIME_OFF_TIME
+                                  000ff5cc         2   data ,g         2
+  _HEALTH_ON_DURATON_LEVEL
+                                  000ff5ce         2   data ,g        10
+  _P_DL
+                                  000ff5d0         2   data ,g         0
+  _PANIC_ALERT_TIME
+                                  000ff5d2         2   data ,g         2
+  _PANIC_TIME
+                                  000ff5d4         2   data ,g         4
+  _HEALTH_ALERT_TIME
+                                  000ff5d6         2   data ,g         3
+  _APN_TEMP
+                                  000ff5d8         2   data ,g         7
+  _HARSH_BRAKE_LEVEL
+                                  000ff5da         2   data ,g         9
+  _HARSH_TURN_LEVEL
+                                  000ff5dc         2   data ,g         a
+  _HARSH_ACCEL_LEVEL
+                                  000ff5de         2   data ,g         8
+  _HT_LEVEL
+                                  000ff5e0         2   data ,g         3
+  _HB_LEVEL
+                                  000ff5e2         2   data ,g         2
+  _P_D_L
+                                  000ff5e4         2   data ,g         c
+  _SLEEP_ON_LEVEL
+                                  000ff5e6         2   data ,g         0
+  _SLEEP_OF_LEVEL
+                                  000ff5e8         2   data ,g         0
+  _SLEEP_OFF_LEVEL
+                                  000ff5ea         2   data ,g         0
+  _OVER_SPEED
+                                  000ff5ec         2   data ,g         5
+  _TEMP_OVS_LEVEL
+                                  000ff5ee         2   data ,g         7
+  _SLEEP_OFF_TIME
+                                  000ff5f0         2   data ,g         5
+  _TEMP_SLEEP_OFF_TIME
+                                  000ff5f2         2   data ,g         7
+  _EMGT_TIME
+                                  000ff5f4         2   data ,g         4
+  _ENGINEER_MODE_FRAME_1_ACK
+                                  000ff5f6         1   data ,g         4
+  _P
+                                  000ff5f7         1   data ,g         a
+  _MCC_MNC_LAC_CELL_ID
+                                  000ff5f8        14   data ,g         0
+  _GSM_COMMA
+                                  000ff60c         1   data ,g         6
+  _GET_IMEI_SMS_CMD_RX
+                                  000ff60d         1   data ,g         d
+  _UPDATE_INTERVAL_CMD
+                                  000ff60e         1   data ,g         1
+  _HARSH_ACCEL_CMD_SMS_RX
+                                  000ff60f         1   data ,g         0
+  _HARSH_TURN_CMD_SMS_RX
+                                  000ff610         1   data ,g         0
+  _HARSH_BRAKE_CMD_SMS_RX
+                                  000ff611         1   data ,g         0
+  _HARSH_ACCEL_CMD_SMS_LEVEL
+                                  000ff612         1   data ,g         0
+  _HARSH_TURN_CMD_SMS_LEVEL
+                                  000ff613         1   data ,g         0
+  _HARSH_BRAKE_CMD_SMS_LEVEL
+                                  000ff614         1   data ,g         0
+  _TEMP_EMERGENCY_NUMBER
+                                  000ff615         5   data ,g         3
+  _DBM_1
+                                  000ff61a         5   data ,g         4
+  _LAC_1
+                                  000ff61f         5   data ,g         4
+  _CELL_ID_1
+                                  000ff624         5   data ,g         4
+  _DBM_2
+                                  000ff629         5   data ,g         4
+  _LAC_2
+                                  000ff62e         5   data ,g         4
+  _CELL_ID_2
+                                  000ff633         5   data ,g         4
+  _DBM_3
+                                  000ff638         5   data ,g         4
+  _LAC_3
+                                  000ff63d         5   data ,g         4
+  _CELL_ID_3
+                                  000ff642         5   data ,g         4
+  _DBM_4
+                                  000ff647         5   data ,g         4
+  _LAC_4
+                                  000ff64c         5   data ,g         4
+  _CELL_ID_4
+                                  000ff651         5   data ,g         4
+  _N
+                                  000ff656         1   data ,g        1c
+  _GSM_COMMA_2
+                                  000ff657         1   data ,g        10
+  _SPEED_DATA_LENGTH_COUNT
+                                  000ff658         1   data ,g         7
+  _APN_LENGTH
+                                  000ff659         1   data ,g         8
+  _COG_VALUE_COUNT
+                                  000ff65a         1   data ,g        19
+  _PDOP_COUNT
+                                  000ff65b         1   data ,g         0
+  _HDOP_COUNT
+                                  000ff65c         1   data ,g         0
+  _GET_VLT_IMEI_PH_CMD
+                                  000ff65d         1   data ,g         4
+  _VERSION_CMD_SET
+                                  000ff65e         1   data ,g         4
+  _ENGINEER_MODE_FRAME_2_ACK
+                                  000ff65f         1   data ,g         5
+  _GET_NMR_RX
+                                  000ff660         1   data ,g         3
+  _HEX_CHARACTER_CONVERSION
+                                  000ff661         1   data ,g         c
+  _SMS_CMD_REPLY
+                                  000ff662         1   data ,g         3
+  _VERSION_CMD_RX
+                                  000ff663         1   data ,g         0
+  _SEND_IMEI
+                                  000ff664         1   data ,g         3
+  _UPDATE_INTERVAL_CMD_2
+                                  000ff665         1   data ,g         1
+  _SET_APN_FRAME_CMD
+                                  000ff666         1   data ,g         1
+  _UPDATE_APN
+                                  000ff667         1   data ,g         3
+  _UPDATE_REGISTRATION_NUMBER
+                                  000ff668         1   data ,g         2
+  _UPDATE_INTERVAL_TIME_FOR_IGNITION_ON_CMD
+                                  000ff669         1   data ,g         2
+  _UPDATE_INTERVAL_TIME_FOR_IGNITION_OFF_CMD
+                                  000ff66a         1   data ,g         2
+  _SMS_CMD_DATA_UPLOAD_UONT
+                                  000ff66b         1   data ,g         0
+  _SMS_CMD_DATA_UPLOAD
+                                  000ff66c         1   data ,g         0
+  _UPDATE_REGISTRATION_NUMBER_1
+                                  000ff66d         1   data ,g         3
+  _OTA_PACKET
+                                  000ff66e         1   data ,g        1f
+  _PANIC_TIME_STOP
+                                  000ff66f         1   data ,g         4
+  _PRIMARY_PN
+                                  000ff670         1   data ,g         0
+  _SECONDARY_PN
+                                  000ff671         1   data ,g         0
+  _SLEEP_ON_TIME_CMD
+                                  000ff672         1   data ,g         2
+  _SLEEP_OFF_TIME_CMD
+                                  000ff673         1   data ,g         2
+  _LOW_BAT_LEVEL_RX
+                                  000ff674         1   data ,g         2
+  _LOW_BAT_LEVEL_CMD
+                                  000ff675         1   data ,g         4
+  _GET_SPN_S_RX
+                                  000ff676         1   data ,g         0
+  _DBM_DATA_LENGTH
+                                  000ff677         5   data ,g        21
+  _LAC_DATA_LENGTH
+                                  000ff67c         5   data ,g        19
+  _CELL_ID_DATA_LENGTH
+                                  000ff681         5   data ,g        19
+  _MCC_1
+                                  000ff686         5   data ,g         0
+  _MNC
+                                  000ff68b         5   data ,g         9
+  _LAC
+                                  000ff690         5   data ,g         6
+  _CELL_ID
+                                  000ff695         5   data ,g         4
+  _MCC_DATA_LENGTH
+                                  000ff69a         1   data ,g         0
+  _MNC_DATA_LENGTH
+                                  000ff69b         1   data ,g        10
+  _LAC_DATA_LENGTH_0
+                                  000ff69c         1   data ,g         b
+  _CELL_ID_DATA_LENGTH_0
+                                  000ff69d         1   data ,g         7
+  _SMS_CMD_FRAME_RX
+                                  000ff69e         1   data ,g         0
+  _GET_IMEI_SEND_CMD_RX
+                                  000ff69f         1   data ,g         0
+  _TEMP_IP
+                                  000ff6a0         f   data ,g         0
+  _SET_IP_FRAME_RX
+                                  000ff6af         1   data ,g         0
+  _SET_RP_NO_FRAME_RX
+                                  000ff6b0         1   data ,g         0
+  _SET_RP_NO_FRAME_CMD
+                                  000ff6b1         1   data ,g         3
+  _VV
+                                  000ff6b2         1   data ,g        2c
+  _TEMP_RP_NO
+                                  000ff6b3         c   data ,g         1
+  _REPLY_NUMBER_RX
+                                  000ff6bf         1   data ,g         0
+  _FLASH_READ_ADDRESS
+                                  000ff6c0         4   data ,g         6
+  _TEMP_FLASH_WRITE_ADDRESS
+                                  000ff6c4         4   data ,g         3
+  _TEMP_FLASH_READ_ADDRESS
+                                  000ff6c8         4   data ,g         3
+  _HEALTH_FRAME_NUMBER
+                                  000ff6cc         4   data ,g        14
+  _updatedata
+                                  000ff6d0         2   data ,g         0
+  _FLASH_WRITE_ADDRESS_1
+                                  000ff6d2         2   data ,g         2
+  _FLASH_WRITE_ADDRESS_2
+                                  000ff6d4         2   data ,g         2
+  _FLASH_WRITE_ADDRESS_3
+                                  000ff6d6         2   data ,g         5
+  _FLASH_READ_ADDRESS_1
+                                  000ff6d8         2   data ,g         2
+  _FLASH_READ_ADDRESS_2
+                                  000ff6da         2   data ,g         2
+  _FLASH_READ_ADDRESS_3
+                                  000ff6dc         2   data ,g         2
+  _RLL
+                                  000ff6de         2   data ,g         d
+  _LOW_BAT_LEVEL
+                                  000ff6e0         2   data ,g        10
+  _LB_LEVEL
+                                  000ff6e2         2   data ,g         2
+  _SLEEP_ON_TIME
+                                  000ff6e4         2   data ,g         5
+  _TEMP_SLEEP_ON_TIME
+                                  000ff6e6         2   data ,g         7
+  _RECORD
+                                  000ff6e8        b4   data ,g         c
+  _HA_LEVEL
+                                  000ff79c         1   data ,g         2
+  _GET_PPN_S_RX
+                                  000ff79d         1   data ,g         0
+  _GET_DEVICE_CLEAR_S_RX
+                                  000ff79e         1   data ,g         0
+  _FLASH_WRITING
+                                  000ff79f         1   data ,g         3
+  _GET_PPN_CMD
+                                  000ff7a0         1   data ,g         2
+  _GET_SPN_CMD
+                                  000ff7a1         1   data ,g         2
+  _FLASH_STATUS
+                                  000ff7a2         a   data ,g         3
+FILE=DefaultBuild\N_DELAY.obj
+                                  000ff7ac  000ff7af         4
+  _Milli_Seconds
+                                  000ff7ac         2   data ,g         3
+  _Micro_Seconds
+                                  000ff7ae         2   data ,g         3
+FILE=DefaultBuild\V_Control.obj
+                                  000ff7b0  000ff7da        2b
+  _VLT_STARTUP_INITIAL
+                                  000ff7b0         1   data ,g         6
+  _RS_ALERT_UPDATE
+                                  000ff7b1         1   data ,g         3
+  _PS_ALERT_UPDATE
+                                  000ff7b2         1   data ,g         3
+  _LB_ALERT_SEND
+                                  000ff7b3         1   data ,g         4
+  _A_COUNT
+                                  000ff7b4         2   data ,g         0
+  _AVERAGE
+                                  000ff7b6        14   data ,g         0
+  _Test
+                                  000ff7ca         4   data ,g         2
+  _Ax
+                                  000ff7ce         4   data ,g         c
+  _Ay
+                                  000ff7d2         4   data ,g         8
+  _Az
+                                  000ff7d6         4   data ,g         c
+  _INT_BAT_PERCENTAGE
+                                  000ff7da         1   data ,g         c
+FILE=DefaultBuild\N_Serial.obj
+                                  000ff7dc  000ff7dd         2
+  _CSI00_RX_DATA
+                                  000ff7dc         1   data ,g         0
+  _CSI00_RX
+                                  000ff7dd         1   data ,g         0
+FILE=DefaultBuild\GSM_INTZ_AND_SMS_HANDLING.obj
+                                  000ff7de  000ff7e5         8
+  _FOR_9
+                                  000ff7de         2   data ,g        29
+  _NetworkCode
+                                  000ff7e0         2   data ,g         0
+  _PNET_CMD_REPLY
+                                  000ff7e2         1   data ,g         3
+  _SNET_CMD_REPLY
+                                  000ff7e3         1   data ,g         3
+  _NWP_CMD_SET
+                                  000ff7e4         1   data ,g         4
+  _NWS_CMD_SET
+                                  000ff7e5         1   data ,g         3
+FILE=DefaultBuild\N_GSM_RESPONSE_HANDLE.obj
+                                  000ff7e6  000ff825        40
+  _TEMP_HACL_VALUE
+                                  000ff7e6         3   data ,g         c
+  _G
+                                  000ff7e9         1   data ,g         2
+  _PIN_COUNT_CHECK
+                                  000ff7ea         1   data ,g         7
+  _Y
+                                  000ff7eb         1   data ,g         0
+  _V
+                                  000ff7ec         1   data ,g         0
+  _U
+                                  000ff7ed         1   data ,g         0
+  _SNET_CMD_FRAME_RX
+                                  000ff7ee         1   data ,g         d
+  _PNET_CMD_FRAME_RX
+                                  000ff7ef         1   data ,g         d
+  _NWA_CMD_FRAME_RX
+                                  000ff7f0         1   data ,g         0
+  _NWS_CMD_FRAME_RX
+                                  000ff7f1         1   data ,g         0
+  _TEMP_D
+                                  000ff7f2        32   data ,g         0
+  _TD
+                                  000ff824         2   data ,g         0
+FILE=DefaultBuild\N_IEEPROM.obj
+                                  000ff826  000ff862        3d
+  _my_request
+                                  000ff826         8   data ,g        12
+    struct  {
+                                                   8
+      _my_request.index_u16
+                                  000ff826         2   unsigned int
+      _my_request.data_pu08
+                                  000ff828         4   [near pointer]
+      _my_request.bytecount_u16
+                                  000ff82a         2   unsigned int
+      _my_request.command_enu
+                                  000ff82c         1   enum
+    }
+  _my_descriptor
+                                  000ff82e         2   data ,g         3
+    struct  {
+                                                   2
+      _my_descriptor.fx_MHz_u08
+                                  000ff82e         1   unsigned char
+      _my_descriptor.wide_voltage_mode_u08
+                                  000ff82f         1   unsigned char
+    }
+  _my_status
+                                  000ff830         1   data ,g        1b
+  _bit0
+                                  000ff831         1   data ,g         0
+  _bit1
+                                  000ff832         1   data ,g         0
+  _bit2
+                                  000ff833         1   data ,g         0
+  _bit3
+                                  000ff834         1   data ,g         0
+  _bit4
+                                  000ff835         1   data ,g         0
+  _err_blcok0
+                                  000ff836         1   data ,g         1
+  _err_blcok1
+                                  000ff837         1   data ,g         1
+  _err_blcok2
+                                  000ff838         1   data ,g         0
+  _err_blcok3
+                                  000ff839         1   data ,g         0
+  _intp_cnt
+                                  000ff83a         1   data ,g         0
+  _Write_Buffer
+                                  000ff83b         a   data ,g         0
+    struct  {
+                                                   a
+      _Write_Buffer.data1
+                                  000ff83b         1   unsigned char
+      _Write_Buffer.data2
+                                  000ff83c         1   unsigned char
+      _Write_Buffer.data3
+                                  000ff83d         1   unsigned char
+      _Write_Buffer.data4
+                                  000ff83e         1   unsigned char
+      _Write_Buffer.data5
+                                  000ff83f         1   unsigned char
+      _Write_Buffer.data6
+                                  000ff840         1   unsigned char
+      _Write_Buffer.data7
+                                  000ff841         1   unsigned char
+      _Write_Buffer.data8
+                                  000ff842         1   unsigned char
+      _Write_Buffer.data9
+                                  000ff843         1   unsigned char
+      _Write_Buffer.data10
+                                  000ff844         1   unsigned char
+    }
+  _Write_Buffer2
+                                  000ff845         a   data ,g         0
+    struct  {
+                                                   a
+      _Write_Buffer2.data1
+                                  000ff845         1   unsigned char
+      _Write_Buffer2.data2
+                                  000ff846         1   unsigned char
+      _Write_Buffer2.data3
+                                  000ff847         1   unsigned char
+      _Write_Buffer2.data4
+                                  000ff848         1   unsigned char
+      _Write_Buffer2.data5
+                                  000ff849         1   unsigned char
+      _Write_Buffer2.data6
+                                  000ff84a         1   unsigned char
+      _Write_Buffer2.data7
+                                  000ff84b         1   unsigned char
+      _Write_Buffer2.data8
+                                  000ff84c         1   unsigned char
+      _Write_Buffer2.data9
+                                  000ff84d         1   unsigned char
+      _Write_Buffer2.data10
+                                  000ff84e         1   unsigned char
+    }
+  _Read_Buffer
+                                  000ff84f         a   data ,g         0
+    struct  {
+                                                   a
+      _Read_Buffer.data1
+                                  000ff84f         1   unsigned char
+      _Read_Buffer.data2
+                                  000ff850         1   unsigned char
+      _Read_Buffer.data3
+                                  000ff851         1   unsigned char
+      _Read_Buffer.data4
+                                  000ff852         1   unsigned char
+      _Read_Buffer.data5
+                                  000ff853         1   unsigned char
+      _Read_Buffer.data6
+                                  000ff854         1   unsigned char
+      _Read_Buffer.data7
+                                  000ff855         1   unsigned char
+      _Read_Buffer.data8
+                                  000ff856         1   unsigned char
+      _Read_Buffer.data9
+                                  000ff857         1   unsigned char
+      _Read_Buffer.data10
+                                  000ff858         1   unsigned char
+    }
+  _Read_Buffer2
+                                  000ff859         a   data ,g         1
+    struct  {
+                                                   a
+      _Read_Buffer2.data1
+                                  000ff859         1   unsigned char
+      _Read_Buffer2.data2
+                                  000ff85a         1   unsigned char
+      _Read_Buffer2.data3
+                                  000ff85b         1   unsigned char
+      _Read_Buffer2.data4
+                                  000ff85c         1   unsigned char
+      _Read_Buffer2.data5
+                                  000ff85d         1   unsigned char
+      _Read_Buffer2.data6
+                                  000ff85e         1   unsigned char
+      _Read_Buffer2.data7
+                                  000ff85f         1   unsigned char
+      _Read_Buffer2.data8
+                                  000ff860         1   unsigned char
+      _Read_Buffer2.data9
+                                  000ff861         1   unsigned char
+      _Read_Buffer2.data10
+                                  000ff862         1   unsigned char
+    }
+FILE=DefaultBuild\r_cg_pfdl.obj
+                                  000ff864  000ff870         d
+  _gFdlResult
+                                  000ff864         1   data ,g         d
+  _gFdlReq
+                                  000ff866         8   data ,g        15
+    struct  {
+                                                   8
+      _gFdlReq.index_u16
+                                  000ff866         2   unsigned int
+      _gFdlReq.data_pu08
+                                  000ff868         4   [near pointer]
+      _gFdlReq.bytecount_u16
+                                  000ff86a         2   unsigned int
+      _gFdlReq.command_enu
+                                  000ff86c         1   enum
+    }
+  _gFdlDesc
+                                  000ff86e         2   data ,g         5
+    struct  {
+                                                   2
+      _gFdlDesc.fx_MHz_u08
+                                  000ff86e         1   unsigned char
+      _gFdlDesc.wide_voltage_mode_u08
+                                  000ff86f         1   unsigned char
+    }
+  _gFdlStatus
+                                  000ff870         1   data ,g         7
+
+SECTION=.dataR
+FILE=DefaultBuild\r_main.obj
+                                  000ff872  000ff872         1
+  _PANIC_ALERT
+                                  000ff872         1   data ,g         9
+FILE=DefaultBuild\N_EEPROM.obj
+                                  000ff874  000ff87d         a
+  _Array_1
+                                  000ff874         a   data ,g         0
+FILE=DefaultBuild\N_GPS.obj
+                                  000ff87e  000ff8e6        69
+  _LON_DIRECTION
+                                  000ff87e         1   data ,g         7
+  _LAT_DIRECTION
+                                  000ff87f         1   data ,g         7
+  _COG
+                                  000ff880         6   data ,g        12
+  _no
+                                  000ff886         2   data ,g         4
+  _LAT_DM
+                                  000ff888         a   data ,g         7
+  _LOG_DM
+                                  000ff892         a   data ,g         7
+  _LAT_DM_RX
+                                  000ff89c         a   data ,g         3
+  _LOG_DM_RX
+                                  000ff8a6         a   data ,g         2
+  _Array
+                                  000ff8b0         a   data ,g         0
+  _GPGA_FRAME
+                                  000ff8ba         5   data ,g         1
+  _GPGA_DATA
+                                  000ff8bf         a   data ,g         0
+  _VTG_FRAME
+                                  000ff8c9         3   data ,g         1
+  _SPEED_DATA_RX
+                                  000ff8cc         a   data ,g         3
+  _GSA_FRAME
+                                  000ff8d6         3   data ,g         1
+  _ALTITUDE
+                                  000ff8d9         8   data ,g         a
+  _NAVIGATION_FRAME_ACK
+                                  000ff8e1         6   data ,g         1
+FILE=DefaultBuild\N_GSM.obj
+                                  000ff8e8  000ff9dd        f6
+  _GSM_STRENGTH
+                                  000ff8e8         1   data ,g         7
+  _VEICHLE_NUMBER
+                                  000ff8e9         f   data ,g         d
+  _IMEI
+                                  000ff8f8        10   data ,g        10
+  _Array_0
+                                  000ff908         a   data ,g        1d
+  _NETWORK_NAME
+                                  000ff912         8   data ,g         a
+  _P_LAT_DM
+                                  000ff91a         a   data ,g         0
+  _P_LOG_DM
+                                  000ff924         a   data ,g         0
+  _SMS_MOBILE_NO
+                                  000ff92e        34   data ,g         f
+  _REPLY_NUMBER
+                                  000ff962         a   data ,g         3
+  _TEMP_PIP
+                                  000ff96c        10   data ,g         1
+  _TEMP_PIP2
+                                  000ff97c        10   data ,g         3
+  _TEMP_SIP
+                                  000ff98c        10   data ,g         1
+  _TEMP_SIP2
+                                  000ff99c        10   data ,g         3
+  _TEMP_APN
+                                  000ff9ac         f   data ,g        18
+  _TEMP_PPN
+                                  000ff9bb         4   data ,g         0
+  _TEMP_PPN2
+                                  000ff9bf         4   data ,g         2
+  _TEMP_SPN
+                                  000ff9c3         4   data ,g         0
+  _TEMP_SPN2
+                                  000ff9c7         4   data ,g         2
+  _FLASH_WRITE_ADDRESS
+                                  000ff9cc         4   data ,g         6
+  _RECORD_ARRAY_ADDRESS
+                                  000ff9d0         2   data ,g         5
+  _FLASH_BYTE
+                                  000ff9d2         2   data ,g         5
+  _RDSR
+                                  000ff9d4         1   data ,g         1
+  _WRSR
+                                  000ff9d5         2   data ,g         1
+  _WREN
+                                  000ff9d7         1   data ,g         1
+  _CE
+                                  000ff9d8         1   data ,g         1
+  _STATUS_REG
+                                  000ff9d9         1   data ,g         1
+  _READ
+                                  000ff9da         4   data ,g         0
+
+SECTION=RAM_VECT_n
+FILE=DefaultBuild\u_ram_vector.obj
+                                  000ff9de  000ffa71        94
+  _RAM_INTWDTI_ISR
+                                  000ff9de         4   data ,g         2
+  _RAM_INTLVI_ISR
+                                  000ff9e2         4   data ,g         2
+  _RAM_INTP0_ISR
+                                  000ff9e6         4   data ,g         2
+  _RAM_INTP1_ISR
+                                  000ff9ea         4   data ,g         4
+  _RAM_INTP2_ISR
+                                  000ff9ee         4   data ,g         4
+  _RAM_INTP3_ISR
+                                  000ff9f2         4   data ,g         4
+  _RAM_INTP4_ISR
+                                  000ff9f6         4   data ,g         4
+  _RAM_INTP5_ISR
+                                  000ff9fa         4   data ,g         2
+  _RAM_INTST2_ISR
+                                  000ff9fe         4   data ,g         4
+  _RAM_INTSR2_ISR
+                                  000ffa02         4   data ,g         4
+  _RAM_INTSRE2_ISR
+                                  000ffa06         4   data ,g         2
+  _RAM_INTST0_ISR
+                                  000ffa0a         4   data ,g         4
+  _RAM_INTSR0_ISR
+                                  000ffa0e         4   data ,g         2
+  _RAM_INTSRE0_ISR
+                                  000ffa12         4   data ,g         2
+  _RAM_INTST1_ISR
+                                  000ffa16         4   data ,g         4
+  _RAM_INTSR1_ISR
+                                  000ffa1a         4   data ,g         4
+  _RAM_INTSRE1_ISR
+                                  000ffa1e         4   data ,g         2
+  _RAM_INTIICA0_ISR
+                                  000ffa22         4   data ,g         2
+  _RAM_INTTM00_ISR
+                                  000ffa26         4   data ,g         4
+  _RAM_INTTM01_ISR
+                                  000ffa2a         4   data ,g         4
+  _RAM_INTTM02_ISR
+                                  000ffa2e         4   data ,g         4
+  _RAM_INTTM03_ISR
+                                  000ffa32         4   data ,g         4
+  _RAM_INTAD_ISR
+                                  000ffa36         4   data ,g         4
+  _RAM_INTRTC_ISR
+                                  000ffa3a         4   data ,g         2
+  _RAM_INTIT_ISR
+                                  000ffa3e         4   data ,g         2
+  _RAM_INTKR_ISR
+                                  000ffa42         4   data ,g         2
+  _RAM_INTTM04_ISR
+                                  000ffa46         4   data ,g         4
+  _RAM_INTTM05_ISR
+                                  000ffa4a         4   data ,g         2
+  _RAM_INTTM06_ISR
+                                  000ffa4e         4   data ,g         2
+  _RAM_INTTM07_ISR
+                                  000ffa52         4   data ,g         2
+  _RAM_INTP6_ISR
+                                  000ffa56         4   data ,g         0
+  _RAM_INTP7_ISR
+                                  000ffa5a         4   data ,g         0
+  _RAM_INTP8_ISR
+                                  000ffa5e         4   data ,g         0
+  _RAM_INTP9_ISR
+                                  000ffa62         4   data ,g         0
+  _RAM_INTP10_ISR
+                                  000ffa66         4   data ,g         0
+  _RAM_INTP11_ISR
+                                  000ffa6a         4   data ,g         0
+  _RAM_INTFL_ISR
+                                  000ffa6e         4   data ,g         2
+
+Absolute value symbols
+FILE=DefaultBuild\N_GPS.obj
+  @$IMM_12
+                                  00000012         0   none ,l         1
+FILE=rlink_generates_05
+  __s.text
+                                  00000244         0   none ,g         0
+  __e.text
+                                  0000067e         0   none ,g         0
+  __s.textf
+                                  000034bf         0   none ,g         0
+  __e.textf
+                                  0000c190         0   none ,g         0
+  __s.const
+                                  00002000         0   none ,g         0
+  __e.const
+                                  000034bf         0   none ,g         0
+  __s.constf
+                                  00000080         0   none ,g         0
+  __e.constf
+                                  00000080         0   none ,g         0
+  __s.data
+                                  000000d8         0   none ,g         0
+  __e.data
+                                  00000244         0   none ,g         0
+  __s.sdata
+                                  00000080         0   none ,g         0
+  __e.sdata
+                                  00000080         0   none ,g         0
+  __s.bss
+                                  000fef00         0   none ,g         0
+  __e.bss
+                                  000ff871         0   none ,g         0
+  __s.sbss
+                                  000ffe20         0   none ,g         0
+  __e.sbss
+                                  000ffe20         0   none ,g         0
+  __s.dataR
+                                  000ff872         0   none ,g         0
+  __e.dataR
+                                  000ff9de         0   none ,g         0
+  __s.sdataR
+                                  000ffe20         0   none ,g         0
+  __e.sdataR
+                                  000ffe20         0   none ,g         0
+  __s.RLIB
+                                  0000070c         0   none ,g         0
+  __e.RLIB
+                                  00000a3f         0   none ,g         0
+  __s.SLIB
+                                  000000c4         0   none ,g         0
+  __e.SLIB
+                                  000000c4         0   none ,g         0
+  __sRAM_VECT_n
+                                  000ff9de         0   none ,g         0
+  __eRAM_VECT_n
+                                  000ffa72         0   none ,g         0
+  __sPFDL_COD
+                                  0000067e         0   none ,g         0
+  __ePFDL_COD
+                                  0000070c         0   none ,g         0
+  __s.option_byte
+                                  000000c0         0   none ,g         0
+  __e.option_byte
+                                  000000c4         0   none ,g         0
+  __s.monitor1
+                                  000000ce         0   none ,g         0
+  __e.monitor1
+                                  000000d8         0   none ,g         0
+  __s.monitor2
+                                  0000fe00         0   none ,g         0
+  __e.monitor2
+                                  00010000         0   none ,g         0
+  __s.security_id
+                                  000000c4         0   none ,g         0
+  __e.security_id
+                                  000000ce         0   none ,g         0
+  __s.vect
+                                  00000000         0   none ,g         0
+  __e.vect
+                                  00000080         0   none ,g         0
+  __RAM_ADDR_START
+                                  000fef00         0   none ,g         0
+  __RAM_ADDR_END
+                                  000ffee0         0   none ,g         0
+  __STACK_ADDR_START
+                                  000ffe20         0   none ,g         1
+  __STACK_ADDR_END
+                                  000ffa72         0   none ,g         1
+
+*** Unfilled Areas ***
+
+AREA                                START    END
+
+*** Delete Symbols ***
+
+SYMBOL                                SIZE    INFO
+
+*** Variable Vector Table List ***
+
+ADDRESS  SYMBOL/ADDRESS
+00       _start
+02       ffff
+04       _watchdog_intrpt@1
+06       _lvi_intrpt@1
+08       _intp0_intrpt@1
+0a       _intp1_intrpt@1
+0c       _intp2_intrpt@1
+0e       _intp3_intrpt@1
+10       _intp4_intrpt@1
+12       _intp5_intrpt@1
+14       _intst2_interrupt@1
+16       _intsr2_interrupt@1
+18       _intsre2_interrupt@1
+1a       
+1c       
+1e       _intst0_interrupt@1
+20       _intsr0_interrupt@1
+22       _intsre0_interrupt@1
+24       _intst1_interrupt@1
+26       _intsr1_interrupt@1
+28       _intsre1_interrupt@1
+2a       _intsic_interrupt@1
+2c       _inttm00_interrupt@1
+2e       _inttm01_interrupt@1
+30       _inttm02_interrupt@1
+32       _inttm03_interrupt@1
+34       _intad_interrupt@1
+36       _intrtc_interrrupt@1
+38       _intit_interrrupt@1
+3a       _intkr_interrupt@1
+3c       
+3e       
+40       
+42       _inttm04_interrupt@1
+44       _inttm05_interrupt@1
+46       _inttm06_interrupt@1
+48       _inttm07_interrupt@1
+4a       
+4c       
+4e       
+50       
+52       
+54       
+56       
+58       
+5a       
+5c       
+5e       
+60       
+62       _intfl_interrupt@1
+64       
+66       
+68       
+6a       
+6c       
+6e       
+70       
+72       
+74       
+76       
+78       
+7a       
+7c       
+7e       

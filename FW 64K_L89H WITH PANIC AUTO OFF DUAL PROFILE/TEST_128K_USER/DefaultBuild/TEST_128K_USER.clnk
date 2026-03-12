@@ -1,0 +1,65 @@
+-Input=DefaultBuild\cstart.obj
+-Input=DefaultBuild\stkinit.obj
+-Input=DefaultBuild\r_main.obj
+-Input=DefaultBuild\r_systeminit.obj
+-Input=DefaultBuild\r_cg_cgc.obj
+-Input=DefaultBuild\r_cg_cgc_user.obj
+-Input=DefaultBuild\r_cg_wdt.obj
+-Input=DefaultBuild\r_cg_wdt_user.obj
+-Input=DefaultBuild\r_cg_port.obj
+-Input=DefaultBuild\r_cg_port_user.obj
+-Input=DefaultBuild\r_cg_intc.obj
+-Input=DefaultBuild\r_cg_intc_user.obj
+-Input=DefaultBuild\r_cg_serial.obj
+-Input=DefaultBuild\r_cg_serial_user.obj
+-Input=DefaultBuild\r_cg_adc.obj
+-Input=DefaultBuild\r_cg_adc_user.obj
+-Input=DefaultBuild\r_cg_timer.obj
+-Input=DefaultBuild\r_cg_timer_user.obj
+-Input=DefaultBuild\r_cg_rtc.obj
+-Input=DefaultBuild\r_cg_rtc_user.obj
+-Input=DefaultBuild\u_interrupts.obj
+-Input=DefaultBuild\u_ram_vector.obj
+-Input=DefaultBuild\N_IIC.obj
+-Input=DefaultBuild\N_EEPROM.obj
+-Input=DefaultBuild\N_GPS.obj
+-Input=DefaultBuild\N_GSM.obj
+-Input=DefaultBuild\N_DELAY.obj
+-Input=DefaultBuild\V_Control.obj
+-Input=DefaultBuild\N_Serial.obj
+-Input=DefaultBuild\GSM_INTZ_AND_SMS_HANDLING.obj
+-Input=DefaultBuild\N_GSM_RESPONSE_HANDLE.obj
+-Input=DefaultBuild\FIRMWARE_HANDLING.obj
+-Input=DefaultBuild\N_IEEPROM.obj
+-Input=DefaultBuild\r_cg_pfdl.obj
+-LIBrary=User_Files\V1.05\lib\pfdl.lib
+-LIBrary=User_Files\V1.05\librl78\pfdl.lib
+-SECURITY_ID=00000000000000000000
+-DEVICE=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF
+-DEBug
+-NOCOmpress
+-NOOPtimize
+-OUtput=DefaultBuild\TEST_128K_USER.abs
+-LIBrary=C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.15.00\lib\rl78cm4s.lib
+-LIBrary=C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.15.00\lib\malloc_n.lib
+-LIBrary=C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.15.00\lib\rl78cm4r.lib
+-OCDBG=84
+-DEBUG_MONITOR=FE00-FFFF
+-USER_OPT_BYTE=7EFFE8
+-LISt=DefaultBuild\TEST_128K_USER.map
+-SHow=Total_size,VECTOR,STRUCT
+-AUTO_SECTION_LAYOUT
+-ROm=.data=.dataR
+-ROm=.sdata=.sdataR
+-NOMessage
+-STACk
+-Total_size
+-NOLOgo
+-end
+-Input=DefaultBuild\TEST_128K_USER.abs
+-DEVICE=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF
+-OUtput=DefaultBuild\TEST_128K_USER.mot
+-FOrm=Stype
+-NOMessage
+-exit
+

@@ -1,0 +1,2 @@
+ .public _bl_start
+_bl_start .equ 0x00000500

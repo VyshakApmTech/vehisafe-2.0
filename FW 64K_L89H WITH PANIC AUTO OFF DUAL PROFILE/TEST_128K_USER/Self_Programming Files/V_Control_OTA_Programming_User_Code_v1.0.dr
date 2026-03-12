@@ -1,0 +1,19 @@
+; User ROM area definition
+;MEMORY ROM   : ( 000000H , 002000H )        ; Boot clusters
+MEMORY ROM : ( 002000H , 00DE00H )        ; User program
+MEMORY OCDROM :(00FE00H, 000200H)
+
+MEMORY D_ROM : (0000H, 0C0H)
+
+MERGE @@VECT00 :=D_ROM
+MERGE @@VECT04 :=D_ROM
+MEMORY CSEG0B0 :(0000C0H, 000004H)
+MEMORY OCDSTAD :(0000CEH, 00000AH)
+
+; User RAM area definition
+; It is possible to use this memory area "RAM" as you like.
+; Please modify this area in order to match your device.
+; Ex.) MEMORY RAM : ( 0FF300H , 00B20H )    ; for device RAM size 4KB
+
+MEMORY RAM : ( 0FF309H , 00B16H )           ; for device RAM size 4KB
+MEMORY RAM_SADDR : ( 0FFE20H , 00DFH )     ; RAM (saddr)
