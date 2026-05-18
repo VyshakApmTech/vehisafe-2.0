@@ -1,5 +1,5 @@
 #include "r_cg_userdefine.h"
-unsigned int Milli_Seconds,Micro_Seconds;
+volatile unsigned int Milli_Seconds,Micro_Seconds;
 /*void delay__us(unsigned int us)
 {  
 	unsigned int z;
@@ -19,6 +19,7 @@ void MS_TIMER(unsigned int y)
 	while(Milli_Seconds<=y);
 	R_TAU0_Channel1_Stop();
 }
+
 void US_TIMER(unsigned int o)
 {
 	Micro_Seconds=0;
@@ -26,4 +27,3 @@ void US_TIMER(unsigned int o)
 	while(Micro_Seconds<=o);
 	R_TAU0_Channel3_Stop();
 }
-

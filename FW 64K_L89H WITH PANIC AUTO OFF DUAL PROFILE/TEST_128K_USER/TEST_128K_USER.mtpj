@@ -1,9 +1,9 @@
-﻿<CubeSuiteProject PackageVersion="V8.13.00  [05 Dec 2024]">
-  <ProductVersion>9.13.00.00</ProductVersion>
+﻿<CubeSuiteProject PackageVersion="V8.15.00  [28 Nov 2025]">
+  <ProductVersion>9.15.00.00</ProductVersion>
   <Class Guid="68f4a651-b9cd-473b-a595-b00447132ffa">
     <Instance Guid="00000000-0000-0000-0000-000000000000">
       <FormatVersion>2.0</FormatVersion>
-      <FileVersion>9.13</FileVersion>
+      <FileVersion>9.15</FileVersion>
       <ProjectGuid>a378bc81-81c2-46c6-b2a4-54adb6f65bdc</ProjectGuid>
       <ProjectItemGuid>1bcdfae0-be21-4601-8ab4-ce722345f53d</ProjectItemGuid>
       <FileCategoryGuid>0eaa32c7-f61b-4833-b065-ddd86600c7fe</FileCategoryGuid>
@@ -809,7 +809,7 @@ C:\Program Files (x86)\Renesas Electronics\CS+\CC\FAA\V1.05.00
       <LibOptionLibraryRuntime-DefaultValue>False</LibOptionLibraryRuntime-DefaultValue>
       <LinkOptionLibraryRuntime-DefaultValue>True</LinkOptionLibraryRuntime-DefaultValue>
       <IsLockedByUser>False</IsLockedByUser>
-      <TimeTagModified--0>-8584285620135308869</TimeTagModified--0>
+      <TimeTagModified--0>-8584283173265922208</TimeTagModified--0>
       <BuildMode-0>DefaultBuild</BuildMode-0>
       <Memo-0 />
       <OutputMessageFormat-0>%TargetFiles%</OutputMessageFormat-0>
@@ -844,7 +844,7 @@ C:\Program Files (x86)\Renesas Electronics\CS+\CC\FAA\V1.05.00
       <DependencyFileExistCheckingType-0>Rebuild</DependencyFileExistCheckingType-0>
       <GeneralOptionLimitDevice-0>Limit</GeneralOptionLimitDevice-0>
       <GeneralOptionOtherAdditionalOptions-0 />
-      <LastCompilerVersion-0>V1.15.00</LastCompilerVersion-0>
+      <LastCompilerVersion-0>V1.16.00</LastCompilerVersion-0>
     </Instance>
     <Instance Guid="86bebc9e-2f6f-4e72-83c8-8883e6cf6d33">
       <COptionAnsi-DefaultValue>False</COptionAnsi-DefaultValue>
@@ -1408,7 +1408,7 @@ User_Files\V1.05\incrl78
       <LbgOptionHeadStringH-DefaultValue>False</LbgOptionHeadStringH-DefaultValue>
       <LbgOptionHeadInttypesH-DefaultValue>False</LbgOptionHeadInttypesH-DefaultValue>
       <IsLockedByUser>False</IsLockedByUser>
-      <TimeTagModified--0>-8584285620135288798</TimeTagModified--0>
+      <TimeTagModified--0>-8584283173265932153</TimeTagModified--0>
       <LbgOptionLibraryMode-0>None</LbgOptionLibraryMode-0>
       <LbgOptionLogo-0>False</LbgOptionLogo-0>
       <LbgOptionUseSameOptimizeRelatedSettingsAsCompileOptions-0>False</LbgOptionUseSameOptimizeRelatedSettingsAsCompileOptions-0>
@@ -2610,7 +2610,6 @@ User_Files\V1.05\incrl78
       <DebuggerProperty-HookProperty-HookTransaction-Broke-Length>0</DebuggerProperty-HookProperty-HookTransaction-Broke-Length>
       <DebuggerProperty-HookProperty-HookTransaction-Connected-Length>0</DebuggerProperty-HookProperty-HookTransaction-Connected-Length>
       <DebuggerProperty-HookProperty-HookTransaction-Disconnecting-Length>0</DebuggerProperty-HookProperty-HookTransaction-Disconnecting-Length>
-      <DebuggerProperty-EssentialProperty-EmulatorConnect-SerialNumber />
     </Instance>
   </Class>
   <Class Guid="9f7af90c-526c-4f28-af29-524df208b9e0">
@@ -4659,7 +4658,7 @@ User_Files\V1.05\incrl78
     &lt;PIOR4Value Name="PIOR4Value" Text="0" /&gt;
     &lt;PIOR5Value Name="PIOR5Value" Text="0" /&gt;
     &lt;ProjectName Name="PrjName" Text="TEST_128K_USER" /&gt;
-    &lt;ProjectPath Name="PrjPath" Text="E:\vyshak\FW 64K_L89H WITH PANIC AUTO OFF DUAL PROFILE\TEST_128K_USER" /&gt;
+    &lt;ProjectPath Name="PrjPath" Text="C:\Users\Admin\Desktop\vyshak\FW 64K_L89H WITH PANIC AUTO OFF DUAL PROFILE\TEST_128K_USER" /&gt;
     &lt;ProjectKind Name="PrjKind" Text="Project78K0R" /&gt;
     &lt;DeviceName Name="DeviceName" Fixed="" Text="RL78G13" /&gt;
     &lt;MCUName Name="MCUName" Text="RL78G13_44pin" /&gt;
@@ -5641,6 +5640,7 @@ User_Files\V1.05\incrl78
     &lt;/FUNC&gt;
     &lt;TAG&gt;
       &lt;GlobleUserTag&gt;
+        &lt;cg_security4 Name="cg_security4" Value="00" /&gt;
         &lt;cg_security9 Name="cg_security9" Value="00" /&gt;
         &lt;cg_security7 Name="cg_security7" Value="00" /&gt;
         &lt;cg_security5 Name="cg_security5" Value="00" /&gt;
@@ -5650,14 +5650,13 @@ User_Files\V1.05\incrl78
         &lt;cg_security1 Name="cg_security1" Value="00" /&gt;
         &lt;cg_ocd_ram_size Name="cg_ocd_ram_size" Value="512" /&gt;
         &lt;clock_option Name="clock_option" Value="E8" /&gt;
-        &lt;cg_security2 Name="cg_security2" Value="00" /&gt;
         &lt;pior_value Name="pior_value" Value="00" /&gt;
         &lt;cg_option Name="cg_option" Value="84" /&gt;
         &lt;cg_security8 Name="cg_security8" Value="00" /&gt;
         &lt;cg_security6 Name="cg_security6" Value="00" /&gt;
         &lt;ocdstart Name="ocdstart" Value="0FE00" /&gt;
         &lt;cg_onchip Name="cg_onchip" Value="" /&gt;
-        &lt;cg_security4 Name="cg_security4" Value="00" /&gt;
+        &lt;cg_security2 Name="cg_security2" Value="00" /&gt;
         &lt;cg_iawctl_value Name="cg_iawctl_value" Value="00" /&gt;
         &lt;lvi_option Name="lvi_option" Value="FF" /&gt;
         &lt;wdt_option Name="wdt_option" Value="7E" /&gt;

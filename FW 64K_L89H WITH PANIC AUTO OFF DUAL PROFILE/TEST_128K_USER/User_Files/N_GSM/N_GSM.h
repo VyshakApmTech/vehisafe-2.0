@@ -3,6 +3,7 @@
 
 #include "r_cg_userdefine.h"
 
+void SEND_AIS140_PVT(void);
 void ACK_RX(unsigned int ct,unsigned int ack,unsigned int REDIAL,unsigned int WAIT_TIME);
 void GSM_UART_RX(unsigned char UART0_BUFFER);
 void GSM_INTZ(char MODE);
@@ -16,6 +17,7 @@ void SYSTEM_STATUS(void);
 void GET_NETWORK_NAME(void);
 void GET_DEGREES(void);
 void GPS_PRINT(void);
+//void CONNECT_AND_SEND_TO_SERVER(void);
 void UPDATE_ONLINE_DATA_FRAME(void);
 void GET_SIGNAL_STRENGTH(void);
 void DATA_PRINT(char FORMAT);

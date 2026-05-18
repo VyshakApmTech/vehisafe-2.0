@@ -3,6 +3,7 @@
 
 #include "r_cg_userdefine.h"
 
+extern void GSM_SMS_DIAG(void);
 void GSM_INTZ(char MODE);
 void NEW_SMS_READ(void);
 void IsSTKInit(void);

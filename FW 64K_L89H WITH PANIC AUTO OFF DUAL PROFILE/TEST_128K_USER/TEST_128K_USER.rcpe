@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <MicomToolCommonProjectFile Version="1.00">
-  <CreatorType Name="CubeSuite+" Version="V8.13.00  [05 Dec 2024]" />
+  <CreatorType Name="CubeSuite+" Version="V8.15.00  [28 Nov 2025]" />
   <Placeholders>
     <PlaceholderPrefix>%</PlaceholderPrefix>
     <PlaceholderPostfix>%</PlaceholderPostfix>
@@ -124,7 +124,7 @@
       <DebugToolSettings />
     </DebugOptions>
     <Device Series="RL78">R5F100FE</Device>
-    <BuildOptions Name="CC-RL" Version="V1.15.00">
+    <BuildOptions Name="CC-RL" Version="V1.16.00">
       <BuildMode Name="DefaultBuild" Active="True">
         <LinkOrder>
           <Path>DefaultBuild\cstart.obj</Path>
@@ -219,9 +219,9 @@
           <Option>-NOCOmpress</Option>
           <Option>-NOOPtimize</Option>
           <Option>-OUtput=%BuildModeName%\%ProjectName%.abs</Option>
-          <Option>-LIBrary=%MicomToolPath%\CC-RL\V1.15.00\lib\rl78cm4s.lib</Option>
-          <Option>-LIBrary=%MicomToolPath%\CC-RL\V1.15.00\lib\malloc_n.lib</Option>
-          <Option>-LIBrary=%MicomToolPath%\CC-RL\V1.15.00\lib\rl78cm4r.lib</Option>
+          <Option>-LIBrary=%MicomToolPath%\CC-RL\V1.16.00\lib\rl78cm4s.lib</Option>
+          <Option>-LIBrary=%MicomToolPath%\CC-RL\V1.16.00\lib\malloc_n.lib</Option>
+          <Option>-LIBrary=%MicomToolPath%\CC-RL\V1.16.00\lib\rl78cm4r.lib</Option>
           <Option>-OCDBG=84</Option>
           <Option>-DEBUG_MONITOR=FE00-FFFF</Option>
           <Option>-USER_OPT_BYTE=7EFFE8</Option>
@@ -376,7 +376,7 @@
     &lt;PIOR4Value Name="PIOR4Value" Text="0" /&gt;
     &lt;PIOR5Value Name="PIOR5Value" Text="0" /&gt;
     &lt;ProjectName Name="PrjName" Text="TEST_128K_USER" /&gt;
-    &lt;ProjectPath Name="PrjPath" Text="E:\vyshak\FW 64K_L89H WITH PANIC AUTO OFF DUAL PROFILE\TEST_128K_USER" /&gt;
+    &lt;ProjectPath Name="PrjPath" Text="C:\Users\Admin\Desktop\vyshak\FW 64K_L89H WITH PANIC AUTO OFF DUAL PROFILE\TEST_128K_USER" /&gt;
     &lt;ProjectKind Name="PrjKind" Text="Project78K0R" /&gt;
     &lt;DeviceName Name="DeviceName" Fixed="" Text="RL78G13" /&gt;
     &lt;MCUName Name="MCUName" Text="RL78G13_44pin" /&gt;

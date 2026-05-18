@@ -8,9 +8,9 @@ char DATE_MSB,DATE_LSB,MONTH_MSB,MONTH_LSB,YEAR_MSB,YEAR_LSB,L,NAVIGATION_ACK,O,
 int no=0,RR;
 
 char LAT_DM[10]={'1','2','3','4','5','6','7','8'},LOG_DM[10]={'1','2','3','4','5','6','7','8'};
-char LAT_DM_RX[10]={'0','0','0','0','0','0','0','0'},FOR_2,COMMA,COMMA_1,VTG_FRAME_ACK,S;
+char LAT_DM_RX[10]={'0','0','0','0','0','0','0','0'},COMMA,COMMA_1,VTG_FRAME_ACK,S;
 char LOG_DM_RX[10]={'0','0','0','0','0','0','0','0','0'};
-char Array[10]={'0','1','2','3','4','5','6','7','8','9'},GPGA_FRAME[5]={'G','N','G','G','A'},GPGA_FRAME_ACK,GPGA_DATA[10]={'0','0','.','0','0','0','0','0','.','0'},A,VTG_FRAME[3]={'V','T','G'},B,SPEED_DATA_RX[10]={'0','0','0','0','0','0','0','0','0','0'},GSA_FRAME[3]={'G','S','A'};
+char GPGA_FRAME[5]={'G','N','G','G','A'},GPGA_FRAME_ACK,GPGA_DATA[10]={'0','0','.','0','0','0','0','0','.','0'},A,VTG_FRAME[3]={'V','T','G'},B,SPEED_DATA_RX[10]={'0','0','0','0','0','0','0','0','0','0'},GSA_FRAME[3]={'G','S','A'};
 char GPS_GGA_RX,ALTITUDE[8]={'0','0','0','0','0','0','0','0'},HDOP[5],NO_OF_SAT,data_count_2,GGA_DATA,NAVIGATION_FRAME_ACK[6]={'$','P','M','T','K','0'};//NAVIGATION_FRAME_ACK[12]={'$','P','M','T','K','0','0','1',',','8','8','6'};
 extern char NAVIGATION_RX;
 extern _Bool VLT_STARTUP_INITIAL,GPS_RMC_DATA_RX,GPS_GGA_DATA_RX,GPS_VTG_DATA_RX; 
@@ -136,7 +136,7 @@ void GET_GPS_DATA(void)
     R_UART1_Start();
     t_count=0;
 	    while(GPS_RMC_DATA_RX==OFF && t_count<=60){NOP();}						      if(t_count>=60){t_count=0;BAUD_RATE_AND_INITIAL_SETTINGS();}t_count=0;
-    while(GPS_GGA_DATA_RX==OFF && GPS_DIRECTION_DATA_VALID==ON && t_count<=60){NOP();}                if(t_count>=60){t_count=0;BAUD_RATE_AND_INITIAL_SETTINGS();}t_count=0;
+    while(GPS_GGA_DATA_RX==OFF && t_count<=60){NOP();}                if(t_count>=60){t_count=0;BAUD_RATE_AND_INITIAL_SETTINGS();}t_count=0;
     //while(GPS_VTG_DATA_RX==OFF && GPS_DIRECTION_DATA_VALID==ON && NO_OF_SAT<=7 && t_count<=60){NOP();}if(t_count>=60){t_count=0;BAUD_RATE_AND_INITIAL_SETTINGS();}t_count=0;
     
     while(GPS_VTG_DATA_RX==OFF && GPS_DIRECTION_DATA_VALID==ON && t_count<=60){NOP();}if(t_count>=60){t_count=0;BAUD_RATE_AND_INITIAL_SETTINGS();}t_count=0;
@@ -274,43 +274,113 @@ void GPS_UART_RX_1(unsigned int UART1_BUFFER)
 }
 void GPS_UART_RX_2(char UART1_BUFFER_2)
 {
-
-	
-	
-	if(GPS_DIRECTION_DATA_VALID==ON){
-	GPS_BUSY=ON;    
-	if(UART1_BUFFER_2==GPGA_FRAME[A] || GPGA_FRAME_ACK>=1)
-	{
-		A++;
-		if(GPGA_FRAME_ACK==1){
-		     if(COMMA<7 && UART1_BUFFER_2==','){L=0;COMMA++;R=0;}
-		else if(COMMA>=7){
-		if(UART1_BUFFER_2!=0x00){
-		if(UART1_BUFFER_2==','){L++;R=0;}
-		else if(L==0){
-		if(R>=1){NO_OF_SAT=((NO_OF_SAT*10)+(0x0F&UART1_BUFFER_2));}
-		else{
-		NO_OF_SAT=0x0F&UART1_BUFFER_2;R++;}
-		}
-		else if(L==1)
-		{
-		HDOP[R]=UART1_BUFFER_2;R++;
-		}
-		else if(L==2)
-		{
-		ALTITUDE[R]=UART1_BUFFER_2;
-		R++;
-		}
-		//GPGA_DATA[R]=UART1_BUFFER_2;R++;
-		}
-		}     
-		}
-		else if(A>=5){A=0;GPGA_FRAME_ACK=1;R=0;COMMA=0;}
-	        if(UART1_BUFFER_2=='M' && GPGA_FRAME_ACK==1){GPS_GGA_DATA_RX=ON;R=0;GPGA_FRAME_ACK=0;A=0;}
-		GPS_BUSY=OFF;    
-	}
-	else{A=0;GPGA_FRAME_ACK=0;COMMA=0;}
-}
+    GPS_BUSY=ON;
+    
+    if(A == 0)
+    {
+        if(UART1_BUFFER_2 == 'G')
+        {
+            A = 1;
+        }
+    }
+    else if(A == 1)
+    {
+        if(UART1_BUFFER_2 == 'N' || UART1_BUFFER_2 == 'P')
+        {
+            A = 2;
+        }
+        else
+        {
+            A = 0;
+        }
+    }
+    else if(A == 2)
+    {
+        if(UART1_BUFFER_2 == 'G')
+        {
+            A = 3;
+        }
+        else
+        {
+            A = 0;
+        }
+    }
+    else if(A == 3)
+    {
+        if(UART1_BUFFER_2 == 'G')
+        {
+            A = 4;
+        }
+        else
+        {
+            A = 0;
+        }
+    }
+    else if(A == 4)
+    {
+        if(UART1_BUFFER_2 == 'A')
+        {
+            A = 5;
+            COMMA = 0;
+            L = 0;
+            R = 0;
+            NO_OF_SAT = 0;
+            HDOP[0]='0';HDOP[1]='0';HDOP[2]='0';HDOP[3]='0';HDOP[4]=0;
+            ALTITUDE[0]='0';ALTITUDE[1]='0';ALTITUDE[2]='0';ALTITUDE[3]='0';ALTITUDE[4]='0';ALTITUDE[5]='0';ALTITUDE[6]='0';
+        }
+        else
+        {
+            A = 0;
+        }
+    }
+    else if(A == 5)
+    {
+        if(UART1_BUFFER_2 == ',')
+        {
+            if(COMMA >= 7)
+            {
+                L++;
+                R = 0;
+            }
+            COMMA++;
+        }
+        else if(COMMA >= 7 && COMMA < 10)
+        {
+            if(L == 0)
+            {
+                if(R >= 1)
+                {
+                    NO_OF_SAT = (NO_OF_SAT * 10) + (UART1_BUFFER_2 & 0x0F);
+                }
+                else
+                {
+                    NO_OF_SAT = UART1_BUFFER_2 & 0x0F;
+                    R++;
+                }
+            }
+            else if(L == 1)
+            {
+                HDOP[R] = UART1_BUFFER_2;
+                R++;
+            }
+            else if(L == 2)
+            {
+                ALTITUDE[R] = UART1_BUFFER_2;
+                R++;
+            }
+        }
+        
+        if(UART1_BUFFER_2 == '*')
+        {
+            GPS_GGA_DATA_RX = ON;
+            A = 0;
+            COMMA = 0;
+            L = 0;
+            R = 0;
+        }
+    }
+    
+    GPS_BUSY = OFF;
 }	
 	
 	
@@ -351,8 +421,8 @@ void GPS_UART_RX_2(char UART1_BUFFER_2)
 
 void GPS_UART_RX_3(unsigned int UART1_BUFFER_3)
 {
-//if(GPS_DIRECTION_DATA_VALID==ON && NO_OF_SAT<=7){
-//if(GPS_DIRECTION_DATA_VALID==ON){	
+	//if(GPS_DIRECTION_DATA_VALID==ON && NO_OF_SAT<=7){
+	//if(GPS_DIRECTION_DATA_VALID==ON){	
 	   
 	if(UART1_BUFFER_3==VTG_FRAME[B] || VTG_FRAME_ACK>=1)
 	{

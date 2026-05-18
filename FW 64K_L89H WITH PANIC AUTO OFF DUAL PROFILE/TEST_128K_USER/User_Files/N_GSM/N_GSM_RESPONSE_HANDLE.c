@@ -1,5 +1,25 @@
 #include "r_cg_userdefine.h"
 //const unsigned char DEVICE_RESET_CMD_FRAME[] = {"SET VLT RESET IMEI "};
+const unsigned char QCCID_ACK[8] = {'+','Q','C','C','I','D',':',' '};
+const unsigned char GET_GETVINFO_FRAME[] = {"GETVINFO"};  // 8 chars
+const unsigned char GET_PANIC_FRAME[] = {"GETPANIC"};  // 8 chars
+const unsigned char GET_LOCATION_FRAME[] = {"GETLOCATION"};  // 11 chars
+const unsigned char GET_SERVERDETAILS_FRAME[] = {"GETSERVERDETAILS"};  // 16 chars
+const unsigned char GET_VSTATUS_FRAME[] = {"GETVSTATUS"};  // 10 chars
+const unsigned char GET_SOSTIMEOUT_FRAME[] = {"GETSOSTIMEOUT"};  // 13 chars (no space needed for GET commands)
+const unsigned char GET_PROFILE_FRAME[] = {"GETPROFILE"};  // 10 chars
+const unsigned char SET_FOTA_FRAME[] = {"SETFOTA "};  // 8 chars
+const unsigned char SET_SOSSET_FRAME[] = {"SETSOSSET "};  // 10 chars
+const unsigned char SET_BTS_FRAME[] = {"SETBTS "};  // 7 chars
+const unsigned char SET_SOSTIMEOUT_FRAME[] = {"SETSOSTIMEOUT "};  // 14 chars
+const unsigned char SET_SOSCLR_FRAME[] = {"SETSOSCLR"};  // 9 chars
+const unsigned char SET_DEFAULT_FRAME[] = {"SETDEFAULT"};  // 10 chars
+const unsigned char SET_VRESET_FRAME[] = {"SETVRESET"};  // 9 chars
+const unsigned char SET_INTERVAL_FRAME[] = {"SETINTERVAL "};  // 12 chars
+const unsigned char SET_VEHREG_FRAME[] = {"SETVEHREG "};  // 10 chars
+const unsigned char SET_PROFILE_FRAME[] = {"SETPROFILE "};
+const unsigned char SET_SERVER1_FRAME[] = {"SETSERVER1 "};
+const unsigned char SET_SERVER2_FRAME[] = {"SETSERVER2 "};
 const unsigned char SET_HEALTH_FRAME[] = {"SET HPET IMEI "};
 const unsigned char GET_VERSION_FRAME[12] = {"GET VERSION "};
 const unsigned char GET_VLT_IMEI_PH_FRAME[] = {"GET VLT IMEI 0669 "};
@@ -10,11 +30,69 @@ const unsigned char SET_LBAT_FRAME[] = {"SET LBAT IMEI 2202="};
 const unsigned char SET_APN_FRAME2[] = {"SET APN IMEI 2202="};
 // const unsigned char SET_ENO_FRAME[] = {"SET ENO IMEI 2202="};  // 18 characters (same as APN)
 char TEMP_HACL_VALUE[3];  // For storing the HACL value (e.g., "30")
+//char PRIM_IP[16];
+//char PRIM_PORT[6];
+char PROF_CMD_FRAME_RX;
+char PROF_CMD_REPLY;
+char TEMP_PROF;
+char SETDEF_CMD_FRAME_RX,SETDEF_CMD_REPLY;
+char SOSCLR_CMD_FRAME_RX,SOSCLR_CMD_REPLY;
+char SOSTMO_CMD_FRAME_RX,SOSTMO_CMD_REPLY;
+int TEMP_SOSTMO;
+char SOSSET_CMD_FRAME_RX;
+char SOSSET_CMD_REPLY;
+char TEMP_SOS_NUM1[11];
+char TEMP_SOS_NUM2[11];
+
+char SETBTS_CMD_FRAME_RX;
+char SETBTS_CMD_REPLY;
+unsigned int TEMP_BTS;
+
+char SETFOTA_CMD_FRAME_RX;
+char SETFOTA_CMD_REPLY;
+char TEMP_FOTA_IP[16];
+char TEMP_FOTA_PORT[6];
+char TEMP_FOTA_USER[16];
+char TEMP_FOTA_PASS[16];
+char TEMP_FOTA_FILE[32];
+
+char GETPROF_CMD_FRAME_RX;
+char GETPROF_CMD_REPLY;
+
+char GETSOSTMO_CMD_FRAME_RX;
+char GETSOSTMO_CMD_REPLY;
+
+char GETVSTAT_CMD_FRAME_RX;
+char GETVSTAT_CMD_REPLY;
+
+char GETSRVDTL_CMD_FRAME_RX;
+char GETSRVDTL_CMD_REPLY;
+
+char GETLOC_CMD_FRAME_RX;
+char GETLOC_CMD_REPLY;
+
+char GETPANIC_CMD_FRAME_RX;
+char GETPANIC_CMD_REPLY;
+
+char GETVINFO_CMD_FRAME_RX;
+char GETVINFO_CMD_REPLY;
+char ICCID[22];          // stores SIM ICCID from AT+QCCID
+char ICCID_RX;           // state for ICCID parser
+
+char INTVL_CMD_FRAME_RX;
+char INTVL_CMD_REPLY;
+unsigned int TEMP_TRC_INTVL;
+unsigned int TEMP_IGN_INTVL;
+unsigned int TEMP_SOS_INTVL;
+unsigned int TEMP_STD_INTVL;
+unsigned int TEMP_HLT_INTVL;
+
 extern char IMEI_EEPROM[16],RX_ACK_Frame,ACK,ERROR_OCCURED,RX_SMS_CMD,RX_CMD_SMS[10],t,SMS_FAIL_COUNT,SMS_FAIL,NETWORK_NAME_RX,BATTERY_MEASUREMENT,SET_OVERSPEED_RX,GET_SLEEP_TIME_RX;
 extern char IGNITION_CTRL_RX,INITIAL_MESSAGE,P_LAT_DM_RX,FILE_CLOSE_ATTEMPT;
 extern char V_NO_LEN,GSM_REG,GPRS_REG,SS_DATA_RX,GET_SS,dBm,SMS_MOBILE_NO[55],HEALTH_ON_DURATON_S_RX;
+extern int SERVING_CELL_DBM;
 extern char VN_ACK_RX,PANIC_NUMBER_RX,GPRS_CONNECTED,GSM_STRENGTH,INTERNET_CONNECTED,DISCONNECT,LOW_BATTERY_ALERT,HTTP_CONNECT_COUNT,VEICHLE_NUMBER[15],NW_NAME_RX,IMEI[16];
-extern unsigned int FOR_1,FOR_3,Address_1,NW_REGN_COUNT,FLASH_MEMORY,GPRS_REG_COUNT,MAIN_BATTERY_VOLTAGE,ADC_BUFFER,BACKUP_BATTERY_VOLTAGE,GPRS_REG_ROAMING,GSM_REG_ROAMING,T_SPEED,FILTER,DATA_HEADER,TEMP_VERSION,SLEEP_ON_LEVEL,SLEEP_OF_LEVEL,OVER_SPEED;
+extern unsigned int FOR_1,FOR_3,Address_1,NW_REGN_COUNT,FLASH_MEMORY,GPRS_REG_COUNT,MAIN_BATTERY_VOLTAGE,ADC_BUFFER,BACKUP_BATTERY_VOLTAGE,GPRS_REG_ROAMING,GSM_REG_ROAMING,T_SPEED,FILTER,DATA_HEADER,TEMP_VERSION,SLEEP_ON_LEVEL,SLEEP_OF_LEVEL,OVER_SPEED,VOLT;
 extern unsigned int t_count,WRITE_ADDRESS,DATA,WATCH_DOG_KILL,WRITE_ADDRESS,TEMPS,WRITE_ADDRESS_MSB,WRITE_ADDRESS_LSB,BYTE;
 extern char LOG_DM[10],LAT_DM[10],TIME[10],GPS_BUSY,SPEED[4],/*GPS_RX,*/SPEED_DATA_RX[10],WATCH_DOG,FILE[150],FIRM_DATA[150];
 extern char GPS_DIRECTION_DATA_VALID,IGNITION,PANIC_ALERT,PANIC_ALERT_PACKET,IGNITION_ON_PACKET,IGNITION_OFF_PACKET,POWER_SOURCE_PACKET,LOW_BATTERY_ALERT_PACKET;
@@ -76,7 +154,7 @@ extern _Bool SETTING_CMD,SET_APN,SET_TCP,CONNECT_FAIL,QST_CMD_FLAG,GET_SPN_CMD,S
 extern char SET_SLEEP_OFF_FRAME[7],SET_SLEEP_ON_FRAME[7],SET_SLEEP_OF_RX,SET_SLEEP_ON_RX,SET_OVERSPEED_FRAME[8],GET_OVER_SPEED_RX;
 extern unsigned int RESTART;
 // CHACKING
-unsigned int TEMP_D[25],TD;
+//unsigned int TEMP_D[25],TD;
 //extern char QST_CMD_ACK[8];
 
 
@@ -1212,7 +1290,7 @@ if(FIRMWARE_UPDATE==1){
 	else{I[19]=0;}
 	}
 	
-///**********************************************************************************************************/	
+
 /************************************************************************************************************************************************************
 					   DEVICE RESTART ON/OFF
 /************************************************************************************************************************************************************/
@@ -1339,6 +1417,9 @@ if(FIRMWARE_UPDATE==1){
 ///************************************************************************************************************************************************************
 //					   GET MCC MNC LAC,CELL-ID FROM GSM  QENG: 0,
 ///************************************************************************************************************************************************************/
+///************************************************************************************************************************************************************
+//					   GET MCC MNC LAC,CELL-ID FROM GSM  QENG: 0,
+///************************************************************************************************************************************************************/
 if(GET_MCC_MNC_LAC_CELL_ID_RX==SET)
 {
 	if(UART0_BUFFER==ENGINEER_MODE_FRAME_1[I[25]] || ENGINEER_MODE_FRAME_1_ACK==SET)
@@ -1373,25 +1454,54 @@ if(GET_MCC_MNC_LAC_CELL_ID_RX==SET)
 			  
 		}
 		
-		
-		else if(GSM_COMMA>=5)
+		else if(GSM_COMMA==5 || GSM_COMMA==6)
 		{
-		ENGINEER_MODE_FRAME_1_ACK=CLR;
-		MCC_MNC_LAC_CELL_ID_LENGTH=P;
-		P=CLR;
-		I[25]=CLR;
-		GSM_COMMA=CLR;
+			/* Skip BCCH (5), BSIC (6) fields */
 		}
 		
-		     
-		     else if(I[25]>=7)
-		     {
-		     ENGINEER_MODE_FRAME_1_ACK=SET;
-		     I[25]=CLR;
-		     P=CLR;
-		     }
-		     
+		else if(GSM_COMMA==7)
+		{
+			/* Capture serving cell dBm (field 7) */
+			if(UART0_BUFFER=='-')
+			{
+				P = 1; /* negative flag */
+				SERVING_CELL_DBM = 0; /* Reset before accumulating */
+			}
+			else if(UART0_BUFFER>='0' && UART0_BUFFER<='9')
+			{
+				if(P != 1) 
+				{ 
+					P = 0; 
+					SERVING_CELL_DBM = 0; 
+				}
+				SERVING_CELL_DBM = (SERVING_CELL_DBM * 10) + (UART0_BUFFER - '0');
+			}
+		}
 		
+		else if(GSM_COMMA > 7)
+		{
+			/* End of serving cell data, apply negative flag if needed */
+			if(P == 1) 
+			{
+				VOLT = SERVING_CELL_DBM;
+				VOLT = -VOLT;
+				SERVING_CELL_DBM = VOLT;
+				P = 0; /* clear flag after applying */
+			}
+			ENGINEER_MODE_FRAME_1_ACK=CLR;
+			MCC_MNC_LAC_CELL_ID_LENGTH=P;
+			P=CLR;
+			I[25]=CLR;
+			GSM_COMMA=CLR;
+		}
+		
+		else if(I[25]>=7)
+		{
+			ENGINEER_MODE_FRAME_1_ACK=SET;
+			I[25]=CLR;
+			P=CLR;
+			SERVING_CELL_DBM=0;  /* Reset between calls */
+		}
 	}
 	else{I[25]=0;}	
 }
@@ -1913,112 +2023,333 @@ else{I[68]=0;}
 
 ///*************************************************************************************************************************************************************/
 
-//				SET PRIMARY NETWORK COMMAND SMS // IDEA P
+//				SET SERVER1 NETWORK COMMAND SMS // IDEA P
 
 ///*************************************************************************************************************************************************************/
-if(UART0_BUFFER==PNET_CMD_FRAME[I[69]] || PNET_CMD_FRAME_RX>=1)
-	{
-		I[69]++;
-		
-		if(PNET_CMD_FRAME_RX==1 && UART0_BUFFER==IMEI[12])
-		{
-                PNET_CMD_FRAME_RX=2;
-		}
-		else if( PNET_CMD_FRAME_RX==2 && UART0_BUFFER==IMEI[13])
-		{
-                PNET_CMD_FRAME_RX=3;
-		}
-		else if( PNET_CMD_FRAME_RX==3 && UART0_BUFFER==IMEI[14])
-		{
-                PNET_CMD_FRAME_RX=4;
-		}
-		else if(PNET_CMD_FRAME_RX==4 && UART0_BUFFER==IMEI[15])
-		{
-                PNET_CMD_FRAME_RX=CLR;
-		PNET_CMD_REPLY=SET;
-		SMS_PIN_WRONG=CLR;
-		}
-		else if( PNET_CMD_FRAME_RX>=1 )
-		{
-		PNET_CMD_FRAME_RX=CLR;
-		SMS_PIN_WRONG=SET;
-		}
-		
-		if(I[69]>=9)
-		{
-		PNET_CMD_FRAME_RX=SET;
-		I[69]=0;
-		}
-		
-	}
-	else{I[69]=0;PNET_CMD_FRAME_RX=CLR;}	
+if(UART0_BUFFER == SET_SERVER1_FRAME[I[69]] || PNET_CMD_FRAME_RX >= 1)
+{
+    // Only advance frame index during keyword matching phase
+    if(PNET_CMD_FRAME_RX == 0)
+    {
+        I[69]++;
+        if(I[69] >= 11)
+        {
+            PNET_CMD_FRAME_RX = 1;
+            I[69] = 0;
+            i = 0;
+            // Skip this byte (it's the space) � do nothing else this cycle
+        }
+    }
+    // Collect IP � state 1
+    else if(PNET_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            TEMP_PIP2[i] = '\0';
+            TEMP_PPN2[0] = '\0';
+            PNET_CMD_REPLY = SET;
+            PNET_CMD_FRAME_RX = 0;
+            i = 0;
+        }
+        else if(UART0_BUFFER == ',')
+        {
+            TEMP_PIP2[i] = '\0';    // null terminate IP
+            PNET_CMD_FRAME_RX = 2;  // move to port
+            i = 0;
+            // Do NOT store comma, do NOT fall into port block this cycle
+        }
+        else
+        {
+            if(i < 15)
+            {
+                TEMP_PIP2[i] = UART0_BUFFER;
+                i++;
+            }
+        }
+    }
+    // Collect PORT � state 2
+    else if(PNET_CMD_FRAME_RX == 2)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            TEMP_PPN2[i] = '\0';    // null terminate port
+            PNET_CMD_REPLY = SET;
+            PNET_CMD_FRAME_RX = 0;
+            i = 0;
+        }
+        else
+        {
+            if(i < 5)
+            {
+                TEMP_PPN2[i] = UART0_BUFFER;
+                i++;
+            }
+        }
+    }
+}
+else
+{
+    I[69] = 0;
+    PNET_CMD_FRAME_RX = CLR;
+}
+///*************************************************************************************************************************************************************/
+//              SET SERVER2 NETWORK COMMAND SMS // EMERGENCY SERVER
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == SET_SERVER2_FRAME[I[70]] || SNET_CMD_FRAME_RX >= 1)
+{
+    // Only advance frame index during keyword matching phase
+    if(SNET_CMD_FRAME_RX == 0)
+    {
+        I[70]++;
+        if(I[70] >= 11)
+        {
+            SNET_CMD_FRAME_RX = 1;
+            I[70] = 0;
+            i = 0;
+        }
+    }
+    // Collect IP � state 1
+    else if(SNET_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            TEMP_SIP2[i] = '\0';
+            TEMP_SPN2[0] = '\0';
+            SNET_CMD_REPLY = SET;
+            SNET_CMD_FRAME_RX = 0;
+            i = 0;
+        }
+        else if(UART0_BUFFER == ',')
+        {
+            TEMP_SIP2[i] = '\0';     // null terminate IP
+            SNET_CMD_FRAME_RX = 2;  // move to port
+            i = 0;
+        }
+        else
+        {
+            if(i < 15)
+            {
+                TEMP_SIP2[i] = UART0_BUFFER;
+                i++;
+            }
+        }
+    }
+    // Collect PORT � state 2
+    else if(SNET_CMD_FRAME_RX == 2)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            TEMP_SPN2[i] = '\0';     // null terminate port
+            SNET_CMD_REPLY = SET;
+            SNET_CMD_FRAME_RX = 0;
+            i = 0;
+        }
+        else
+        {
+            if(i < 5)
+            {
+                TEMP_SPN2[i] = UART0_BUFFER;
+                i++;
+            }
+        }
+    }
+}
+else
+{
+    I[70] = 0;
+    SNET_CMD_FRAME_RX = CLR;
+}
+
+
+
+
 
 ///*************************************************************************************************************************************************************/
-
-//				SET SECONDARY NETWORK COMMAND SMS // BSNL F
+//              SET PROFILE COMMAND SMS
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == SET_PROFILE_FRAME[I[90]] || PROF_CMD_FRAME_RX >= 1)
+{
+    // Only advance frame index during keyword matching phase
+    if(PROF_CMD_FRAME_RX == 0)
+    {
+        I[90]++;
+        if(I[90] >= 11)   // "SETPROFILE " = 11 chars
+        {
+            PROF_CMD_FRAME_RX = 1;
+            I[90] = 0;
+            // Space byte � skip, move to collection next byte
+        }
+    }
+    // Collect profile number � state 1
+    else if(PROF_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            // End of SMS � process
+            PROF_CMD_REPLY = SET;
+            PROF_CMD_FRAME_RX = 0;
+        }
+        else if(UART0_BUFFER == '1' || UART0_BUFFER == '2' || UART0_BUFFER == '3')
+        {
+            TEMP_PROF = UART0_BUFFER;   // store '1', '2', or '3'
+            PROF_CMD_FRAME_RX = 2;      // wait for end of SMS
+        }
+        // ignore any other character
+    }
+    // Wait for end of SMS � state 2
+    else if(PROF_CMD_FRAME_RX == 2)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            PROF_CMD_REPLY = SET;
+            PROF_CMD_FRAME_RX = 0;
+        }
+    }
+}
+else
+{
+    I[90] = 0;
+    PROF_CMD_FRAME_RX = CLR;
+}
 
 ///*************************************************************************************************************************************************************/
-if(UART0_BUFFER==SNET_CMD_FRAME[I[70]] || SNET_CMD_FRAME_RX>=1)
-	{
-		I[70]++;
-		
-		if(SNET_CMD_FRAME_RX==1 && UART0_BUFFER==IMEI[12])
-		{
-                SNET_CMD_FRAME_RX=2;
-		}
-		else if( SNET_CMD_FRAME_RX==2 && UART0_BUFFER==IMEI[13])
-		{
-                SNET_CMD_FRAME_RX=3;
-		}
-		else if( SNET_CMD_FRAME_RX==3 && UART0_BUFFER==IMEI[14])
-		{
-                SNET_CMD_FRAME_RX=4;
-		}
-		else if(SNET_CMD_FRAME_RX==4 && UART0_BUFFER==IMEI[15])
-		{
-                SNET_CMD_FRAME_RX=CLR;
-		SNET_CMD_REPLY=SET;
-		SMS_PIN_WRONG=CLR;
-		}
-		else if( SNET_CMD_FRAME_RX>=1 )
-		{
-		SNET_CMD_FRAME_RX=CLR;
-		SMS_PIN_WRONG=SET;
-		}
-		
-		if(I[70]>=9)
-		{
-		SNET_CMD_FRAME_RX=SET;
-		I[70]=0;
-		}
-		
-	}
-	else{I[70]=0;SNET_CMD_FRAME_RX=CLR;}	
-
-
-
-
-
-
+//              SET INTERVAL COMMAND SMS
+//              FORMAT: SETINTERVAL trc,ign,sos,std,health
+//              EXAMPLE: SETINTERVAL 30,20,10,120,250
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == SET_INTERVAL_FRAME[I[91]] || INTVL_CMD_FRAME_RX >= 1)
+{
+    if(INTVL_CMD_FRAME_RX == 0)
+    {
+        I[91]++;
+        if(I[91] >= 12)    // "SETINTERVAL " = 12 chars
+        {
+            INTVL_CMD_FRAME_RX = 1;
+            I[91] = 0;
+            i = 0;
+            TEMP_TRC_INTVL = 0;
+            TEMP_IGN_INTVL = 0;
+            TEMP_SOS_INTVL = 0;
+            TEMP_STD_INTVL = 0;
+            TEMP_HLT_INTVL = 0;
+        }
+    }
+    // Collect TRC (tracking) � state 1
+    else if(INTVL_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            INTVL_CMD_REPLY = SET;
+            INTVL_CMD_FRAME_RX = 0;
+            i = 0;
+        }
+        else if(UART0_BUFFER == ',')
+        {
+            INTVL_CMD_FRAME_RX = 2;   // move to IGN
+            i = 0;
+        }
+        else if(UART0_BUFFER >= '0' && UART0_BUFFER <= '9')
+        {
+            TEMP_TRC_INTVL = (TEMP_TRC_INTVL * 10) + (UART0_BUFFER & 0x0F);
+        }
+    }
+    // Collect IGN (ignition on) � state 2
+    else if(INTVL_CMD_FRAME_RX == 2)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            INTVL_CMD_REPLY = SET;
+            INTVL_CMD_FRAME_RX = 0;
+            i = 0;
+        }
+        else if(UART0_BUFFER == ',')
+        {
+            INTVL_CMD_FRAME_RX = 3;   // move to SOS
+            i = 0;
+        }
+        else if(UART0_BUFFER >= '0' && UART0_BUFFER <= '9')
+        {
+            TEMP_IGN_INTVL = (TEMP_IGN_INTVL * 10) + (UART0_BUFFER & 0x0F);
+        }
+    }
+    // Collect SOS � state 3
+    else if(INTVL_CMD_FRAME_RX == 3)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            INTVL_CMD_REPLY = SET;
+            INTVL_CMD_FRAME_RX = 0;
+            i = 0;
+        }
+        else if(UART0_BUFFER == ',')
+        {
+            INTVL_CMD_FRAME_RX = 4;   // move to STD
+            i = 0;
+        }
+        else if(UART0_BUFFER >= '0' && UART0_BUFFER <= '9')
+        {
+            TEMP_SOS_INTVL = (TEMP_SOS_INTVL * 10) + (UART0_BUFFER & 0x0F);
+        }
+    }
+    // Collect STD (standby) � state 4
+    else if(INTVL_CMD_FRAME_RX == 4)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            INTVL_CMD_REPLY = SET;
+            INTVL_CMD_FRAME_RX = 0;
+            i = 0;
+        }
+        else if(UART0_BUFFER == ',')
+        {
+            INTVL_CMD_FRAME_RX = 5;   // move to HEALTH
+            i = 0;
+        }
+        else if(UART0_BUFFER >= '0' && UART0_BUFFER <= '9')
+        {
+            TEMP_STD_INTVL = (TEMP_STD_INTVL * 10) + (UART0_BUFFER & 0x0F);
+        }
+    }
+    // Collect HEALTH � state 5
+    else if(INTVL_CMD_FRAME_RX == 5)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            INTVL_CMD_REPLY = SET;
+            INTVL_CMD_FRAME_RX = 0;
+            i = 0;
+        }
+        else if(UART0_BUFFER >= '0' && UART0_BUFFER <= '9')
+        {
+            TEMP_HLT_INTVL = (TEMP_HLT_INTVL * 10) + (UART0_BUFFER & 0x0F);
+        }
+    }
+}
+else
+{
+    I[91] = 0;
+    INTVL_CMD_FRAME_RX = CLR;
+}
 ///*************************************************************************************************************************************************************/
 
 //				AUTO NETWORK COMMAND SMS // Idea 0
 
 ///*************************************************************************************************************************************************************/
 if(UART0_BUFFER==NWA_CMD_FRAME[I[71]])
+{
+	I[71]++;
+	
+				
+	if(I[71]>=9)
 	{
-		I[71]++;
-		
-					
-		if(I[71]>=9)
-		{
 		NWP_CMD_SET=SET;
 		I[71]=0;
-		}
-		
 	}
-	else{I[71]=0;}	
-	///*************************************************************************************************************************************************************/
+	
+}
+	else{I[71]=0;
+}	
+///*************************************************************************************************************************************************************/
 
 //				AUTO NETWORK COMMAND SMS // Idea 0
 
@@ -2433,34 +2764,730 @@ else
 {
     I[21] = 0;
 }
-	/************************************************************************************************************************************************************
-					     GET VEICHLE NUMBER									 
+
+
+
+
+///*************************************************************************************************************************************************************/
+//              SET VEHICLE REGISTRATION NUMBER COMMAND SMS
+//              FORMAT: SETVEHREG vhno
+//              EXAMPLE: SETVEHREG DL081513
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == SET_VEHREG_FRAME[I[92]] || VN_ACK_RX >= 1)
+{
+    if(VN_ACK_RX == 0)
+    {
+        I[92]++;
+        if(I[92] >= 10)
+        {
+            VN_ACK_RX = 1;
+            I[92] = 0;
+            i = 0;
+            for(t = 0; t < 14; t++)
+            {
+                VEICHLE_NUMBER[t] = ' ';
+            }
+            t = 0;
+        }
+    }
+    else if(VN_ACK_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            VEICHLE_NUMBER[t] = '\0';
+            V_NO_LEN = t;
+            UPDATE_REGISTRATION_NUMBER_1 = SET;  // ? only set here after all chars received
+            VN_ACK_RX = 0;
+            t = 0;
+        }
+        else
+        {
+            if(t < 14)
+            {
+                VEICHLE_NUMBER[t] = UART0_BUFFER;  // ? just store, no flag here
+                t++;
+            }
+        }
+    }
+}
+else
+{
+    I[92] = 0;
+    VN_ACK_RX = CLR;
+}
+
+///*************************************************************************************************************************************************************/
+//              SET VEHICLE RESET COMMAND SMS
+//              FORMAT: SETVRESET
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == SET_VRESET_FRAME[I[93]] || DEVICE_RESET_CMD_FRAME_RX >= 1)
+{
+    if(DEVICE_RESET_CMD_FRAME_RX == 0)
+    {
+        I[93]++;
+        if(I[93] >= 9)    // "SETVRESET" = 9 chars
+        {
+            DEVICE_RESET_CMD_FRAME_RX = 1;
+            I[93] = 0;
+        }
+    }
+    else if(DEVICE_RESET_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            DEVICE_RESET_CMD = SET;
+            DEVICE_RESET_CMD_FRAME_RX = 0;
+        }
+    }
+}
+else
+{
+    I[93] = 0;
+    DEVICE_RESET_CMD_FRAME_RX = CLR;
+}
+
+
+
+///*************************************************************************************************************************************************************/
+//              SET DEFAULT COMMAND SMS
+//              FORMAT: SETDEFAULT
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == SET_DEFAULT_FRAME[I[94]] || SETDEF_CMD_FRAME_RX >= 1)
+{
+    if(SETDEF_CMD_FRAME_RX == 0)
+    {
+        I[94]++;
+        if(I[94] >= 10)    // "SETDEFAULT" = 10 chars
+        {
+            SETDEF_CMD_FRAME_RX = 1;
+            I[94] = 0;
+        }
+    }
+    else if(SETDEF_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            SETDEF_CMD_REPLY = SET;
+            SETDEF_CMD_FRAME_RX = 0;
+        }
+    }
+}
+else
+{
+    I[94] = 0;
+    SETDEF_CMD_FRAME_RX = CLR;
+}
+
+
+///*************************************************************************************************************************************************************/
+//              SOS CLEAR COMMAND SMS
+//              FORMAT: SETSOSCLR
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == SET_SOSCLR_FRAME[I[95]] || SOSCLR_CMD_FRAME_RX >= 1)
+{
+    if(SOSCLR_CMD_FRAME_RX == 0)
+    {
+        I[95]++;
+        if(I[95] >= 9)    // "SETSOSCLR" = 9 chars
+        {
+            SOSCLR_CMD_FRAME_RX = 1;
+            I[95] = 0;
+        }
+    }
+    else if(SOSCLR_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            SOSCLR_CMD_REPLY = SET;
+            SOSCLR_CMD_FRAME_RX = 0;
+        }
+    }
+}
+else
+{
+    I[95] = 0;
+    SOSCLR_CMD_FRAME_RX = CLR;
+}
+
+///*************************************************************************************************************************************************************/
+//              SET SOS TIMEOUT COMMAND SMS
+//              FORMAT: SETSOSTIMEOUT stm
+//              EXAMPLE: SETSOSTIMEOUT 240
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == SET_SOSTIMEOUT_FRAME[I[96]] || SOSTMO_CMD_FRAME_RX >= 1)
+{
+    if(SOSTMO_CMD_FRAME_RX == 0)
+    {
+        I[96]++;
+        if(I[96] >= 14)    // "SETSOSTIMEOUT " = 14 chars
+        {
+            SOSTMO_CMD_FRAME_RX = 1;
+            I[96] = 0;
+            TEMP_SOSTMO = 0;
+        }
+    }
+    else if(SOSTMO_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            SOSTMO_CMD_REPLY = SET;
+            SOSTMO_CMD_FRAME_RX = 0;
+        }
+        else if(UART0_BUFFER >= '0' && UART0_BUFFER <= '9')
+        {
+            TEMP_SOSTMO = (TEMP_SOSTMO * 10) + (UART0_BUFFER & 0x0F);
+        }
+    }
+}
+else
+{
+    I[96] = 0;
+    SOSTMO_CMD_FRAME_RX = CLR;
+}
+
+///*************************************************************************************************************************************************************/
+//              SET SOS NUMBERS COMMAND SMS
+//              FORMAT: SETSOSSET num1,num2
+//              EXAMPLE: SETSOSSET 9219536638,7037045203
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == SET_SOSSET_FRAME[I[97]] || SOSSET_CMD_FRAME_RX >= 1)
+{
+    if(SOSSET_CMD_FRAME_RX == 0)
+    {
+        I[97]++;
+        if(I[97] >= 10)    // "SETSOSSET " = 10 chars
+        {
+            SOSSET_CMD_FRAME_RX = 1;
+            I[97] = 0;
+            i = 0;
+            t = 0;
+            // Clear buffers
+            for(t = 0; t < 10; t++)
+            {
+                TEMP_SOS_NUM1[t] = ' ';
+                TEMP_SOS_NUM2[t] = ' ';
+            }
+            t = 0;
+        }
+    }
+    // Collect num1 � state 1
+    else if(SOSSET_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            // End without comma � only num1 received
+            TEMP_SOS_NUM1[t] = '\0';
+            SOSSET_CMD_REPLY = SET;
+            SOSSET_CMD_FRAME_RX = 0;
+            t = 0;
+        }
+        else if(UART0_BUFFER == ',')
+        {
+            TEMP_SOS_NUM1[t] = '\0';   // null terminate num1
+            SOSSET_CMD_FRAME_RX = 2;   // move to num2
+            t = 0;
+        }
+        else
+        {
+            if(t < 10)
+            {
+                TEMP_SOS_NUM1[t] = UART0_BUFFER;
+                t++;
+            }
+        }
+    }
+    // Collect num2 � state 2
+    else if(SOSSET_CMD_FRAME_RX == 2)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            TEMP_SOS_NUM2[t] = '\0';   // null terminate num2
+            SOSSET_CMD_REPLY = SET;
+            SOSSET_CMD_FRAME_RX = 0;
+            t = 0;
+        }
+        else
+        {
+            if(t < 10)
+            {
+                TEMP_SOS_NUM2[t] = UART0_BUFFER;
+                t++;
+            }
+        }
+    }
+}
+else
+{
+    I[97] = 0;
+    SOSSET_CMD_FRAME_RX = CLR;
+}
+
+///*************************************************************************************************************************************************************/
+//              SET BATTERY THRESHOLD COMMAND SMS
+//              FORMAT: SETBTS thr
+//              EXAMPLE: SETBTS 37
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == SET_BTS_FRAME[I[98]] || SETBTS_CMD_FRAME_RX >= 1)
+{
+    if(SETBTS_CMD_FRAME_RX == 0)
+    {
+        I[98]++;
+        if(I[98] >= 7)    // "SETBTS " = 7 chars
+        {
+            SETBTS_CMD_FRAME_RX = 1;
+            I[98] = 0;
+            TEMP_BTS = 0;
+        }
+    }
+    else if(SETBTS_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            SETBTS_CMD_REPLY = SET;
+            SETBTS_CMD_FRAME_RX = 0;
+        }
+        else if(UART0_BUFFER >= '0' && UART0_BUFFER <= '9')
+        {
+            TEMP_BTS = (TEMP_BTS * 10) + (UART0_BUFFER & 0x0F);
+        }
+    }
+}
+else
+{
+    I[98] = 0;
+    SETBTS_CMD_FRAME_RX = CLR;
+}
+
+///*************************************************************************************************************************************************************/
+//              SET FOTA COMMAND SMS
+//              FORMAT: SETFOTA ip,port,user,pass,file
+//              EXAMPLE: SETFOTA 23.25.26.45,21,fuser1,fpass1,app.bin
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == SET_FOTA_FRAME[I[99]] || SETFOTA_CMD_FRAME_RX >= 1)
+{
+    if(SETFOTA_CMD_FRAME_RX == 0)
+    {
+        I[99]++;
+        if(I[99] >= 8)    // "SETFOTA " = 8 chars
+        {
+            SETFOTA_CMD_FRAME_RX = 1;
+            I[99] = 0;
+            t = 0;
+            // Clear all buffers
+            for(t = 0; t < 16; t++) { TEMP_FOTA_IP[t]   = ' '; }
+            for(t = 0; t < 6;  t++) { TEMP_FOTA_PORT[t] = ' '; }
+            for(t = 0; t < 16; t++) { TEMP_FOTA_USER[t] = ' '; }
+            for(t = 0; t < 16; t++) { TEMP_FOTA_PASS[t] = ' '; }
+            for(t = 0; t < 32; t++) { TEMP_FOTA_FILE[t] = ' '; }
+            t = 0;
+        }
+    }
+    // Collect IP � state 1
+    else if(SETFOTA_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            TEMP_FOTA_IP[t] = '\0';
+            SETFOTA_CMD_REPLY = SET;
+            SETFOTA_CMD_FRAME_RX = 0;
+            t = 0;
+        }
+        else if(UART0_BUFFER == ',')
+        {
+            TEMP_FOTA_IP[t] = '\0';
+            SETFOTA_CMD_FRAME_RX = 2;
+            t = 0;
+        }
+        else
+        {
+            if(t < 15) { TEMP_FOTA_IP[t] = UART0_BUFFER; t++; }
+        }
+    }
+    // Collect PORT � state 2
+    else if(SETFOTA_CMD_FRAME_RX == 2)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            TEMP_FOTA_PORT[t] = '\0';
+            SETFOTA_CMD_REPLY = SET;
+            SETFOTA_CMD_FRAME_RX = 0;
+            t = 0;
+        }
+        else if(UART0_BUFFER == ',')
+        {
+            TEMP_FOTA_PORT[t] = '\0';
+            SETFOTA_CMD_FRAME_RX = 3;
+            t = 0;
+        }
+        else
+        {
+            if(t < 5) { TEMP_FOTA_PORT[t] = UART0_BUFFER; t++; }
+        }
+    }
+    // Collect USER � state 3
+    else if(SETFOTA_CMD_FRAME_RX == 3)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            TEMP_FOTA_USER[t] = '\0';
+            SETFOTA_CMD_REPLY = SET;
+            SETFOTA_CMD_FRAME_RX = 0;
+            t = 0;
+        }
+        else if(UART0_BUFFER == ',')
+        {
+            TEMP_FOTA_USER[t] = '\0';
+            SETFOTA_CMD_FRAME_RX = 4;
+            t = 0;
+        }
+        else
+        {
+            if(t < 15) { TEMP_FOTA_USER[t] = UART0_BUFFER; t++; }
+        }
+    }
+    // Collect PASS � state 4
+    else if(SETFOTA_CMD_FRAME_RX == 4)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            TEMP_FOTA_PASS[t] = '\0';
+            SETFOTA_CMD_REPLY = SET;
+            SETFOTA_CMD_FRAME_RX = 0;
+            t = 0;
+        }
+        else if(UART0_BUFFER == ',')
+        {
+            TEMP_FOTA_PASS[t] = '\0';
+            SETFOTA_CMD_FRAME_RX = 5;
+            t = 0;
+        }
+        else
+        {
+            if(t < 15) { TEMP_FOTA_PASS[t] = UART0_BUFFER; t++; }
+        }
+    }
+    // Collect FILE � state 5
+    else if(SETFOTA_CMD_FRAME_RX == 5)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            TEMP_FOTA_FILE[t] = '\0';
+            SETFOTA_CMD_REPLY = SET;
+            SETFOTA_CMD_FRAME_RX = 0;
+            t = 0;
+        }
+        else
+        {
+            if(t < 31) { TEMP_FOTA_FILE[t] = UART0_BUFFER; t++; }
+        }
+    }
+}
+else
+{
+    I[99] = 0;
+    SETFOTA_CMD_FRAME_RX = CLR;
+}
+
+///*************************************************************************************************************************************************************/
+//              GET PROFILE COMMAND SMS
+//              FORMAT: GETPROFILE
+//              RESPONSE: Current Profile : prf
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == GET_PROFILE_FRAME[I[88]] || GETPROF_CMD_FRAME_RX >= 1)
+{
+    if(GETPROF_CMD_FRAME_RX == 0)
+    {
+        I[88]++;
+        if(I[88] >= 10)    // "GETPROFILE" = 10 chars
+        {
+            GETPROF_CMD_FRAME_RX = 1;
+            I[88] = 0;
+        }
+    }
+    else if(GETPROF_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            GETPROF_CMD_REPLY = SET;
+            GETPROF_CMD_FRAME_RX = 0;
+        }
+    }
+}
+else
+{
+    I[88] = 0;
+    GETPROF_CMD_FRAME_RX = CLR;
+}
+///*************************************************************************************************************************************************************/
+//              GET SOS TIMEOUT COMMAND SMS
+//              FORMAT: GETSOSTIMEOUT
+//              RESPONSE: SOS Timeout : stm
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == GET_SOSTIMEOUT_FRAME[I[39]] || GETSOSTMO_CMD_FRAME_RX >= 1)
+{
+    if(GETSOSTMO_CMD_FRAME_RX == 0)
+    {
+        I[39]++;
+        if(I[39] >= 13)    // "GETSOSTIMEOUT" = 13 chars
+        {
+            GETSOSTMO_CMD_FRAME_RX = 1;
+            I[39] = 0;
+        }
+    }
+    else if(GETSOSTMO_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            GETSOSTMO_CMD_REPLY = SET;
+            GETSOSTMO_CMD_FRAME_RX = 0;
+        }
+    }
+}
+else
+{
+    I[39] = 0;
+    GETSOSTMO_CMD_FRAME_RX = CLR;
+}
+
+///*************************************************************************************************************************************************************/
+//              GET VEHICLE STATUS COMMAND SMS
+//              FORMAT: GETVSTATUS
+//              RESPONSE: GPRS ACTIVE\nSIG : csq\nMains Volt : mvlt\nBatt Volt : bvlt\nSERVER CONNECTED\nGPS FIXED
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == GET_VSTATUS_FRAME[I[40]] || GETVSTAT_CMD_FRAME_RX >= 1)
+{
+    if(GETVSTAT_CMD_FRAME_RX == 0)
+    {
+        I[40]++;
+        if(I[40] >= 10)    // "GETVSTATUS" = 10 chars
+        {
+            GETVSTAT_CMD_FRAME_RX = 1;
+            I[40] = 0;
+        }
+    }
+    else if(GETVSTAT_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            GETVSTAT_CMD_REPLY = SET;
+            GETVSTAT_CMD_FRAME_RX = 0;
+        }
+    }
+}
+else
+{
+    I[40] = 0;
+    GETVSTAT_CMD_FRAME_RX = CLR;
+}
+
+///*************************************************************************************************************************************************************/
+//              GET SERVER DETAILS COMMAND SMS
+//              FORMAT: GETSERVERDETAILS
+//              RESPONSE: IP1 : ip1\nPort1 : port1\nIP2 : ip2\nPort2 : port2
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == GET_SERVERDETAILS_FRAME[I[42]] || GETSRVDTL_CMD_FRAME_RX >= 1)
+{
+    if(GETSRVDTL_CMD_FRAME_RX == 0)
+    {
+        I[42]++;
+        if(I[42] >= 16)    // "GETSERVERDETAILS" = 16 chars
+        {
+            GETSRVDTL_CMD_FRAME_RX = 1;
+            I[42] = 0;
+        }
+    }
+    else if(GETSRVDTL_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            GETSRVDTL_CMD_REPLY = SET;
+            GETSRVDTL_CMD_FRAME_RX = 0;
+        }
+    }
+}
+else
+{
+    I[42] = 0;
+    GETSRVDTL_CMD_FRAME_RX = CLR;
+}
+///*************************************************************************************************************************************************************/
+//              GET LOCATION COMMAND SMS
+//              FORMAT: GETLOCATION
+//              RESPONSE: Latitude � lat\nLongitude � long\nAltitude � alt\nSpeed � vel
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == GET_LOCATION_FRAME[I[43]] || GETLOC_CMD_FRAME_RX >= 1)
+{
+    if(GETLOC_CMD_FRAME_RX == 0)
+    {
+        I[43]++;
+        if(I[43] >= 11)    // "GETLOCATION" = 11 chars
+        {
+            GETLOC_CMD_FRAME_RX = 1;
+            I[43] = 0;
+        }
+    }
+    else if(GETLOC_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            GETLOC_CMD_REPLY = SET;
+            GETLOC_CMD_FRAME_RX = 0;
+        }
+    }
+}
+else
+{
+    I[43] = 0;
+    GETLOC_CMD_FRAME_RX = CLR;
+}
+
+///*************************************************************************************************************************************************************/
+//              GET PANIC STATUS COMMAND SMS
+//              FORMAT: GETPANIC
+//              RESPONSE: SOS � ON  or  SOS � OFF
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == GET_PANIC_FRAME[I[44]] || GETPANIC_CMD_FRAME_RX >= 1)
+{
+    if(GETPANIC_CMD_FRAME_RX == 0)
+    {
+        I[44]++;
+        if(I[44] >= 8)    // "GETPANIC" = 8 chars
+        {
+            GETPANIC_CMD_FRAME_RX = 1;
+            I[44] = 0;
+        }
+    }
+    else if(GETPANIC_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            GETPANIC_CMD_REPLY = SET;
+            GETPANIC_CMD_FRAME_RX = 0;
+        }
+    }
+}
+else
+{
+    I[44] = 0;
+    GETPANIC_CMD_FRAME_RX = CLR;
+}
+
+///*************************************************************************************************************************************************************/
+//              GET VEHICLE INFO COMMAND SMS
+//              FORMAT: GETVINFO
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == GET_GETVINFO_FRAME[I[51]] || GETVINFO_CMD_FRAME_RX >= 1)
+{
+    if(GETVINFO_CMD_FRAME_RX == 0)
+    {
+        I[51]++;
+        if(I[51] >= 8)    // "GETVINFO" = 8 chars
+        {
+            GETVINFO_CMD_FRAME_RX = 1;
+            I[51] = 0;
+        }
+    }
+    else if(GETVINFO_CMD_FRAME_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
+        {
+            GETVINFO_CMD_REPLY = SET;
+            GETVINFO_CMD_FRAME_RX = 0;
+        }
+    }
+}
+else
+{
+    I[51] = 0;
+    GETVINFO_CMD_FRAME_RX = CLR;
+}
+
+///*************************************************************************************************************************************************************/
+//              ICCID PARSER  (+QCCID: 8991xxxxxxxxxxxxxxxx)
+///*************************************************************************************************************************************************************/
+if(UART0_BUFFER == QCCID_ACK[I[89]] || ICCID_RX >= 1)
+{
+    if(ICCID_RX == 0)
+    {
+        I[89]++;
+        if(I[89] >= 8)    // "+QCCID: " = 8 chars
+        {
+            ICCID_RX = 1;
+            I[89] = 0;
+            t = 0;
+            // Clear ICCID buffer
+            for(t = 0; t < 21; t++) { ICCID[t] = '0'; }
+            t = 0;
+        }
+    }
+    else if(ICCID_RX == 1)
+    {
+        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n' || UART0_BUFFER == 0x00)
+        {
+            ICCID[t] = '\0';
+            ICCID_RX = 0;
+            t = 0;
+        }
+        else
+        {
+            if(t < 20)
+            {
+                ICCID[t] = UART0_BUFFER;
+                t++;
+            }
+        }
+    }
+}
+else
+{
+    I[89] = 0;
+    // Don't reset ICCID_RX here — it's a one-shot parser, not continuous
+}
+
+
+/************************************************************************************************************************************************************
+                         GET VEICHLE NUMBER
 /************************************************************************************************************************************************************/
-
-	if(UART0_BUFFER==VN_ACK[I[15]] || VN_ACK_RX>=1)
-	{
-		I[15]++;
-		     if(UART0_BUFFER=='#' && VN_ACK_RX==1){VN_ACK_RX=0;I[15]=0;/*VEICHLE_NUMBER[t]=0;*/V_NO_LEN=t-1;t=0;if(V_NO_LEN<=0){V_NO_LEN=9;}}
-		else if(VN_ACK_RX==1)
-		{
-		if(UART0_BUFFER==0X00){UART0_BUFFER=0X30;}
-		if(VEICHLE_NUMBER[t]!=UART0_BUFFER)
-		{
-		UPDATE_REGISTRATION_NUMBER_1=SET;
-		}
-		VEICHLE_NUMBER[t]=UART0_BUFFER;
-		t++;
-		//VEICHLE_NUMBER[t]=0;
-		}
-		else if(I[15]>=3){VN_ACK_RX=1;t=0;V_NO_LEN=0;}
-		
-	}
-	else{I[15]=0;}
-		
-	
-		
-	
-	
-
-
+/*
+if(UART0_BUFFER==VN_ACK[I[15]] || VN_ACK_RX>=1)
+{
+    I[15]++;
+    if(UART0_BUFFER=='#' && VN_ACK_RX==1)
+    {
+        VN_ACK_RX=0;
+        I[15]=0;
+        //VEICHLE_NUMBER[t]=0;
+        V_NO_LEN=t-1;
+        t=0;
+        if(V_NO_LEN<=0)
+        {
+            V_NO_LEN=9;
+        }
+    }
+    else if(VN_ACK_RX==1)
+    {
+        if(UART0_BUFFER==0X00)
+        {
+            UART0_BUFFER=0X30;
+        }
+        if(VEICHLE_NUMBER[t]!=UART0_BUFFER)
+        {
+            UPDATE_REGISTRATION_NUMBER_1=SET;
+        }
+        VEICHLE_NUMBER[t]=UART0_BUFFER;
+        t++;
+        //VEICHLE_NUMBER[t]=0;
+    }
+    else if(I[15]>=3)
+    {
+        VN_ACK_RX=1;
+        t=0;
+        V_NO_LEN=0;
+    }
+}
+else
+{
+    I[15]=0;
+}
+*/
 }

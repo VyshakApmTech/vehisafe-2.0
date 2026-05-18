@@ -64,6 +64,10 @@
 	void READ_DEVICE_ID(void);
 	void CMD_DATA_WRITE_IN_EEROM(char D);
 	void CMD_DATA_READ_IN_EEPROM(void);
+	void GSM_SMS_DIAG(void);
+	
+	
+	
 	void convert(unsigned long int i)
 	{
 		
@@ -107,6 +111,7 @@
 	    
 	            
 	          NEW_SMS_READ();
+		 
 		    VLT_RUNNING_MODE();
 		//   ACC_GYRO_READ();
 		    WATCHDOG_OFF();
@@ -189,12 +194,12 @@
 	    RED_LED=OFF;
 	    GPRS_PS_EN=ON1;
 	    MS_TIMER(1500);
-	    R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+	   // R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
 	    MS_TIMER(500);
-	    R_UART2_SEND("AT+QSTK?\r\n");
+	    //R_UART2_SEND("AT+QSTK?\r\n");
 	MS_TIMER(500);
-	QSTK();
-	    R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
+	//QSTK();
+	    //R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
 	     MS_TIMER(300);
 	    POWER_SOURCE=ON;
 	    VLT_STARTUP=SET;
@@ -226,7 +231,8 @@
 	   
 	   // R_UART2_SEND("AT+GSN\r\n");
 	   //  MS_TIMER(300);
-	   // GSM_INTZ(SMS_MODE);
+	   GSM_INTZ(SMS_MODE);
+	   GSM_SMS_DIAG();
 	    GET_IMEI();
 	     R_UART2_SEND("AT\r\n");ACK_RX(20,2,10,1);
 	    MS_TIMER(300);

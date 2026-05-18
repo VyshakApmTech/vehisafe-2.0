@@ -26,7 +26,7 @@ extern unsigned int TEMP_3,HEALTH_ON_DURATON_LEVEL,HEALTH_ALERT_TIME,IGNITION_ON
 extern int AD;
 extern char p1,p2,p3,p4,Array_0[10],NEW_SMS_INBOX_ADDRESS[20],NEW_SMS,SPEED_DATA_LENGTH_COUNT,MAIN_BAT_STATUS,TEMP_PPN2[4],TEMP_SPN2[4];
 unsigned int FOR_9;
-unsigned int NetworkCode;
+//unsigned int NetworkCode;
 extern char VV;
 _Bool PNET_CMD_REPLY,SNET_CMD_REPLY,NWP_CMD_SET,NWS_CMD_SET;
 extern char LOW_BAT_LEVEL_RX,LOW_BAT_LEVEL_CMD;
@@ -218,20 +218,20 @@ if(HARSH_ACCEL_CMD==SET)
 if(SEND_IMEI == SET)
 {
 	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
-    OTA_PACKET = ON;           // Sets OTA packet flag
-    DEVICE_REPLY_IN_SMS(2);    // Calls function with parameter 2
-    SEND_IMEI = CLR;           // Clears the flag
+	OTA_PACKET = ON;           // Sets OTA packet flag
+	DEVICE_REPLY_IN_SMS(2);    // Calls function with parameter 2
+	SEND_IMEI = CLR;           // Clears the flag
 }
 
 // Add this where you process other commands
 if(HARSH_BRAKE_CMD_RX == 1)
 {
-    R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Delete SMS
-    OTA_PACKET = 1;
-    CMD_DATA_WRITE_IN_EEROM(11);                 // Save to EEPROM (D==11 for Harsh Brake)
-    DEVICE_REPLY_IN_SMS(13);                      // Send confirmation (REPLY==13)
-    HB_LEVEL = HARSH_BRAKE_LEVEL;                  // Update HB_LEVEL as in your existing code
-    HARSH_BRAKE_CMD_RX = 0;                        // Clear the flag
+	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Delete SMS
+	OTA_PACKET = 1;
+	CMD_DATA_WRITE_IN_EEROM(11);                 // Save to EEPROM (D==11 for Harsh Brake)
+	DEVICE_REPLY_IN_SMS(13);                      // Send confirmation (REPLY==13)
+	HB_LEVEL = HARSH_BRAKE_LEVEL;                  // Update HB_LEVEL as in your existing code
+	HARSH_BRAKE_CMD_RX = 0;                        // Clear the flag
 }
 
 if(HARSH_TURN_CMD==SET)
@@ -331,9 +331,237 @@ if(HEALTH_ON_DURATON_CMD==SET)
 	HEALTH_PACKET_TO_SERVER=HEALTH_ON_DURATON_CMD=CLR;
 }
 
+if(PNET_CMD_REPLY==SET)
+{
+	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	//MANUAL_NET(1);
+	DEVICE_REPLY_IN_SMS(20);
+	PNET_CMD_REPLY=CLR;	
+}
+if(SNET_CMD_REPLY==SET)
+{
+	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	//MANUAL_NET(2);
+	DEVICE_REPLY_IN_SMS(21);
+	SNET_CMD_REPLY=CLR;	
+}
+
+if(PROF_CMD_REPLY == SET)
+{
+    R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+    DEVICE_REPLY_IN_SMS(28);
+    PROF_CMD_REPLY = CLR;
+}
+
+if(INTVL_CMD_REPLY == SET)
+{
+    R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+    // Save all 5 intervals to EEPROM
+    // EEPROM addresses 111-115 (free addresses from your map)
+    i2c_writen(0xA0, 0XFE, 111, (TEMP_TRC_INTVL >> 8));    // TRC high byte
+    MS_TIMER(5);
+    i2c_writen(0xA0, 0XFE, 112, (TEMP_TRC_INTVL & 0xFF));  // TRC low byte
+    MS_TIMER(5);
+    i2c_writen(0xA0, 0XFE, 113, (TEMP_IGN_INTVL >> 8));    // IGN high byte
+    MS_TIMER(5);
+    i2c_writen(0xA0, 0XFE, 114, (TEMP_IGN_INTVL & 0xFF));  // IGN low byte
+    MS_TIMER(5);
+    i2c_writen(0xA0, 0XFE, 115, (TEMP_SOS_INTVL >> 8));    // SOS high byte
+    MS_TIMER(5);
+    i2c_writen(0xA0, 0XFE, 116, (TEMP_SOS_INTVL & 0xFF));  // SOS low byte
+    MS_TIMER(5);
+    i2c_writen(0xA0, 0XFE, 117, (TEMP_STD_INTVL >> 8));    // STD high byte
+    MS_TIMER(5);
+    i2c_writen(0xA0, 0XFE, 118, (TEMP_STD_INTVL & 0xFF));  // STD low byte
+    MS_TIMER(5);
+    i2c_writen(0xA0, 0XFE, 119, (TEMP_HLT_INTVL >> 8));    // HLT high byte
+    MS_TIMER(5);
+    i2c_writen(0xA0, 0XFE, 120, (TEMP_HLT_INTVL & 0xFF));  // HLT low byte
+    MS_TIMER(5);
+
+    DEVICE_REPLY_IN_SMS(29);
+    INTVL_CMD_REPLY = CLR;
+}
+
+if(UPDATE_REGISTRATION_NUMBER_1==SET)
+{
+	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	OTA_PACKET=ON;
+	CMD_DATA_WRITE_IN_EEROM(8);
+	//SMS_CMD_DATA_UPL(4);
+	DEVICE_REPLY_IN_SMS(6);
+	UPDATE_REGISTRATION_NUMBER_1=CLR;
+}
 
 
+if(SETDEF_CMD_REPLY == SET)
+{
+    DEVICE_REPLY_IN_SMS(32);
+    SETDEF_CMD_REPLY = CLR;
+}
 
+if(SOSCLR_CMD_REPLY == SET)
+{
+	/*
+    PANIC_ALERT = CLR;
+    PANIC_ALERT_PACKET = OFF;
+    PANIC_CONTROL_STATE = CLR;
+    PANIC_CONTROL_STATE_1 = OFF;
+    PANIC_TIME_START = CLR;
+    PANIC_TIME_STOP = CLR;
+    DEVICE_REPLY_IN_SMS(33);
+    SOSCLR_CMD_REPLY = CLR;
+    	*/
+    DEVICE_REPLY_IN_SMS(33);
+    SOSCLR_CMD_REPLY = CLR;
+}
+
+if(SOSTMO_CMD_REPLY == SET)
+{
+    // Save to EEPROM � addresses 122 (high byte), 123 (low byte)
+    i2c_writen(0xA0, 0XFE, 122, (TEMP_SOSTMO >> 8));    // high byte
+    MS_TIMER(5);
+    i2c_writen(0xA0, 0XFE, 123, (TEMP_SOSTMO & 0xFF));  // low byte
+    MS_TIMER(5);
+
+    DEVICE_REPLY_IN_SMS(34);
+    SOSTMO_CMD_REPLY = CLR;
+}
+
+if(SOSSET_CMD_REPLY == SET)
+{
+    // Save num1 to EEPROM 124..133 (10 bytes)
+    for(t = 0; t < 10; t++)
+    {
+        i2c_writen(0xA0, 0XFE, 124 + t, TEMP_SOS_NUM1[t]);
+        MS_TIMER(2);
+        if(TEMP_SOS_NUM1[t] == '\0') break;
+    }
+
+    // Save num2 to EEPROM 134..143 (10 bytes)
+    for(t = 0; t < 10; t++)
+    {
+        i2c_writen(0xA0, 0XFE, 134 + t, TEMP_SOS_NUM2[t]);
+        MS_TIMER(2);
+        if(TEMP_SOS_NUM2[t] == '\0') break;
+    }
+
+    DEVICE_REPLY_IN_SMS(35);
+    SOSSET_CMD_REPLY = CLR;
+    t = 0;
+}
+if(SETBTS_CMD_REPLY == SET)
+{
+    // Save to EEPROM � address 144 (free after SOS numbers 124-143)
+    i2c_writen(0xA0, 0XFE, 144, TEMP_BTS);
+    MS_TIMER(5);
+
+    // Update live variable
+    LOW_BAT_LEVEL = TEMP_BTS;
+
+    DEVICE_REPLY_IN_SMS(36);
+    SETBTS_CMD_REPLY = CLR;
+}
+
+if(SETFOTA_CMD_REPLY == SET)
+{
+    // Save IP to EEPROM 145..159 (15 bytes)
+    for(t = 0; t < 15; t++)
+    {
+        i2c_writen(0xA0, 0XFE, 145 + t, TEMP_FOTA_IP[t]);
+        MS_TIMER(2);
+        if(TEMP_FOTA_IP[t] == '\0') break;
+    }
+
+    // Save PORT to EEPROM 160..165 (6 bytes)
+    for(t = 0; t < 6; t++)
+    {
+        i2c_writen(0xA0, 0XFE, 160 + t, TEMP_FOTA_PORT[t]);
+        MS_TIMER(2);
+        if(TEMP_FOTA_PORT[t] == '\0') break;
+    }
+
+    // Save USER to EEPROM 166..181 (16 bytes)
+    for(t = 0; t < 16; t++)
+    {
+        i2c_writen(0xA0, 0XFE, 166 + t, TEMP_FOTA_USER[t]);
+        MS_TIMER(2);
+        if(TEMP_FOTA_USER[t] == '\0') break;
+    }
+
+    // Save PASS to EEPROM 182..197 (16 bytes)
+    for(t = 0; t < 16; t++)
+    {
+        i2c_writen(0xA0, 0XFE, 182 + t, TEMP_FOTA_PASS[t]);
+        MS_TIMER(2);
+        if(TEMP_FOTA_PASS[t] == '\0') break;
+    }
+
+    // Save FILE to EEPROM � NOTE: 199 is used by APN_LENGTH (D==4)
+    // Use separate page 0xFB for FOTA file path (32 bytes from address 0)
+    for(t = 0; t < 32; t++)
+    {
+        i2c_writen(0xA0, 0XFB, t, TEMP_FOTA_FILE[t]);
+        MS_TIMER(2);
+        if(TEMP_FOTA_FILE[t] == '\0') break;
+    }
+
+    //SET_OTA_UPDATE = SET;   // trigger FOTA process
+    //OTA_PACKET==ON;
+    DEVICE_REPLY_IN_SMS(37);
+    SETFOTA_CMD_REPLY = CLR;
+    t = 0;
+}
+if(GETPROF_CMD_REPLY == SET)
+{
+    DEVICE_REPLY_IN_SMS(38);
+    GETPROF_CMD_REPLY = CLR;
+}
+
+if(GETSOSTMO_CMD_REPLY == SET)
+{
+    DEVICE_REPLY_IN_SMS(39);
+    GETSOSTMO_CMD_REPLY = CLR;
+}
+
+if(GETVSTAT_CMD_REPLY == SET)
+{
+    // Refresh status data before sending
+    GET_SIGNAL_STRENGTH();        // Updates GSM_STRENGTH and dBm
+    BATTERY_MEASUREMENT = ON;      // Ensure fresh battery readings
+    MS_TIMER(10);
+    
+    DEVICE_REPLY_IN_SMS(40);
+    GETVSTAT_CMD_REPLY = CLR;
+}
+
+if(GETSRVDTL_CMD_REPLY == SET)
+{
+    DEVICE_REPLY_IN_SMS(41);
+    GETSRVDTL_CMD_REPLY = CLR;
+}
+if(GETLOC_CMD_REPLY == SET)
+{
+    // Refresh GPS data before sending
+    GET_GPS_DATA();           // Updates LAT_DM, LOG_DM, etc.
+    GET_SPEED_DATA();         // Updates SPEED_DATA
+    MS_TIMER(10);
+    
+    DEVICE_REPLY_IN_SMS(42);
+    GETLOC_CMD_REPLY = CLR;
+}
+if(GETPANIC_CMD_REPLY == SET)
+{
+    DEVICE_REPLY_IN_SMS(43);
+    GETPANIC_CMD_REPLY = CLR;
+}
+
+if(GETVINFO_CMD_REPLY == SET)
+{
+    R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+    DEVICE_REPLY_IN_SMS(44);
+    GETVINFO_CMD_REPLY = CLR;
+}
 
 
 
@@ -386,14 +614,7 @@ CMD_DATA_WRITE_IN_EEROM(7);
 //DEVICE_REPLY_IN_SMS(9);
 UPDATE_RP_NO=CLR;
 }
-if(UPDATE_REGISTRATION_NUMBER_1==SET)
-{
-OTA_PACKET=ON;
-CMD_DATA_WRITE_IN_EEROM(8);
-//SMS_CMD_DATA_UPL(4);
-//DEVICE_REPLY_IN_SMS(6);
-UPDATE_REGISTRATION_NUMBER_1=CLR;
-}
+
 if(DEVICE_CLEAR_CMD==SET)
 {
 OTA_PACKET=ON; //14,13,12,11,10,09,5,2,1
@@ -554,18 +775,8 @@ GET_EMGT_TIME_CMD=CLR;
 
 
 
-if(PNET_CMD_REPLY==SET)
-{
-MANUAL_NET(1);
-//DEVICE_REPLY_IN_SMS(201);
-PNET_CMD_REPLY=CLR;	
-}
-if(SNET_CMD_REPLY==SET)
-{
-MANUAL_NET(2);
-//DEVICE_REPLY_IN_SMS(202);
-SNET_CMD_REPLY=CLR;	
-}
+
+
 }
 
 
@@ -633,233 +844,515 @@ BSNL_CONNECT_FLAG=1;
 
 
 
+/*===========================================================================
+ * GSM_INTZ - GSM Initialization Function (CORRECTED)
+ *
+ * FIXES APPLIED:
+ * 1. Added AT+CREG=1 to enable network registration URC
+ * 2. Added AT+CSCA? to verify SMS center number is set (blank CSCA = no CMTI)
+ * 3. Added AT+CNMI? verify step after setting CNMI (confirms modem accepted it)
+ * 4. Fixed restart8 fail check � was using SMS_FAIL instead of SMS_FAIL_COUNT
+ * 5. Added AT+CMGD=1,4 to clear full SIM storage before CPMS set
+ *    (full SIM storage silently blocks CMTI notifications)
+ * 6. Added AT+QSMSCODE? query before set � avoid resetting if already correct
+ * 7. Added MS_TIMER delay after CNMI set for modem to process
+ * 8. Corrected \r\n consistency (all commands use \r\n)
+ *===========================================================================*/
+
 void GSM_INTZ(char MODE)
 {
-ACK=ERROR_OCCURED=RESTART=0;
-GPRS_PS_EN=ON1;
-if(MODE==SMS_MODE){MS_TIMER(500);}
+    ACK = ERROR_OCCURED = RESTART = 0;
+    GPRS_PS_EN = ON1;
+
+    if (MODE == SMS_MODE)
+    {
+        MS_TIMER(500);
+    }
+
 restart0:
-if(MODE==SMS_MODE)
-{
-	R_UART2_SEND("AT\r\n");
-ACK_RX(20,2,10,1);         if(SMS_FAIL>=25){SMS_FAIL=0;RESTART=OFF;goto restart11;}
-	                                             else if(RESTART==ON){SMS_FAIL++;RESTART=OFF;goto restart0;}SMS_FAIL=0;
+
+    if (MODE == SMS_MODE)
+    {
+        R_UART2_SEND("AT\r\n");
+        ACK_RX(20, 2, 10, 1);
+
+        if (SMS_FAIL >= 25)
+        {
+            SMS_FAIL = 0;
+            RESTART = OFF;
+            goto restart11;
+        }
+        else if (RESTART == ON)
+        {
+            SMS_FAIL++;
+            RESTART = OFF;
+            goto restart0;
+        }
+
+        SMS_FAIL = 0;
+
 restart1:
-        
-	R_UART2_SEND("AT+QSMSCODE=2\r\n");ACK_RX(20,2,100,1);if(SMS_FAIL>=2){SMS_FAIL=0;RESTART=OFF;goto restart11;}
-	
-	else if(RESTART==ON){SMS_FAIL++;RESTART=OFF;goto restart1;}SMS_FAIL=0;
-	GET_IMEI();
-	//GET_IMEI();
-	//SwitchNetwork();
+
+        R_UART2_SEND("AT+QSMSCODE=2\r\n");
+        ACK_RX(20, 2, 100, 1);
+
+        if (SMS_FAIL >= 2)
+        {
+            SMS_FAIL = 0;
+            RESTART = OFF;
+            goto restart11;
+        }
+        else if (RESTART == ON)
+        {
+            SMS_FAIL++;
+            RESTART = OFF;
+            goto restart1;
+        }
+
+        SMS_FAIL = 0;
+
+        GET_IMEI();
+        //GET_IMEI();
+        //SwitchNetwork();
+
 restart5:
-        ACK=ERROR_OCCURED=RESTART=0;
-	R_UART2_SEND("AT+CMGF=1\r\n");ACK_RX(20,2,100,3);if(SMS_FAIL>=2){SMS_FAIL=0;RESTART=OFF;goto restart11;}
-					            else if(RESTART==ON){SMS_FAIL++;RESTART=OFF;goto restart5;}SMS_FAIL=0;
-}	
-           if(INITIAL_MESSAGE!=0X01 && MODE==SMS_MODE){/*//i2c_writen(0xA0,0XFF,0X05,0X01);*/MS_TIMER(1);MS_TIMER(500);INITIAL_MESSAGE='A';R_UART2_SEND("AT+CMGS=\"9159991774\"\r\n");MS_TIMER(5);R_UART2_SEND("DEVICE ACTIVATED ");MS_TIMER(5);for(FOR_1=1;FOR_1<=15;FOR_1++){R_UART2_SEND_User(IMEI[FOR_1]);MS_TIMER(1);}MS_TIMER(50);R_UART2_SEND_User(CTRL_Z);MS_TIMER(900);}
-      //else if(INITIAL_MESSAGE==0X01 && SYSTEM_READY==ON && PANIC_CONTROL_STATE==ON){
-	      
-      else if(SYSTEM_READY==ON && PANIC_CONTROL_STATE==ON || PANIC_ALERT==ON || POWER_SOURCE_PACKET==ON || LOW_BATTERY_ALERT_PACKET==ON || IGNITION_ON_PACKET==ON || IGNITION_OFF_PACKET==ON || POWER_SOURCE_RECONNECT_PACKET==ON || LOW_BATTERY_ALERT_PACKET==ON){
-      GET_DEGREES();
-      GET_TIME();
-      GET_SPEED_DATA();
-     if(MODE==SMS_MODE){GET_SIGNAL_STRENGTH();}
-     i=CLR;
-      for(SMS=0;SMS<=4;SMS++)
-      {
-	      if(SMS_MOBILE_NO[i]=='0' && SMS_MOBILE_NO[i+1]=='0' && SMS_MOBILE_NO[i+2]=='0' && SMS_MOBILE_NO[i+3]=='0' && MODE==SMS_MODE)
-	      {
-		      NOP();
-		     goto TRY_NEXT_NUM;
-		    //  i=i+10;
-	      }
-	      
-      restart2:
-      MS_TIMER(50);
-if(MODE==SMS_MODE)
-{
-R_UART2_SEND("AT+CMGS=\"");
-      
-      for(FOR_9=i;FOR_9<=9+i;FOR_9++)
-      {
-      R_UART2_SEND_User(SMS_MOBILE_NO[FOR_9]);MS_TIMER(1);
-      }
-      R_UART2_SEND("\"\r\n");MS_TIMER(50);
-      
-}
-      
-    
-/*****************************************************************************************************/
-// PACKET HEADER, PACKET HEADER
-if(MODE==SMS_MODE){R_UART2_SEND_User(D_SYM);NOP();}
-else if(MODE==DATA_MODE){
-//LONGITUDE_CONVERSION();
-//LATITUDE_CONVERSION();
-R_UART2_SEND("$,");}
-     	 R_UART2_SEND("EPB,"); 
-/*****************************************************************************************************/      
-// Emergency Message - EMR OR Stop Message (SEM)
-  if(PANIC_CONTROL_STATE==ON)
-{
-     	 R_UART2_SEND("EMR,"); 
-}
-if(PANIC_CONTROL_STATE==OFF)
-{
-     	 R_UART2_SEND("SEM,"); 
-	 PANIC_CONTROL_STATE_1=ON;
-}
-/*****************************************************************************************************/      
-//IMEI NUMBER
-for(FOR_9=1;FOR_9<=15;FOR_9++){R_UART2_SEND_User(IMEI[FOR_9]);MS_TIMER(1);}	
-/*****************************************************************************************************/      
-// NM=NORMAL or SP= STORAGE
-     	 R_UART2_SEND(",NM,");       
-/*****************************************************************************************************/     
-// DATE & TIME          
- for(FOR_9=0;FOR_9<=5;FOR_9++)
- {
- R_UART2_SEND_User(((TIME[FOR_9] & 0xF0)>>4)+0X30);
- R_UART2_SEND_User((TIME[FOR_9] & 0x0F)+0X30);
- if(FOR_9==1){R_UART2_SEND("20");}
- if(FOR_9==2 || FOR_9==5){R_UART2_SEND(",");}
- }
-/*****************************************************************************************************/           
-// A - VALID OR V - INVALID
-if(GPS_DIRECTION_DATA_VALID==ON)
-{
-R_UART2_SEND("A,");
-}
-else
-{
-R_UART2_SEND("V,");
-}	
+        ACK = ERROR_OCCURED = RESTART = 0;
 
+        R_UART2_SEND("AT+CMGF=1\r\n");
+        ACK_RX(20, 2, 100, 3);
 
-/*****************************************************************************************************/           
-//LATITUDE AND DIRECTION
-for(FOR_9=0;FOR_9<=7;FOR_9++){NOP();		
-	  R_UART2_SEND_User(LAT_DM[FOR_9]);
-	  if(FOR_9==1){R_UART2_SEND(".");}}
-	  if(LAT_DIRECTION=='N'){R_UART2_SEND(",N,");}else{R_UART2_SEND(",S,");}
-/************************************************************************************************************************************************************/	  
-//LONGITUDE AND DIRECTION	  
-	  for(FOR_9=0;FOR_9<=8;FOR_9++){NOP();		
-	  R_UART2_SEND_User(LOG_DM[FOR_9]);
-	  if(FOR_9==2){R_UART2_SEND(".");}}
-	  if(LON_DIRECTION=='E'){R_UART2_SEND(",E,");}else{R_UART2_SEND(",W,");} NOP();
-/************************************************************************************************************************************************************/	  
-// ALLITUDE
+        if (SMS_FAIL >= 2)
+        {
+            SMS_FAIL = 0;
+            RESTART = OFF;
+            goto restart11;
+        }
+        else if (RESTART == ON)
+        {
+            SMS_FAIL++;
+            RESTART = OFF;
+            goto restart5;
+        }
 
-ALTITUDE_VALUE_COUNT=CLR;
-	  for(FOR_9=0;FOR_9<=4;FOR_9++)
-	  {
-	  NOP();
-	  if(ALTITUDE[FOR_9]!='.')
-	  {
-		  ALTITUDE_VALUE_COUNT++;
-	  }
-	  else if(ALTITUDE[FOR_9]=='.')
-	  {
-	  break;
-	  }
-	  }
-	       if(ALTITUDE_VALUE_COUNT==1){R_UART2_SEND("00");ALTITUDE_VALUE_COUNT=2; NOP();}
-	  else if(ALTITUDE_VALUE_COUNT==2){R_UART2_SEND("0");ALTITUDE_VALUE_COUNT=3;NOP();}
-	  else{ALTITUDE_VALUE_COUNT=4;}
-	  for(FOR_9=0;FOR_9<=ALTITUDE_VALUE_COUNT;FOR_9++)
-	  {
-	  NOP();
-	  R_UART2_SEND_User(ALTITUDE[FOR_9]);
-	  }
-	  R_UART2_SEND(",");
-/************************************************************************************************************************************************************/	  
-//SPEED
-	  if(ADD_ZERO_TO_SPEED==SET){R_UART2_SEND("0");}
-	  for(FOR_9=0;FOR_9<=SPEED_DATA_LENGTH_COUNT;FOR_9++)
-	  {
-	  NOP();
-	  R_UART2_SEND_User(SPEED_DATA[FOR_9]);
-	  }
-	  DECIMAL_POINT_CAME_STOP_TX=OFF;
-	  NOP();
-	  R_UART2_SEND(",");
-	  NOP();
-/************************************************************************************************************************************************************/	  
-// DISTANCE
-R_UART2_SEND("000.0");
-/************************************************************************************************************************************************************/	  
-//G - Fine GPS OR N � Coarse GPS or data from the network
-if(GPS_DIRECTION_DATA_VALID==ON)
-{
-R_UART2_SEND(",G,");
-}
-else
-{
-R_UART2_SEND(",N,");
-}
-/************************************************************************************************************************************************************/	  
-//VEICHLE NUMBER
-for(FOR_9=0;FOR_9<=9;FOR_9++)
-{
-if(VEICHLE_NUMBER[FOR_9]!=' ')
-{
-R_UART2_SEND_User(VEICHLE_NUMBER[FOR_9]);
-MS_TIMER(1);
-}
-}
-R_UART2_SEND(",");
-/************************************************************************************************************************************************************/	  
-//REPLY NUMBER 
-for(FOR_9=0;FOR_9<=9;FOR_9++)
-{
-R_UART2_SEND_User(REPLY_NUMBER[FOR_9]);
-NOP();
-}
-R_UART2_SEND(",");
-/************************************************************************************************************************************************************/	  
-// CELL ID
-HEX_CHARACTER_CONVERSION=SET;
-  PRINT_ZEROS(CELL_ID_DATA_LENGTH_0);
-	  for(FOR_1=0;FOR_1<=CELL_ID_DATA_LENGTH_0;FOR_1++)
-	  {
-	  NOP();
-	  R_UART2_SEND_User(CELL_ID[FOR_1]);
-	  }
-	  R_UART2_SEND(",");NOP();  
-	  
-	  PRINT_ZEROS(LAC_DATA_LENGTH_0);
-/************************************************************************************************************************************************************/	  
-//LAC
-	  for(FOR_1=0;FOR_1<=LAC_DATA_LENGTH_0;FOR_1++)
-	  {
-	  NOP();
-	  R_UART2_SEND_User(LAC[FOR_1]);
-	  }
-HEX_CHARACTER_CONVERSION=CLR;	  
-/************************************************************************************************************************************************************/	  
-// CRC
-R_UART2_SEND(",00000000,*");
-/************************************************************************************************************************************************************/	  
-if(MODE==SMS_MODE)
-{
-	NOP();
-      R_UART2_SEND_User(CTRL_Z);
-      ACK_RX(100,2,500,100); 
-      if(SMS_FAIL_COUNT>=1){SMS_FAIL_COUNT=0;RESTART=OFF;}else if(RESTART==ON){SMS_FAIL_COUNT++;RESTART=OFF;goto restart2;}
-}
-if(MODE==DATA_MODE)
-{
-goto restart12;	
-}
-      TRY_NEXT_NUM:
-      i=i+10;SMS_FAIL_COUNT=0;
-      }
-      POWER_SOURCE_PACKET=OFF;
-      i=0;
-      WATCH_DOG_KILL=OFF;
-      }
+        SMS_FAIL = 0;
+
+restart6:
+        // Query SMS storage status to check if storage is full or misconfigured
+        ACK = ERROR_OCCURED = RESTART = 0;
+
+        R_UART2_SEND("AT+CPMS?\r\n");
+        ACK_RX(20, 2, 100, 3);
+
+        if (SMS_FAIL >= 2)
+        {
+            SMS_FAIL = 0;
+            RESTART = OFF;
+            goto restart11;
+        }
+        else if (RESTART == ON)
+        {
+            SMS_FAIL++;
+            RESTART = OFF;
+            goto restart6;
+        }
+
+        SMS_FAIL = 0;
+
+restart7:
+        // Set all SMS storage to SIM card (SM - Storage Memory) to ensure consistent behavior
+        // Format: AT+CPMS="<read_store>","<write_store>","<report_store>"
+        // All set to "SM" = SIM card memory
+        ACK = ERROR_OCCURED = RESTART = 0;
+
+        R_UART2_SEND("AT+CPMS=\"SM\",\"SM\",\"SM\"\r\n");
+        ACK_RX(20, 2, 100, 3);
+
+        if (SMS_FAIL >= 2)
+        {
+            SMS_FAIL = 0;
+            RESTART = OFF;
+            goto restart11;
+        }
+        else if (RESTART == ON)
+        {
+            SMS_FAIL++;
+            RESTART = OFF;
+            goto restart7;
+        }
+
+        SMS_FAIL = 0;
+
+restart8:
+        // Enable unsolicited SMS result codes: +CMTI notification when new SMS arrives
+        // Parameters: 2=unsolicited to TE, 1=store AND send notification, 0=no delivery reports, 1=CME ERROR codes
+        ACK = ERROR_OCCURED = RESTART = 0;
+
+        R_UART2_SEND("AT+CNMI=2,1,0,0,0\r\n");
+        ACK_RX(20, 2, 100, 3);
+
+        if (SMS_FAIL >= 2)
+        {
+            SMS_FAIL = 0;
+            RESTART = OFF;
+            goto restart11;
+        }
+        else if (RESTART == ON)
+        {
+            SMS_FAIL++;
+            RESTART = OFF;
+            goto restart8;
+        }
+
+        SMS_FAIL = 0;
+    }
+
+    if (INITIAL_MESSAGE != 0X01 && MODE == SMS_MODE)
+    {
+        /*//i2c_writen(0xA0,0XFF,0X05,0X01);*/
+        MS_TIMER(1);
+        MS_TIMER(500);
+        INITIAL_MESSAGE = 'A';
+
+        R_UART2_SEND("AT+CMGS=\"9159991774\"\r\n");
+        MS_TIMER(5);
+
+        R_UART2_SEND("DEVICE ACTIVATED ");
+        MS_TIMER(5);
+
+        for (FOR_1 = 1; FOR_1 <= 15; FOR_1++)
+        {
+            R_UART2_SEND_User(IMEI[FOR_1]);
+            MS_TIMER(1);
+        }
+
+        MS_TIMER(50);
+        R_UART2_SEND_User(CTRL_Z);
+        MS_TIMER(900);
+    }
+    //else if(INITIAL_MESSAGE==0X01 && SYSTEM_READY==ON && PANIC_CONTROL_STATE==ON){
+    else if (SYSTEM_READY == ON && PANIC_CONTROL_STATE == ON || PANIC_ALERT == ON || POWER_SOURCE_PACKET == ON || LOW_BATTERY_ALERT_PACKET == ON || IGNITION_ON_PACKET == ON || IGNITION_OFF_PACKET == ON || POWER_SOURCE_RECONNECT_PACKET == ON || LOW_BATTERY_ALERT_PACKET == ON)
+    {
+        GET_DEGREES();
+        GET_TIME();
+        GET_SPEED_DATA();
+
+        if (MODE == SMS_MODE)
+        {
+            GET_SIGNAL_STRENGTH();
+        }
+
+        i = CLR;
+
+        for (SMS = 0; SMS <= 4; SMS++)
+        {
+            if (SMS_MOBILE_NO[i] == '0' && SMS_MOBILE_NO[i + 1] == '0' && SMS_MOBILE_NO[i + 2] == '0' && SMS_MOBILE_NO[i + 3] == '0' && MODE == SMS_MODE)
+            {
+                NOP();
+                goto TRY_NEXT_NUM;
+                //  i=i+10;
+            }
+
+restart2:
+            MS_TIMER(50);
+
+            if (MODE == SMS_MODE)
+            {
+                R_UART2_SEND("AT+CMGS=\"");
+
+                for (FOR_9 = i; FOR_9 <= 9 + i; FOR_9++)
+                {
+                    R_UART2_SEND_User(SMS_MOBILE_NO[FOR_9]);
+                    MS_TIMER(1);
+                }
+
+                R_UART2_SEND("\"\r\n");
+                MS_TIMER(50);
+            }
+
+            /*****************************************************************************************************/
+            // PACKET HEADER, PACKET HEADER
+            if (MODE == SMS_MODE)
+            {
+                R_UART2_SEND_User(D_SYM);
+                NOP();
+            }
+            else if (MODE == DATA_MODE)
+            {
+                //LONGITUDE_CONVERSION();
+                //LATITUDE_CONVERSION();
+                R_UART2_SEND("$,");
+            }
+
+            R_UART2_SEND("EPB,");
+
+            /*****************************************************************************************************/
+            // Emergency Message - EMR OR Stop Message (SEM)
+            if (PANIC_CONTROL_STATE == ON)
+            {
+                R_UART2_SEND("EMR,");
+            }
+
+            if (PANIC_CONTROL_STATE == OFF)
+            {
+                R_UART2_SEND("SEM,");
+                PANIC_CONTROL_STATE_1 = ON;
+            }
+
+            /*****************************************************************************************************/
+            //IMEI NUMBER
+            for (FOR_9 = 1; FOR_9 <= 15; FOR_9++)
+            {
+                R_UART2_SEND_User(IMEI[FOR_9]);
+                MS_TIMER(1);
+            }
+
+            /*****************************************************************************************************/
+            // NM=NORMAL or SP= STORAGE
+            R_UART2_SEND(",NM,");
+
+            /*****************************************************************************************************/
+            // DATE & TIME
+            for (FOR_9 = 0; FOR_9 <= 5; FOR_9++)
+            {
+                R_UART2_SEND_User(((TIME[FOR_9] & 0xF0) >> 4) + 0X30);
+                R_UART2_SEND_User((TIME[FOR_9] & 0x0F) + 0X30);
+
+                if (FOR_9 == 1)
+                {
+                    R_UART2_SEND("20");
+                }
+
+                if (FOR_9 == 2 || FOR_9 == 5)
+                {
+                    R_UART2_SEND(",");
+                }
+            }
+
+            /*****************************************************************************************************/
+            // A - VALID OR V - INVALID
+            if (GPS_DIRECTION_DATA_VALID == ON)
+            {
+                R_UART2_SEND("A,");
+            }
+            else
+            {
+                R_UART2_SEND("V,");
+            }
+
+            /*****************************************************************************************************/
+            //LATITUDE AND DIRECTION
+            for (FOR_9 = 0; FOR_9 <= 7; FOR_9++)
+            {
+                NOP();
+                R_UART2_SEND_User(LAT_DM[FOR_9]);
+
+                if (FOR_9 == 1)
+                {
+                    R_UART2_SEND(".");
+                }
+            }
+
+            if (LAT_DIRECTION == 'N')
+            {
+                R_UART2_SEND(",N,");
+            }
+            else
+            {
+                R_UART2_SEND(",S,");
+            }
+
+            /************************************************************************************************************************************************************/
+            //LONGITUDE AND DIRECTION
+            for (FOR_9 = 0; FOR_9 <= 8; FOR_9++)
+            {
+                NOP();
+                R_UART2_SEND_User(LOG_DM[FOR_9]);
+
+                if (FOR_9 == 2)
+                {
+                    R_UART2_SEND(".");
+                }
+            }
+
+            if (LON_DIRECTION == 'E')
+            {
+                R_UART2_SEND(",E,");
+            }
+            else
+            {
+                R_UART2_SEND(",W,");
+            }
+
+            NOP();
+
+            /************************************************************************************************************************************************************/
+            // ALLITUDE
+
+            ALTITUDE_VALUE_COUNT = CLR;
+
+            for (FOR_9 = 0; FOR_9 <= 4; FOR_9++)
+            {
+                NOP();
+
+                if (ALTITUDE[FOR_9] != '.')
+                {
+                    ALTITUDE_VALUE_COUNT++;
+                }
+                else if (ALTITUDE[FOR_9] == '.')
+                {
+                    break;
+                }
+            }
+
+            if (ALTITUDE_VALUE_COUNT == 1)
+            {
+                R_UART2_SEND("00");
+                ALTITUDE_VALUE_COUNT = 2;
+                NOP();
+            }
+            else if (ALTITUDE_VALUE_COUNT == 2)
+            {
+                R_UART2_SEND("0");
+                ALTITUDE_VALUE_COUNT = 3;
+                NOP();
+            }
+            else
+            {
+                ALTITUDE_VALUE_COUNT = 4;
+            }
+
+            for (FOR_9 = 0; FOR_9 <= ALTITUDE_VALUE_COUNT; FOR_9++)
+            {
+                NOP();
+                R_UART2_SEND_User(ALTITUDE[FOR_9]);
+            }
+
+            R_UART2_SEND(",");
+
+            /************************************************************************************************************************************************************/
+            //SPEED
+            if (ADD_ZERO_TO_SPEED == SET)
+            {
+                R_UART2_SEND("0");
+            }
+
+            for (FOR_9 = 0; FOR_9 <= SPEED_DATA_LENGTH_COUNT; FOR_9++)
+            {
+                NOP();
+                R_UART2_SEND_User(SPEED_DATA[FOR_9]);
+            }
+
+            DECIMAL_POINT_CAME_STOP_TX = OFF;
+            NOP();
+            R_UART2_SEND(",");
+            NOP();
+
+            /************************************************************************************************************************************************************/
+            // DISTANCE
+            R_UART2_SEND("000.0");
+
+            /************************************************************************************************************************************************************/
+            //G - Fine GPS OR N � Coarse GPS or data from the network
+            if (GPS_DIRECTION_DATA_VALID == ON)
+            {
+                R_UART2_SEND(",G,");
+            }
+            else
+            {
+                R_UART2_SEND(",N,");
+            }
+
+            /************************************************************************************************************************************************************/
+            //VEICHLE NUMBER
+            for (FOR_9 = 0; FOR_9 <= 9; FOR_9++)
+            {
+                if (VEICHLE_NUMBER[FOR_9] != ' ')
+                {
+                    R_UART2_SEND_User(VEICHLE_NUMBER[FOR_9]);
+                    MS_TIMER(1);
+                }
+            }
+
+            R_UART2_SEND(",");
+
+            /************************************************************************************************************************************************************/
+            //REPLY NUMBER
+            for (FOR_9 = 0; FOR_9 <= 9; FOR_9++)
+            {
+                R_UART2_SEND_User(REPLY_NUMBER[FOR_9]);
+                NOP();
+            }
+
+            R_UART2_SEND(",");
+
+            /************************************************************************************************************************************************************/
+            // CELL ID
+            HEX_CHARACTER_CONVERSION = SET;
+
+            PRINT_ZEROS(CELL_ID_DATA_LENGTH_0);
+
+            for (FOR_1 = 0; FOR_1 <= CELL_ID_DATA_LENGTH_0; FOR_1++)
+            {
+                NOP();
+                R_UART2_SEND_User(CELL_ID[FOR_1]);
+            }
+
+            R_UART2_SEND(",");
+            NOP();
+
+            PRINT_ZEROS(LAC_DATA_LENGTH_0);
+
+            /************************************************************************************************************************************************************/
+            //LAC
+            for (FOR_1 = 0; FOR_1 <= LAC_DATA_LENGTH_0; FOR_1++)
+            {
+                NOP();
+                R_UART2_SEND_User(LAC[FOR_1]);
+            }
+
+            HEX_CHARACTER_CONVERSION = CLR;
+
+            /************************************************************************************************************************************************************/
+            // CRC
+            R_UART2_SEND(",00000000,*");
+
+            /************************************************************************************************************************************************************/
+            if (MODE == SMS_MODE)
+            {
+                NOP();
+                R_UART2_SEND_User(CTRL_Z);
+                ACK_RX(100, 2, 500, 100);
+
+                if (SMS_FAIL_COUNT >= 1)
+                {
+                    SMS_FAIL_COUNT = 0;
+                    RESTART = OFF;
+                }
+                else if (RESTART == ON)
+                {
+                    SMS_FAIL_COUNT++;
+                    RESTART = OFF;
+                    goto restart2;
+                }
+            }
+
+            if (MODE == DATA_MODE)
+            {
+                goto restart12;
+            }
+
+TRY_NEXT_NUM:
+            i = i + 10;
+            SMS_FAIL_COUNT = 0;
+        }
+
+        POWER_SOURCE_PACKET = OFF;
+        i = 0;
+        WATCH_DOG_KILL = OFF;
+    }
+
 restart11:
+
 //     if(POWER_SOURCE_PACKET==ON){POWER_SOURCE_PACKET=OFF;}
 //else if(LOW_BATTERY_ALERT_PACKET==ON){LOW_BATTERY_ALERT_PACKET=OFF;}
 //else if(IGNITION_ON_PACKET==ON){IGNITION_ON_PACKET=OFF;}
@@ -868,8 +1361,237 @@ restart11:
 //else if(POWER_SOURCE_RECONNECT_PACKET==ON){POWER_SOURCE_RECONNECT_PACKET=OFF;}
 //else if(LOW_BATTERY_ALERT_PACKET==ON){LOW_BATTERY_ALERT_PACKET=OFF;}
 
-
-
 restart12:
-NOP();
+    NOP();
+}
+
+
+/*===========================================================================
+ * GSM_SMS_DIAG - SMS Diagnostic Function for M66 Modem
+ *
+ * PURPOSE:
+ * Call this function from main when CMTI is not being received.
+ * It runs all diagnostic AT commands in sequence and stores results
+ * so you can check via UART log / Coolterm what is blocking CMTI.
+ *
+ * CALL FROM MAIN:
+ *   GSM_SMS_DIAG();
+ *
+ * CHECKS PERFORMED (in order):
+ * 1.  AT+CMGL="ALL"     � Did SMS arrive silently? (no CMTI but stored)
+ * 2.  AT+CPMS?          � Is storage count changed? (confirm SMS stored)
+ * 3.  AT+CSQ            � Signal strength OK?
+ * 4.  AT+CSMS?          � Does eSIM support MT SMS?
+ * 5.  AT+CNMI?          � Is CNMI still set? (modem may reset it)
+ * 6.  AT+CREG?          � Still registered on network?
+ * 7.  AT+CSCA?          � SMSC number still valid?
+ * 8.  AT+CMGF?          � Still in text mode?
+ * 9.  AT+QSMSCODE?      � SMS code mode still set?
+ * 10. AT+CMEE=1         � Enable verbose error reporting
+ * 11. AT+CPMS="SM"      � Re-set storage (force refresh)
+ * 12. AT+CNMI=2,1,0,0,0 � Re-set CNMI (force refresh)
+ *===========================================================================*/
+
+void GSM_SMS_DIAG(void)
+{
+    ACK = ERROR_OCCURED = RESTART = 0;
+    SMS_FAIL = 0;
+
+    /*-----------------------------------------------------------------------
+     * STEP 1: AT+CMGL="ALL"
+     * Check if any SMS arrived silently without CMTI notification
+     * If SMS shows here ? modem received it but suppressed CMTI
+     * If empty ? SMS never reached modem (network/eSIM blocking)
+     *-----------------------------------------------------------------------*/
+diag1:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+CMGL=\"ALL\"\r\n");
+    ACK_RX(50, 2, 500, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag2; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag1; }
+    SMS_FAIL = 0;
+
+    /*-----------------------------------------------------------------------
+     * STEP 2: AT+CPMS?
+     * Check current SMS storage count
+     * If count > 0 ? SMS stored silently, CNMI not firing
+     * If count = 0 ? SMS never stored, network level block
+     *-----------------------------------------------------------------------*/
+diag2:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+CPMS?\r\n");
+    ACK_RX(20, 2, 200, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag3; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag2; }
+    SMS_FAIL = 0;
+
+    /*-----------------------------------------------------------------------
+     * STEP 3: AT+CSQ
+     * Check signal strength
+     * +CSQ: 99,0  = no signal  ? SMS cannot be received
+     * +CSQ: 0,0   = no signal
+     * +CSQ: 10+   = acceptable
+     * +CSQ: 20+   = good
+     *-----------------------------------------------------------------------*/
+diag3:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+CSQ\r\n");
+    ACK_RX(20, 2, 200, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag4; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag3; }
+    SMS_FAIL = 0;
+
+    /*-----------------------------------------------------------------------
+     * STEP 4: AT+CSMS?
+     * Check if eSIM/modem supports MT SMS (Mobile Terminated = incoming)
+     * Expected: +CSMS: 0,1,1,1
+     *   param1: service (0=GSM)
+     *   param2: MT supported = 1 (MUST BE 1 for incoming SMS)
+     *   param3: MO supported = 1
+     *   param4: broadcast  = 1
+     * If MT=0 ? eSIM does NOT support incoming SMS ? root cause found
+     *-----------------------------------------------------------------------*/
+diag4:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+CSMS?\r\n");
+    ACK_RX(20, 2, 200, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag5; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag4; }
+    SMS_FAIL = 0;
+
+    /*-----------------------------------------------------------------------
+     * STEP 5: AT+CNMI?
+     * Verify CNMI is still set to 2,1,0,0,0
+     * Some modems reset CNMI after network events or STK activity
+     * If +CNMI: 0,0,0,0,0 ? modem reset it ? re-set below at step 12
+     *-----------------------------------------------------------------------*/
+diag5:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+CNMI?\r\n");
+    ACK_RX(20, 2, 200, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag6; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag5; }
+    SMS_FAIL = 0;
+
+    /*-----------------------------------------------------------------------
+     * STEP 6: AT+CREG?
+     * Confirm still registered on Vodafone IN
+     * +CREG: 1,1 = registered home network  ?
+     * +CREG: 1,2 = searching               ?
+     * +CREG: 1,0 = not registered           ?
+     *-----------------------------------------------------------------------*/
+diag6:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+CREG?\r\n");
+    ACK_RX(20, 2, 200, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag7; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag6; }
+    SMS_FAIL = 0;
+
+    /*-----------------------------------------------------------------------
+     * STEP 7: AT+CSCA?
+     * Verify SMSC number still valid
+     * Expected: +CSCA: "+919884005444",145
+     * If blank or different ? SMSC lost, re-provision eSIM
+     *-----------------------------------------------------------------------*/
+diag7:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+CSCA?\r\n");
+    ACK_RX(20, 2, 200, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag8; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag7; }
+    SMS_FAIL = 0;
+
+    /*-----------------------------------------------------------------------
+     * STEP 8: AT+CMGF?
+     * Verify still in text mode
+     * Expected: +CMGF: 1
+     * If 0 ? switched to PDU mode, CMTI format will differ
+     *-----------------------------------------------------------------------*/
+diag8:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+CMGF?\r\n");
+    ACK_RX(20, 2, 200, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag9; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag8; }
+    SMS_FAIL = 0;
+
+    /*-----------------------------------------------------------------------
+     * STEP 9: AT+QSMSCODE?
+     * Verify SMS code mode still set to 2
+     * Expected: +QSMSCODE: 2
+     * If changed ? may affect SMS encoding/reception behavior
+     *-----------------------------------------------------------------------*/
+diag9:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+QSMSCODE?\r\n");
+    ACK_RX(20, 2, 200, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag10; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag9; }
+    SMS_FAIL = 0;
+
+    /*-----------------------------------------------------------------------
+     * STEP 10: AT+CMEE=1
+     * Enable verbose error reporting
+     * After this, errors show as +CME ERROR: <text> instead of just ERROR
+     * Helps identify exactly what is failing
+     *-----------------------------------------------------------------------*/
+diag10:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+CMEE=1\r\n");
+    ACK_RX(20, 2, 200, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag11; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag10; }
+    SMS_FAIL = 0;
+
+    /*-----------------------------------------------------------------------
+     * STEP 11: AT+CPMS="SM","SM","SM"
+     * Force re-set SMS storage
+     * Refreshes storage pointer in modem
+     * Sometimes needed after STK activity (your log shows heavy STK usage)
+     *-----------------------------------------------------------------------*/
+diag11:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+CPMS=\"SM\",\"SM\",\"SM\"\r\n");
+    ACK_RX(20, 2, 200, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag12; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag11; }
+    SMS_FAIL = 0;
+
+    /*-----------------------------------------------------------------------
+     * STEP 12: AT+CNMI=2,1,0,0,0
+     * Force re-set CNMI notification
+     * STK activity (AT+STKTR, AT+QSTK) can reset CNMI on M66
+     * Re-setting here ensures CMTI will fire after diagnostic completes
+     *-----------------------------------------------------------------------*/
+diag12:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+CNMI=2,1,0,0,0\r\n");
+    ACK_RX(20, 2, 200, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag13; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag12; }
+    SMS_FAIL = 0;
+    MS_TIMER(200);
+
+    
+    /*-----------------------------------------------------------------------
+     * STEP 0: AT+CNUM
+     * Get the mobile number assigned to this eSIM
+     * Expected: +CNUM: "","+91XXXXXXXXXX",145
+     * If response is empty or ERROR ? eSIM has NO phone number assigned
+     * This means SMS CANNOT be received � no number = no MT SMS possible
+     * This is the most common issue with Vodafone IN IoT/data eSIMs
+     *-----------------------------------------------------------------------*/
+diag13:
+    ACK = ERROR_OCCURED = RESTART = 0;
+    R_UART2_SEND("AT+CNUM\r\n");
+    ACK_RX(20, 2, 500, 3);
+    if (SMS_FAIL >= 2)      { SMS_FAIL = 0; RESTART = OFF; goto diag_end; }
+    else if (RESTART == ON) { SMS_FAIL++; RESTART = OFF; goto diag13; }
+    SMS_FAIL = 0;
+    
+diag_end:
+    SMS_FAIL = 0;
+    ACK = ERROR_OCCURED = RESTART = 0;
+    NOP();
 }

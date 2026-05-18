@@ -1,0 +1,130 @@
+COMPREHENSIVE NOTE: AIS140 SOS/EMERGENCY IMPLEMENTATION STRATEGY
+_______________________________________________________________________________________
+
+# AIS140 SOS BUTTON IMPLEMENTATION STRATEGY
+# DO NOT create new variables, functions, strings or anything that consumes memory
+
+## OVERVIEW
+When SOS button is pressed, the device must send BOTH:
+1. PVT packet with EA (Emergency Alert) type and AlertID 10
+2. EPB packet (separate format) to the same IP (secondary IP to be added later)
+
+## TRANSMISSION RULES
+
+### PHASE 1: SOS PRESSED (Emergency Active)
+- **Trigger**: SOS button press → INTP3 interrupt → PANIC_ALERT = ON
+- **Duration**: 30 seconds (configurable via PANIC_TIME counter)
+- **Interval**: Send packets every 5 seconds
+
+### Packets to send every 5 seconds:
+| Packet | Header | PacketType | AlertID | Destination |
+|--------|--------|------------|---------|-------------|
+| PVT | $PVT | EA | 10 | Primary IP |
+| EPB | $EPB | EMR | N/A | Same IP (secondary later) |
+
+### PHASE 2: Emergency Timeout (After 30 seconds)
+- **Trigger**: PANIC_TIME reaches configured threshold (30000 ms / 30 seconds)
+- **Action**: Send ONE final packet to clear emergency state
+
+### Packets to send at timeout:
+| Packet | Header | PacketType | AlertID | Destination |
+|--------|--------|------------|---------|-------------|
+| PVT | $PVT | EA | 11 | Primary IP |
+
+**NOTE**: AlertID 11 = Emergency State OFF (from Table 4B)
+
+### PHASE 3: Normal Operation (After timeout)
+- **Stop sending EPB packets completely**
+- **Revert PVT to normal**: PacketType = NR, AlertID = 01
+- **Continue normal transmission interval** (40 seconds or configured)
+
+## EXISTING CODE RESOURCES (REUSE - DO NOT CREATE NEW)
+
+| Resource | Location | Purpose |
+|----------|----------|---------|
+| PANIC_ALERT | Global | Emergency state flag |
+| PANIC_TIME | Global | Timer counter for emergency duration |
+| PANIC_TIME_START | _Bool | Start timer when SOS pressed |
+| PANIC_TIME_STOP | _Bool | Stop timer signal |
+| P3_bit.no0 | Hardware | Button state (LOW when pressed, HIGH when released) |
+| DATA_PRINT() | N_GSM.c | Sends PVT packets |
+| EPB_STRING() | N_GSM.c | Sends EPB packets (already exists, needs activation) |
+| TEMP_PIP2/TEMP_PPN2 | Global | Primary server IP/Port |
+| TEMP_SIP2/TEMP_SPN2 | Global | Secondary server IP/Port (currently same as primary) |
+
+## TIMING CRITICALS
+
+
+SOS PRESSED (t=0)
+│
+├── t=5s → Send PVT(EA,10) + EPB(EMR)
+├── t=10s → Send PVT(EA,10) + EPB(EMR)
+├── t=15s → Send PVT(EA,10) + EPB(EMR)
+├── t=20s → Send PVT(EA,10) + EPB(EMR)
+├── t=25s → Send PVT(EA,10) + EPB(EMR)
+├── t=30s → Send PVT(EA,11) ONLY (Emergency OFF)
+│
+└── After t=30s → Normal PVT(NR,01) every 40 seconds, NO EPB
+
+
+
+## WHAT NEEDS TO BE IMPLEMENTED
+
+### 1. Emergency Transmission Loop (Every 5 seconds)
+- Modify UPDATE_ONLINE_DATA_FRAME() or main.c to check PANIC_ALERT
+- When PANIC_ALERT == ON, bypass normal 40-second interval
+- Use existing FOR_1 counter or PANIC_TIME to track 5-second intervals
+
+### 2. EPB Packet Activation
+- EPB_STRING() function already exists (from previous implementation)
+- Currently NOT called anywhere - needs to be invoked during emergency phase
+- Call with parameter OFF for EMR, ON for SEM
+
+### 3. 30-Second Timeout
+- Use existing PANIC_TIME counter (incremented by timer interrupt)
+- When PANIC_TIME >= 30 (seconds), trigger Phase 2
+- Send one final PVT with AlertID 11
+- Then set PANIC_ALERT = OFF
+
+### 4. Dual Server Support (Future Enhancement)
+- Currently both primary and secondary IPs are same (78.46.190.117:50022)
+- Change TEMP_SIP2/TEMP_SPN2 to actual emergency server later
+- No code change needed - variables already exist
+
+## DO NOT CHANGE
+- Normal PVT transmission interval when PANIC_ALERT == OFF
+- DATA_PRINT() structure for normal packets
+- Any existing EEPROM read/write functions
+- GPS, GSM, or network initialization code
+
+## EXAMPLE PACKET FORMATS
+
+### PVT with EA (Emergency Active):
+$PVT,VID,1.5.1,EA,10,L,862567079808882,UK00AB1234,0,15052024,143025,12.940271,N,079.518576,E,25.1,310.5,8,183.5,0.8,0.8,Vodafone,1,1,11.5,4.4,0,C,25,404,84,C777,B1EC,98,6D99,C77D,8,5AE2,C777,8,BCE5,C793,7,0001,00,000001,7F,*
+
+### PVT with EA (Emergency OFF - AlertID 11):
+$PVT,VID,1.5.1,EA,11,L,862567079808882,UK00AB1234,0,15052024,143030,12.940271,N,079.518576,E,25.1,310.5,8,183.5,0.8,0.8,Vodafone,1,1,11.5,4.4,0,C,25,404,84,C777,B1EC,98,6D99,C77D,8,5AE2,C777,8,BCE5,C793,7,0001,00,000002,8A,*
+
+### EPB Packet (Emergency):
+$EPB,EMR,862567079808882,NM,15052024143025,A,12.940271,N,079.518576,E,183.5,25.1,0,G,UK00AB1234,9999999990*7C
+
+## REMEMBER FOR ALL FUTURE PROMPTS
+- DO NOT create new variables
+- DO NOT create new functions unless absolutely necessary
+- DO NOT create new string constants or literals
+- Reuse existing global arrays (IMEI_EEPROM, LAT_DM, LOG_DM, TIME, SPEED_DATA, ALTITUDE, VEICHLE_NUMBER, SMS_MOBILE_NO)
+- Reuse existing counters (FOR_1, FOR_2, FOR_3, VOLT)
+- Reuse CHECKSUM_BYTE for XOR calculations
+- Keep memory footprint minimal
+
+## STATUS CODES SUMMARY
+
+| AlertID | Meaning | PacketType | When |
+|---------|---------|------------|------|
+| 01 | Location Update | NR | Normal operation |
+| 10 | Emergency state ON | EA | SOS pressed (first 30 seconds) |
+| 11 | Emergency state OFF | EA | After 30 seconds (one packet only) |
+
+---
+*Document created: Based on AIS140 specification and senior employee guidance*
+*Memory constraint: RL78/G13 with 128KB flash - NO new memory allocations*
