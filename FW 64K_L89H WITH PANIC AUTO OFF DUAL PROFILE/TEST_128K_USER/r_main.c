@@ -110,19 +110,15 @@
 	    if(GPS_DIRECTION_DATA_VALID==ON && GPS_STANDBY==OFF){WATCHDOG_ON();RTC_SET();WATCHDOG_OFF();}
 	    
 	            
-	          NEW_SMS_READ();
-		 
+			NEW_SMS_READ();
+			SYSTEM_STATUS();          // ← ADD THIS LINE!
 		    VLT_RUNNING_MODE();
-		//   ACC_GYRO_READ();
+			//ACC_GYRO_READ();
 		    WATCHDOG_OFF();
 		    SYSTEM_ALERT_CHECK();
 		    //UPDATE_SETTING();
-	//UPDATE_ONLINE_DATA_FRAME_1();
-	//UPDATE_ONLINE_DATA_FRAME();
-	     	    
-		    
-
-
+			//UPDATE_ONLINE_DATA_FRAME_1();
+			//UPDATE_ONLINE_DATA_FRAME();
 	    }
 	    /* End user code. Do not edit comment generated here */
 	}
@@ -219,10 +215,10 @@
 	    MS_TIMER(300);
 	     R_UART2_SEND("AT+QSPN?\r\n");
 	    MS_TIMER(300);
-	   // SwitchNetwork();
+	   //SwitchNetwork();
 	    R_UART2_SEND("AT+QCCID\r\n");
 	    MS_TIMER(300);
-	     R_UART2_SEND("AT+COPS=?\r\n");
+	    R_UART2_SEND("AT+COPS=?\r\n");
 	     
 	    MS_TIMER(2000);
 	      R_UART2_SEND("AT+CREG?\r\n");

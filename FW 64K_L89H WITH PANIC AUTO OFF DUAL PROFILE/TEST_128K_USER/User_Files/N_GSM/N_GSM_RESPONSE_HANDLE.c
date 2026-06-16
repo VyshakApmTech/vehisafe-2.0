@@ -23,11 +23,12 @@ const unsigned char SET_SERVER2_FRAME[] = {"SETSERVER2 "};
 const unsigned char SET_HEALTH_FRAME[] = {"SET HPET IMEI "};
 const unsigned char GET_VERSION_FRAME[12] = {"GET VERSION "};
 const unsigned char GET_VLT_IMEI_PH_FRAME[] = {"GET VLT IMEI 0669 "};
-const unsigned char SET_HACL_FRAME[] = {"SET HACL IMEI 2202="};
-const unsigned char SET_HBRK_FRAME[] = {"SET HBRK IMEI 2202="};
-const unsigned char SET_HTRN_FRAME[] = {"SET HTRN IMEI 2202="};
-const unsigned char SET_LBAT_FRAME[] = {"SET LBAT IMEI 2202="};
-const unsigned char SET_APN_FRAME2[] = {"SET APN IMEI 2202="};
+const unsigned char SET_HACL_FRAME[] = {"SET HACL "}; //9 chars
+const unsigned char SET_HBRK_FRAME[] = {"SET HBRK "}; //9 chars
+const unsigned char SET_HTRN_FRAME[] = {"SET HTRN "}; //9 chars
+const unsigned char SET_LBAT_FRAME[] = {"SET LBAT "}; //9 chars
+const unsigned char SET_APN_FRAME2[] = {"SET APN "}; //8 chars
+
 // const unsigned char SET_ENO_FRAME[] = {"SET ENO IMEI 2202="};  // 18 characters (same as APN)
 char TEMP_HACL_VALUE[3];  // For storing the HACL value (e.g., "30")
 //char PRIM_IP[16];
@@ -91,7 +92,7 @@ extern char IMEI_EEPROM[16],RX_ACK_Frame,ACK,ERROR_OCCURED,RX_SMS_CMD,RX_CMD_SMS
 extern char IGNITION_CTRL_RX,INITIAL_MESSAGE,P_LAT_DM_RX,FILE_CLOSE_ATTEMPT;
 extern char V_NO_LEN,GSM_REG,GPRS_REG,SS_DATA_RX,GET_SS,dBm,SMS_MOBILE_NO[55],HEALTH_ON_DURATON_S_RX;
 extern int SERVING_CELL_DBM;
-extern char VN_ACK_RX,PANIC_NUMBER_RX,GPRS_CONNECTED,GSM_STRENGTH,INTERNET_CONNECTED,DISCONNECT,LOW_BATTERY_ALERT,HTTP_CONNECT_COUNT,VEICHLE_NUMBER[15],NW_NAME_RX,IMEI[16];
+extern char VN_ACK_RX,PANIC_NUMBER_RX,GPRS_CONNECTED,GSM_STRENGTH,INTERNET_CONNECTED,DISCONNECT,LOW_BATTERY_ALERT,HTTP_CONNECT_COUNT,TCP_CONNECTION_OPEN,VEICHLE_NUMBER[15],NW_NAME_RX,IMEI[16];
 extern unsigned int FOR_1,FOR_3,Address_1,NW_REGN_COUNT,FLASH_MEMORY,GPRS_REG_COUNT,MAIN_BATTERY_VOLTAGE,ADC_BUFFER,BACKUP_BATTERY_VOLTAGE,GPRS_REG_ROAMING,GSM_REG_ROAMING,T_SPEED,FILTER,DATA_HEADER,TEMP_VERSION,SLEEP_ON_LEVEL,SLEEP_OF_LEVEL,OVER_SPEED,VOLT;
 extern unsigned int t_count,WRITE_ADDRESS,DATA,WATCH_DOG_KILL,WRITE_ADDRESS,TEMPS,WRITE_ADDRESS_MSB,WRITE_ADDRESS_LSB,BYTE;
 extern char LOG_DM[10],LAT_DM[10],TIME[10],GPS_BUSY,SPEED[4],/*GPS_RX,*/SPEED_DATA_RX[10],WATCH_DOG,FILE[150],FIRM_DATA[150];
@@ -286,6 +287,7 @@ void ACK_RX(unsigned int ct,unsigned int ack,unsigned int REDIAL,unsigned int WA
 void CMD_DATA_READ_IN_EEPROM(void)
 {
 	unsigned int A,B,C;
+	unsigned char ADDR46, ADDR47, ADDR48, EEPROM_VERSION;
 
 	
 	IGNITION_ON_UPDATE_TIME=((i2c_readn(0xA0,0XFE,20))*10);MS_TIMER(2);
@@ -307,6 +309,25 @@ void CMD_DATA_READ_IN_EEPROM(void)
 	UPDATE_TIME_OFF_TIME=IGNITION_OFF_UPDATE_TIME;
 	}
 	A=CLR;
+	
+	/* Set default update times if EEPROM values were invalid (0 or out of range) */
+	if(UPDATE_TIME_ON_TIME == 0)
+	{
+		UPDATE_TIME_ON_TIME = 10;  /* Default: 10 seconds (IGN ON PVT interval from VLT_RUNNING_MODE) */
+		/* Write to EEPROM addresses 20,21,22 as 3-digit format: 010 */
+		MS_TIMER(1);i2c_writen(0xA0,0XFE,20,0);MS_TIMER(1);
+		i2c_writen(0xA0,0XFE,21,1);MS_TIMER(1);
+		i2c_writen(0xA0,0XFE,22,0);MS_TIMER(1);
+	}
+	if(UPDATE_TIME_OFF_TIME == 0)
+	{
+		UPDATE_TIME_OFF_TIME = 600;  /* Default: 600 seconds = 10 minutes (IGN OFF PVT interval from VLT_RUNNING_MODE) */
+		/* Write to EEPROM addresses 23,24,25 as 3-digit format: 600 */
+		MS_TIMER(1);i2c_writen(0xA0,0XFE,23,6);MS_TIMER(1);
+		i2c_writen(0xA0,0XFE,24,0);MS_TIMER(1);
+		i2c_writen(0xA0,0XFE,25,0);MS_TIMER(1);
+	}
+	
 	C=i2c_readn(0xA0,0XFE,26);
 	if(C>=0x41 && C<=0x5A)
 	{
@@ -407,15 +428,48 @@ void CMD_DATA_READ_IN_EEPROM(void)
 	     HB_LEVEL=HARSH_BRAKE_LEVEL=1;
 	}
 	
-	LOW_BAT_LEVEL=i2c_readn(0xA0,0XFE,46);MS_TIMER(2); 
-	    if(LOW_BAT_LEVEL<=9)
-	    {
-	    LB_LEVEL=LOW_BAT_LEVEL;
-	    }
+	// Check EEPROM version marker (address 50) to detect old vs new format
+	EEPROM_VERSION = i2c_readn(0xA0,0XFE,50);MS_TIMER(2);
+	
+	ADDR46 = i2c_readn(0xA0,0XFE,46);MS_TIMER(2);
+	ADDR47 = i2c_readn(0xA0,0XFE,47);MS_TIMER(2);
+	ADDR48 = i2c_readn(0xA0,0XFE,48);MS_TIMER(2);
+	
+	// If version marker not set (==0xFF or ==0x00), EEPROM contains old data - reset to default
+	if(EEPROM_VERSION != 0xAA)
+	{
+		// Old format detected or EEPROM never initialized - write new format with marker
+		MS_TIMER(1);i2c_writen(0xA0,0XFE,46,0);MS_TIMER(1);
+		i2c_writen(0xA0,0XFE,47,7);MS_TIMER(1);
+		i2c_writen(0xA0,0XFE,48,0);MS_TIMER(1);
+		i2c_writen(0xA0,0XFE,50,0xAA);MS_TIMER(1);  // Set version marker
+		LB_LEVEL=LOW_BAT_LEVEL=70;
+	}
 	else
 	{
-	MS_TIMER(1);i2c_writen(0xA0,0XFE,46,1);MS_TIMER(1);
-	LB_LEVEL=LOW_BAT_LEVEL=1;
+		// Version marker found - read new 3-digit format
+		if(ADDR46 == 0 && ADDR47 <= 9 && ADDR48 <= 9)
+		{
+			LOW_BAT_LEVEL = (ADDR47 * 10) + ADDR48;
+		}
+		else
+		{
+			LOW_BAT_LEVEL = 70;
+		}
+		
+		// Final validation: ensure 1-100 range
+		if(LOW_BAT_LEVEL >= 1 && LOW_BAT_LEVEL <= 100)
+		{
+			LB_LEVEL = LOW_BAT_LEVEL;
+		}
+		else
+		{
+			// Out of range - write default
+			MS_TIMER(1);i2c_writen(0xA0,0XFE,46,0);MS_TIMER(1);
+			i2c_writen(0xA0,0XFE,47,7);MS_TIMER(1);
+			i2c_writen(0xA0,0XFE,48,0);MS_TIMER(1);
+			LB_LEVEL=LOW_BAT_LEVEL=70;
+		}
 	}
 	
 	APN_TEMP=i2c_readn(0xA0,0XFE,199);MS_TIMER(2);
@@ -723,11 +777,12 @@ void CMD_DATA_WRITE_IN_EEROM(char D)
 
 	if(D==14)
 	{
-		K = 46;
+		K = LOW_BAT_LEVEL % 100;
 
 		MS_TIMER(1);
-		i2c_writen(0xA0,0XFE,K,LOW_BAT_LEVEL);
-		MS_TIMER(2);
+		i2c_writen(0xA0,0XFE,46,LOW_BAT_LEVEL/100); MS_TIMER(2);
+		i2c_writen(0xA0,0XFE,47,K/10); MS_TIMER(2);
+		i2c_writen(0xA0,0XFE,48,K%10); MS_TIMER(2);
 	}
 
 	if(D==15)
@@ -1106,7 +1161,22 @@ if(UART0_BUFFER==CONNECT_FAIL_ACK[I[76]])
 		I[4]=0;ERROR_OCCURED=1;
 		}
 	}
-	else{I[4]=0;}
+	else{I[4]=0;}	
+
+	/* Detect unsolicited CLOSED response from modem (connection closed by server) */
+	if((UART0_BUFFER=='C' && I[38]==0) || (UART0_BUFFER=='L' && I[38]==1) || (UART0_BUFFER=='O' && I[38]==2) || (UART0_BUFFER=='S' && I[38]==3) || (UART0_BUFFER=='E' && I[38]==4) || (UART0_BUFFER=='D' && I[38]==5))
+	{
+		I[38]++;
+		if(I[38]>=6)
+		{
+			I[38]=0;
+			TCP_CONNECTION_OPEN = OFF;  /* Connection closed by server - reset flag */
+		}
+	}
+	else if(UART0_BUFFER!=' ' && UART0_BUFFER!='\r' && UART0_BUFFER!='\n')
+	{
+		I[38]=0;  /* Reset counter if any non-matching character received */
+	}
 
 //************************************************************************************************************************************************************
 //					HTTP CONNECT ACK							
@@ -1117,7 +1187,7 @@ if(UART0_BUFFER==CONNECT_FAIL_ACK[I[76]])
 		I[7]++;
 		if(I[7]>=7){I[7]=0;GPRS_CONNECTED=ON;}
 	}
-	else{I[7]=0;}
+	else{I[7		]=0;}
 //************************************************************************************************************************************************************
 //					GET SIGNAL STRENGTH						
 //************************************************************************************************************************************************************/
@@ -1393,11 +1463,28 @@ if(FIRMWARE_UPDATE==1){
 	if(UART0_BUFFER==PANIC_CTRL[I[22]] || PANIC_CTRL_RX>=1)
 	{
 		I[22]++;
-		if(PANIC_CTRL_RX==1){if(UART0_BUFFER=='1'){PANIC_CONTROL_STATE=ON;}else{PANIC_CONTROL_STATE=OFF;}PANIC_CTRL_RX=0;I[22]=0;}
-		else if(I[22]>=4){PANIC_CTRL_RX=1;}
+
+		if(PANIC_CTRL_RX==1)
+		{
+			if(UART0_BUFFER=='1')
+			{
+				PANIC_CONTROL_STATE=ON;
+			}
+			else if(PANIC_ALERT==OFF)
+			{
+				PANIC_CONTROL_STATE=OFF;
+			}
+
+			PANIC_CTRL_RX=0;I[22]=0;
+		}
+		else if(I[22]>=4)
+		{
+			PANIC_CTRL_RX=1;
+		}
 		
 	}
-	else{I[22]=0;}
+		else{I[22]=0;
+	}
 
 	
 /////************************************************************************************************************************************************************
@@ -1713,34 +1800,47 @@ if(UART0_BUFFER == SET_HACL_FRAME[I[82]])  // Detects "SET HACL IMEI 2202="
 {
     I[82]++;
     
-    if(I[82] >= 19)  // Full command matched
+    if(I[82] >= 9)  // Full command matched
     {
         HARSH_ACCEL_CMD = SET;  // SETS THE FLAG
         I[82] = 0;
         VV = 0;  // Reset counter for value
+		PIN_COUNT_CHECK = 0;
     }
+}
+
+else if(HARSH_ACCEL_CMD == SET) // Check for PIN in the value part
+{
+	if(PIN_COUNT_CHECK == 0)
+	{
+		PIN_CHECK(UART0_BUFFER, 0);
+	}
+	else if(PIN_COUNT_CHECK == 1)
+	{
+		PIN_CHECK(UART0_BUFFER, 1);
+	}
+	else if (PIN_COUNT_CHECK == 2)
+	{
+		PIN_CHECK(UART0_BUFFER, 2);
+	}
+	else if (PIN_COUNT_CHECK == 3)
+	{
+		PIN_CHECK(UART0_BUFFER, 3);
+	}
+	
+
 }
 else if(HARSH_ACCEL_CMD == SET)  // Reading the value part (e.g., "30")
 {
     if(UART0_BUFFER == '#' || UART0_BUFFER == 0x00 || UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
     {
         int i=0;
-        // End of command - process the value
-        // DON'T clear the flag here! Let main loop handle it.
-        // HARSH_ACCEL_CMD = CLR;  ← REMOVE THIS LINE
-        
         // Convert TEMP_HACL_VALUE to number
         HARSH_ACCEL_LEVEL = 0;
         for(i=0; i<VV; i++)
         {
             HARSH_ACCEL_LEVEL = (HARSH_ACCEL_LEVEL * 10) + (TEMP_HACL_VALUE[i] - '0');
         }
-        
-        // Validate (1-3 range)
-        // if(HARSH_ACCEL_LEVEL > 3) HARSH_ACCEL_LEVEL = 3;
-        // if(HARSH_ACCEL_LEVEL < 1) HARSH_ACCEL_LEVEL = 1;
-        
-        // Flag remains SET for main loop to process
     }
     else
     {
@@ -1867,8 +1967,8 @@ else if(LOW_BAT_LEVEL_RX == 1)
         int i=0;
         LOW_BAT_LEVEL = 0;
 
-        // SAFETY: Only process if VV is reasonable (1 digit for LBAT)
-        if(VV > 2) VV = 2;  // Max 2 digits for safety
+        // SAFETY: Only process if VV is reasonable (up to 3 digits for LOW_BAT_LEVEL 1-100)
+        if(VV > 3) VV = 3;  // Max 3 digits for safety (up to 100)
         
         for(i=0; i<VV; i++)
         {
@@ -1879,12 +1979,12 @@ else if(LOW_BAT_LEVEL_RX == 1)
             }
         }
 
-        // VALIDATE RANGE 1-9
+        // VALIDATE RANGE 1-100 (Low battery threshold percentage)
         if(LOW_BAT_LEVEL < 1) LOW_BAT_LEVEL = 1;
-        if(LOW_BAT_LEVEL > 9) LOW_BAT_LEVEL = 9;
+        if(LOW_BAT_LEVEL > 100) LOW_BAT_LEVEL = 100;
 
         // DEBUG: Check if we got correct value
-        // If LOW_BAT_LEVEL is not 3, then VV or buffer is corrupted
+        // If LOW_BAT_LEVEL is not in valid range, then VV or buffer is corrupted
 
         LOW_BAT_LEVEL_CMD = SET;
         VV = 0;
@@ -3403,46 +3503,78 @@ else
 }
 
 ///*************************************************************************************************************************************************************/
-//              ICCID PARSER  (+QCCID: 8991xxxxxxxxxxxxxxxx)
+//              ICCID PARSER  (Modem sends just: 8991xxxxxxxxxxxxxxxx with no "+QCCID: " prefix)
 ///*************************************************************************************************************************************************************/
-if(UART0_BUFFER == QCCID_ACK[I[89]] || ICCID_RX >= 1)
+///*************************************************************************************************************************************************************/
+//              ICCID PARSER - Quectel modem sends ICCID directly (NO "+QCCID: " prefix)
+//              Modem response format:
+//              AT+QCCID
+//              8991840042634039695F
+//              OK
+//              
+//              The modem sends the ICCID number directly without any prefix.
+//              This parser detects the ICCID by looking for the first digit '8'
+///*************************************************************************************************************************************************************/
+
+// State machine for ICCID parsing
+// ICCID_RX = 0: Waiting for ICCID to start
+// ICCID_RX = 1: Currently collecting ICCID digits
+// ICCID_RX = 2: ICCID collection complete (ready to use)
+
+if(ICCID_RX == 0)
 {
-    if(ICCID_RX == 0)
+    // Look for start of ICCID - typically starts with '8' for Quectel SIMs
+    // ICCID contains only digits 0-9 (no letters, no spaces)
+    if(UART0_BUFFER == '8')
     {
-        I[89]++;
-        if(I[89] >= 8)    // "+QCCID: " = 8 chars
-        {
-            ICCID_RX = 1;
-            I[89] = 0;
-            t = 0;
-            // Clear ICCID buffer
-            for(t = 0; t < 21; t++) { ICCID[t] = '0'; }
-            t = 0;
+        ICCID_RX = 1;           // Start collecting
+        t = 0;                  // Reset index
+        // Clear ICCID buffer before filling
+        for(t = 0; t < 21; t++) 
+        { 
+            ICCID[t] = '\0'; 
         }
+        t = 0;
+        ICCID[t++] = UART0_BUFFER;  // Store first digit
     }
-    else if(ICCID_RX == 1)
+}
+else if(ICCID_RX == 1)
+{
+    // Currently collecting ICCID digits
+    // Stop when we hit end of line (CR, LF, or null)
+    if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n' || UART0_BUFFER == 0x00)
     {
-        if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n' || UART0_BUFFER == 0x00)
+        ICCID[t] = '\0';        // Null terminate string
+        ICCID_RX = 2;           // Collection complete - ready to use
+        t = 0;
+    }
+    else
+    {
+        // Store ICCID digit (only digits 0-9, no letters)
+        if(t < 20 && UART0_BUFFER >= '0' && UART0_BUFFER <= '9')
         {
-            ICCID[t] = '\0';
-            ICCID_RX = 0;
-            t = 0;
+            ICCID[t++] = UART0_BUFFER;
+        }
+        else if(t < 20 && (UART0_BUFFER >= 'A' && UART0_BUFFER <= 'F'))
+        {
+            // Some ICCIDs may have hex letters (A-F) at the end
+            ICCID[t++] = UART0_BUFFER;
+        }
+        else if(t < 20 && (UART0_BUFFER >= 'a' && UART0_BUFFER <= 'f'))
+        {
+            // Handle lowercase hex letters
+            ICCID[t++] = UART0_BUFFER - 32;  // Convert to uppercase
         }
         else
         {
-            if(t < 20)
-            {
-                ICCID[t] = UART0_BUFFER;
-                t++;
-            }
+            // Invalid character - reset parsing
+            ICCID_RX = 0;
+            t = 0;
         }
     }
 }
-else
-{
-    I[89] = 0;
-    // Don't reset ICCID_RX here — it's a one-shot parser, not continuous
-}
+// Note: When ICCID_RX == 2, the ICCID is ready to use
+// The main code should reset ICCID_RX back to 0 after reading
 
 
 /************************************************************************************************************************************************************

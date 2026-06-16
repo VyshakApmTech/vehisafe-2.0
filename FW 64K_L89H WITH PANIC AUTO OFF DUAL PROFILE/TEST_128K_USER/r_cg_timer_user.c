@@ -41,7 +41,7 @@ Pragma directive
 ***********************************************************************************************************************/
 //#pragma interrupt r_tau0_channel0_interrupt(vect=INTTM00)
 //#pragma interrupt r_tau0_channel1_interrupt(vect=INTTM01)
-//#pragma interrupt r_tau0_channel2_interrupt(vect=INTTM02)
+///#pragma interrupt r_tau0_channel2_interrupt(vect=INTTM02)
 //#pragma interrupt r_tau0_channel3_interrupt(vect=INTTM03)
 //#pragma interrupt r_tau0_channel4_interrupt(vect=INTTM04)
 /* Start user code for pragma. Do not edit comment generated here */
@@ -56,6 +56,7 @@ extern unsigned int MINUTE_OFF,MINUTE_ON,Milli_Seconds,WATCH_DOG_KILL,MINUTE,P_D
 extern unsigned int t_count,INTERUPT_COUNT_TIMER,MAIN_BATTERY_VOLTAGE,ADC_BUFFER,BACKUP_BATTERY_VOLTAGE,Micro_Seconds,PANIC_TIME,PANIC_ALERT_TIME,HEALTH_ALERT_TIME;
 char SELECTION,WATCH_DOG;
 extern char GPS_DIRECTION_DATA_VALID,BATTERY_MEASUREMENT,PANIC_ALERT_PACKET,PANIC_ALERT;
+extern char PANIC_CONTROL_STATE;
 unsigned int HOOTER_COUNT,ADC_COUNT,RTC_UPDATE,CHECKING,GPS_RESET_COUNT,BLINK_COUNT,T_SECONDS,T_MINUTE,T_HOUR,PANIC_COUNT,I_HOURS;
 extern _Bool PANIC_CONTROL_STATE_1,RTC_DONE,PANIC_TIME_START,SMS_CMD_REPLY,PANIC_TIME_STOP;
 extern _Bool GPS_STANDBY,WATCH_DOG_FORCE_KILL,POWER_BATTERY;
@@ -86,13 +87,13 @@ extern _Bool GPS_STANDBY,WATCH_DOG_FORCE_KILL,POWER_BATTERY;
 ***********************************************************************************************************************/
 void r_tau0_channel0_interrupt (void)   
 {
-//    MINUTE_OFF++;
-//	MINUTE_ON++;
-MINUTE++;
-    //if(MINUTE>=3600){MINUTE=CLR;I_HOURS++;}
-    //GREEN_LED=~GREEN_LED;
-//     if(MINUTE_OFF>=300){MINUTE_OFF=CLR;
-//    GREEN_LED=~GREEN_LED;I_HOURS++;}
+	//    MINUTE_OFF++;
+	//	MINUTE_ON++;
+	MINUTE++;
+	    //if(MINUTE>=3600){MINUTE=CLR;I_HOURS++;}
+	//GREEN_LED=~GREEN_LED;
+	//     if(MINUTE_OFF>=300){MINUTE_OFF=CLR;
+	//    GREEN_LED=~GREEN_LED;I_HOURS++;}	
 }
 
 /***********************************************************************************************************************
@@ -197,10 +198,11 @@ void r_tau0_channel2_interrupt (void)
 	   // if(PANIC_TIME>=PANIC_ALERT_TIME)
 	   if(PANIC_TIME>=1)
 	    {
-		PANIC_TIME=PANIC_TIME_START=CLR;
-		PANIC_TIME_STOP=ON;
-		HOOTER=ON;HOOTER_COUNT=CLR;
-		PANIC_CONTROL_STATE_1=ON;
+	            PANIC_CONTROL_STATE = ON;
+	            PANIC_TIME=PANIC_TIME_START=CLR;
+	            PANIC_TIME_STOP=ON;
+	            HOOTER=ON;HOOTER_COUNT=CLR;
+	            PANIC_CONTROL_STATE_1=OFF;
 				
 	    }
     }

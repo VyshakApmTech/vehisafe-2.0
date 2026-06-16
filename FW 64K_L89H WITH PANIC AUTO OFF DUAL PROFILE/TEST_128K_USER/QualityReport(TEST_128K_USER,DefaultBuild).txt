@@ -1,30 +1,30 @@
 QualityReport
-15 May 2026 17:51:09
+16 June 2026 19:01:13
 
 ------ Start build(TEST_128K_USER, DefaultBuild) ------
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe "Self_Programming Files\u_interrupts.c" -cpu=S2 -o DefaultBuild\u_interrupts.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_GPS\N_GPS.c -cpu=S2 -o DefaultBuild\N_GPS.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_GSM\FIRMWARE_HANDLING.c -cpu=S2 -o DefaultBuild\FIRMWARE_HANDLING.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_wdt.c -cpu=S2 -o DefaultBuild\r_cg_wdt.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_intc_user.c -cpu=S2 -o DefaultBuild\r_cg_intc_user.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_port.c -cpu=S2 -o DefaultBuild\r_cg_port.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_adc.c -cpu=S2 -o DefaultBuild\r_cg_adc.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
+C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_wdt.c -cpu=S2 -o DefaultBuild\r_cg_wdt.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_serial.c -cpu=S2 -o DefaultBuild\r_cg_serial.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_adc.c -cpu=S2 -o DefaultBuild\r_cg_adc.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 Self_Programming Files\u_interrupts.c(60):W0523077:Called function should have prototype
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 Self_Programming Files\u_interrupts.c(68):W0523077:Called function should have prototype
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 Self_Programming Files\u_interrupts.c(76):W0523077:Called function should have prototype
 Self_Programming Files\u_interrupts.c(84):W0523077:Called function should have prototype
 Self_Programming Files\u_interrupts.c(92):W0523077:Called function should have prototype
 Self_Programming Files\u_interrupts.c(100):W0523077:Called function should have prototype
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 Self_Programming Files\u_interrupts.c(108):W0523077:Called function should have prototype
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 Self_Programming Files\u_interrupts.c(116):W0523077:Called function should have prototype
 Self_Programming Files\u_interrupts.c(124):W0523077:Called function should have prototype
 Self_Programming Files\u_interrupts.c(132):W0523077:Called function should have prototype
@@ -62,91 +62,88 @@ Self_Programming Files\u_interrupts.c(331):W0520177:Function "intp9_interrupt" w
 Self_Programming Files\u_interrupts.c(339):W0520177:Function "intp10_interrupt" was declared but never referenced
 Self_Programming Files\u_interrupts.c(347):W0520177:Function "intp11_interrupt" was declared but never referenced
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_systeminit.c -cpu=S2 -o DefaultBuild\r_systeminit.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
+C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_Delay\N_DELAY.c -cpu=S2 -o DefaultBuild\N_DELAY.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_port_user.c -cpu=S2 -o DefaultBuild\r_cg_port_user.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_rtc_user.c -cpu=S2 -o DefaultBuild\r_cg_rtc_user.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_Delay\N_DELAY.c -cpu=S2 -o DefaultBuild\N_DELAY.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe "Self_Programming Files\u_ram_vector.c" -cpu=S2 -o DefaultBuild\u_ram_vector.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_timer.c -cpu=S2 -o DefaultBuild\r_cg_timer.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_GSM\N_GSM.c -cpu=S2 -o DefaultBuild\N_GSM.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe "Self_Programming Files\u_ram_vector.c" -cpu=S2 -o DefaultBuild\u_ram_vector.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_SERIAL\N_Serial.c -cpu=S2 -o DefaultBuild\N_Serial.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-User_Files\N_GSM\N_GSM.c(405):W0520177:Label "REPL_9" was declared but never referenced
-User_Files\N_GSM\N_GSM.c(1944):W0520177:Label "REPL_10" was declared but never referenced
-User_Files\N_GSM\N_GSM.c(2023):W0520177:Label "REPL_14" was declared but never referenced
-User_Files\N_GSM\N_GSM.c(2420):W0520186:Pointless comparison of unsigned integer with zero
-User_Files\N_GSM\N_GSM.c(2464):W0520186:Pointless comparison of unsigned integer with zero
-User_Files\N_GSM\N_GSM.c(2508):W0520186:Pointless comparison of unsigned integer with zero
-User_Files\N_GSM\N_GSM.c(2552):W0520186:Pointless comparison of unsigned integer with zero
-User_Files\N_GSM\N_GSM.c(4688):W0520167:Argument of type "char __near *" is incompatible with parameter of type "char __near"
-User_Files\N_GSM\N_GSM.c(5175):W0520167:Argument of type "uint8_t __near *" is incompatible with parameter of type "char __near"
-User_Files\N_GSM\N_GSM.c(5218):W0520167:Argument of type "uint8_t __near *" is incompatible with parameter of type "char __near"
-User_Files\N_GSM\N_GSM.c(5256):W0520167:Argument of type "uint8_t __near *" is incompatible with parameter of type "char __near"
-User_Files\N_GSM\N_GSM.c(5385):W0520167:Argument of type "char __near *" is incompatible with parameter of type "uint8_t *const __near"
-User_Files\N_GSM\N_GSM.c(5385):W0520167:Argument of type "char __near *" is incompatible with parameter of type "uint8_t *const __near"
-C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_main.c -cpu=S2 -o DefaultBuild\r_main.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_GSM\N_GSM.c -cpu=S2 -o DefaultBuild\N_GSM.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_VCONTROL\V_Control.c -cpu=S2 -o DefaultBuild\V_Control.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
+C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_cgc.c -cpu=S2 -o DefaultBuild\r_cg_cgc.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
+User_Files\N_GSM\N_GSM.c(449):W0520177:Label "REPL_9" was declared but never referenced
+User_Files\N_GSM\N_GSM.c(2017):W0520177:Label "REPL_10" was declared but never referenced
+User_Files\N_GSM\N_GSM.c(2096):W0520177:Label "REPL_14" was declared but never referenced
+User_Files\N_GSM\N_GSM.c(2493):W0520186:Pointless comparison of unsigned integer with zero
+User_Files\N_GSM\N_GSM.c(2537):W0520186:Pointless comparison of unsigned integer with zero
+User_Files\N_GSM\N_GSM.c(2581):W0520186:Pointless comparison of unsigned integer with zero
+C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_main.c -cpu=S2 -o DefaultBuild\r_main.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
+User_Files\N_GSM\N_GSM.c(2625):W0520186:Pointless comparison of unsigned integer with zero
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_rtc.c -cpu=S2 -o DefaultBuild\r_cg_rtc.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_I2C\N_IIC.c -cpu=S2 -o DefaultBuild\N_IIC.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_cgc.c -cpu=S2 -o DefaultBuild\r_cg_cgc.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+User_Files\N_GSM\N_GSM.c(4471):W0520167:Argument of type "char __near *" is incompatible with parameter of type "char __near"
+User_Files\N_GSM\N_GSM.c(4958):W0520167:Argument of type "uint8_t __near *" is incompatible with parameter of type "char __near"
+User_Files\N_GSM\N_GSM.c(5001):W0520167:Argument of type "uint8_t __near *" is incompatible with parameter of type "char __near"
+User_Files\N_GSM\N_GSM.c(5039):W0520167:Argument of type "uint8_t __near *" is incompatible with parameter of type "char __near"
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_timer_user.c -cpu=S2 -o DefaultBuild\r_cg_timer_user.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-User_Files\N_VCONTROL\V_Control.c(141):W0523077:Called function should have prototype
-User_Files\N_VCONTROL\V_Control.c(161):W0523077:Called function should have prototype
-User_Files\N_VCONTROL\V_Control.c(184):W0523077:Called function should have prototype
-User_Files\N_VCONTROL\V_Control.c(195):W0523077:Called function should have prototype
+User_Files\N_GSM\N_GSM.c(5168):W0520167:Argument of type "char __near *" is incompatible with parameter of type "uint8_t *const __near"
+User_Files\N_GSM\N_GSM.c(5168):W0520167:Argument of type "char __near *" is incompatible with parameter of type "uint8_t *const __near"
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+User_Files\N_VCONTROL\V_Control.c(192):W0523077:Called function should have prototype
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+User_Files\N_VCONTROL\V_Control.c(238):W0523077:Called function should have prototype
+User_Files\N_VCONTROL\V_Control.c(270):W0523077:Called function should have prototype
+User_Files\N_VCONTROL\V_Control.c(317):W0523077:Called function should have prototype
+User_Files\N_VCONTROL\V_Control.c(326):W0523077:Called function should have prototype
+User_Files\N_VCONTROL\V_Control.c(354):W0523077:Called function should have prototype
+User_Files\N_VCONTROL\V_Control.c(371):W0523077:Called function should have prototype
 r_main.c(110):W0523077:Called function should have prototype
-User_Files\N_VCONTROL\V_Control.c(212):W0523077:Called function should have prototype
+User_Files\N_VCONTROL\V_Control.c(386):W0523077:Called function should have prototype
 r_main.c(117):W0523077:Called function should have prototype
-User_Files\N_VCONTROL\V_Control.c(224):W0523077:Called function should have prototype
-r_main.c(140):W0523077:Called function should have prototype
-User_Files\N_VCONTROL\V_Control.c(260):W0523077:Called function should have prototype
-r_main.c(179):W0523077:Called function should have prototype
-User_Files\N_VCONTROL\V_Control.c(268):W0523077:Called function should have prototype
-r_main.c(193):W0523077:Called function should have prototype
-User_Files\N_VCONTROL\V_Control.c(293):W0523077:Called function should have prototype
-User_Files\N_VCONTROL\V_Control.c(307):W0523077:Called function should have prototype
-User_Files\N_VCONTROL\V_Control.c(322):W0523077:Called function should have prototype
-User_Files\N_VCONTROL\V_Control.c(335):W0523077:Called function should have prototype
-User_Files\N_VCONTROL\V_Control.c(427):W0523077:Called function should have prototype
+User_Files\N_VCONTROL\V_Control.c(399):W0523077:Called function should have prototype
+r_main.c(136):W0523077:Called function should have prototype
+User_Files\N_VCONTROL\V_Control.c(491):W0523077:Called function should have prototype
+r_main.c(175):W0523077:Called function should have prototype
+r_main.c(189):W0523077:Called function should have prototype
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe N_IEEPROM.c -cpu=S2 -o DefaultBuild\N_IEEPROM.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_cgc_user.c -cpu=S2 -o DefaultBuild\r_cg_cgc_user.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_wdt_user.c -cpu=S2 -o DefaultBuild\r_cg_wdt_user.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_EEPROM\N_EEPROM.c -cpu=S2 -o DefaultBuild\N_EEPROM.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_intc.c -cpu=S2 -o DefaultBuild\r_cg_intc.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_adc_user.c -cpu=S2 -o DefaultBuild\r_cg_adc_user.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_EEPROM\N_EEPROM.c -cpu=S2 -o DefaultBuild\N_EEPROM.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_serial_user.c -cpu=S2 -o DefaultBuild\r_cg_serial_user.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe r_cg_adc_user.c -cpu=S2 -o DefaultBuild\r_cg_adc_user.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\V1.05\r_cg_pfdl.c -cpu=S2 -o DefaultBuild\r_cg_pfdl.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe cstart.asm -cpu=S2 -o DefaultBuild\cstart.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_GSM\N_GSM_RESPONSE_HANDLE.c -cpu=S2 -o DefaultBuild\N_GSM_RESPONSE_HANDLE.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe stkinit.asm -cpu=S2 -o DefaultBuild\stkinit.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
-User_Files\N_GSM\N_GSM_RESPONSE_HANDLE.c(1296):W0520009:Nested comment is not allowed
-User_Files\N_GSM\N_GSM_RESPONSE_HANDLE.c(2719):W0520009:Nested comment is not allowed
-User_Files\N_GSM\N_GSM_RESPONSE_HANDLE.c(3450):W0520009:Nested comment is not allowed
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+User_Files\N_GSM\N_GSM_RESPONSE_HANDLE.c(1366):W0520009:Nested comment is not allowed
+User_Files\N_GSM\N_GSM_RESPONSE_HANDLE.c(2819):W0520009:Nested comment is not allowed
+User_Files\N_GSM\N_GSM_RESPONSE_HANDLE.c(3582):W0520009:Nested comment is not allowed
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\ccrl.exe User_Files\N_GSM\GSM_INTZ_AND_SMS_HANDLING.c -cpu=S2 -o DefaultBuild\GSM_INTZ_AND_SMS_HANDLING.obj "-dev=C:\Program Files (x86)\Renesas Electronics\CS+\CC\Device\RL78\Devicefile\DR5F100FE.DVF" -g -g_line -I User_Files\V1.05\lib -I User_Files\V1.05\incrl78 -I User_Files\V1.05 -I User_Files\N_SERIAL -I User_Files\N_VCONTROL -I User_Files\N_Delay -I User_Files\N_GSM -I User_Files\N_GPS -I User_Files\N_EEPROM -I User_Files\N_I2C -I "Self_Programming Files" -I . -c -msg_lang=english
-W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 59 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
+W0511186:The evaluation period for the option "-Odefault" of CC-RL V1 is valid for the remaining 27 days. After that, it will be implicitly changed to "-Olite". Please consider purchasing the product to continue using "-Odefault". 
 C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.16.00\Bin\rlink.exe -subcommand=DefaultBuild\TEST_128K_USER.clnk
-W0561018:The evaluation period of CC-RL V1 is valid for the remaining 59 days. After that, functional limit will be applied. Please consider purchasing the product.
+W0561018:The evaluation period of CC-RL V1 is valid for the remaining 27 days. After that, functional limit will be applied. Please consider purchasing the product.
 W0561320:Duplicate symbol "PFDL_Open" in "User_Files\V1.05\lib\pfdl.lib(pfdl)"
 W0561320:Duplicate symbol "PFDL_Open" in "User_Files\V1.05\librl78\pfdl.lib(pfdl)"
 W0561320:Duplicate symbol "_PFDL_Open" in "User_Files\V1.05\lib\pfdl.lib(pfdl)"
@@ -169,12 +166,12 @@ W0561320:Duplicate symbol "_PFDL_GetVersionString" in "User_Files\V1.05\lib\pfdl
 W0561320:Duplicate symbol "_PFDL_GetVersionString" in "User_Files\V1.05\librl78\pfdl.lib(pfdl_version)"
 W0561320:Duplicate symbol "_PFDL_VERSION_STRING" in "User_Files\V1.05\lib\pfdl.lib(pfdl_version)"
 W0561320:Duplicate symbol "_PFDL_VERSION_STRING" in "User_Files\V1.05\librl78\pfdl.lib(pfdl_version)"
-RAMDATA SECTION:  00000c11 Byte(s)
-ROMDATA SECTION:  00001d47 Byte(s)
-PROGRAM SECTION:  0000ad4e Byte(s)
-W0561018:The evaluation period of CC-RL V1 is valid for the remaining 59 days. After that, functional limit will be applied. Please consider purchasing the product.
+RAMDATA SECTION:  00000c15 Byte(s)
+ROMDATA SECTION:  00001937 Byte(s)
+PROGRAM SECTION:  0000abd6 Byte(s)
+W0561018:The evaluation period of CC-RL V1 is valid for the remaining 27 days. After that, functional limit will be applied. Please consider purchasing the product.
 Renesas Optimizing Linker Completed
------- Build ended(Error:0, Warning:133)(TEST_128K_USER, DefaultBuild) ------
+------ Build ended(Error:0, Warning:130)(TEST_128K_USER, DefaultBuild) ------
 
 --- CommandFile 1 ---
 DefaultBuild\TEST_128K_USER.clnk :
@@ -245,8 +242,8 @@ DefaultBuild\TEST_128K_USER.clnk :
 
 
 --- SHA1 hash value of output files ---
-C:\Users\Admin\Desktop\vyshak\FW 64K_L89H WITH PANIC AUTO OFF DUAL PROFILE\TEST_128K_USER\DefaultBuild\TEST_128K_USER.abs: d44057302be49d94777d481178385ff11b47dfcf
-C:\Users\Admin\Desktop\vyshak\FW 64K_L89H WITH PANIC AUTO OFF DUAL PROFILE\TEST_128K_USER\DefaultBuild\TEST_128K_USER.mot: 0c675927ad6921f946b9c7355dc925e65584d9f4
+C:\Users\Admin\Desktop\vyshak\FW 64K_L89H WITH PANIC AUTO OFF DUAL PROFILE\TEST_128K_USER\DefaultBuild\TEST_128K_USER.abs: 9896c56eb815fbee53cf1f50a61706f0963487ad
+C:\Users\Admin\Desktop\vyshak\FW 64K_L89H WITH PANIC AUTO OFF DUAL PROFILE\TEST_128K_USER\DefaultBuild\TEST_128K_USER.mot: d5f3326106016d7d3d4a309907e827e9e7159d3b
 
 
 --- System Information ---
@@ -257,7 +254,7 @@ C:\Users\Admin\Desktop\vyshak\FW 64K_L89H WITH PANIC AUTO OFF DUAL PROFILE\TEST_
 *.NET Framework Version
  Microsoft .NET Framework 4 [.NET 4.8 or later] (533509)
 *WebView2 Version
- 148.0.3967.54
+ 149.0.4022.69
 
 --- Application Information ---
 *Product Name
@@ -274,13 +271,13 @@ C:\Users\Admin\Desktop\vyshak\FW 64K_L89H WITH PANIC AUTO OFF DUAL PROFILE\TEST_
  C:\Program Files (x86)\Renesas Electronics\CS+\CC
 *Memory Usage
  *Private Working Set
-  720 MB
+  732 MB
  *Number of GDI Objects
-  2267
+  2466
  *Number of USER Objects
-  1569
+  1385
  *Opened Files
-  8 editors, 8 files, 292 KB
+  16 editors, 16 files, 407 KB
 
 --- Build Tool Plug-in Information ---
 RH850 Build tool CC-RH Plug-in
@@ -441,7 +438,6 @@ Build Tool Information
 Debug Tool Information
  *RL78 E2 Lite
   Debugger Library V8.15.00.04 [12 Nov 2025]
-  RL78 E2 Lite Executor V4.14d [12 Nov 2024]
   E2 Lite 4100 A F/W V07.06
   
 

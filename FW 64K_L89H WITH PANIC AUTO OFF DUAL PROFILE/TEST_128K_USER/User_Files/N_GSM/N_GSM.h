@@ -8,7 +8,6 @@ void ACK_RX(unsigned int ct,unsigned int ack,unsigned int REDIAL,unsigned int WA
 void GSM_UART_RX(unsigned char UART0_BUFFER);
 void GSM_INTZ(char MODE);
 //void WELCOME_STRING(void);
-void HEALTH_STRING(void);
 void Auto_Read_Message_Intz(void);
 void RESTART_MODEM(void);
 void Enter(void);

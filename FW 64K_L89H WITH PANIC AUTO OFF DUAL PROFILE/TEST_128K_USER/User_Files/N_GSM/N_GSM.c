@@ -10,10 +10,10 @@ char CELL_ID[5],LAC[5],NCELL_CID[4][5],NCELL_LAC[4][5],NCELL_DBM[4];
 int SERVING_CELL_DBM;
 unsigned int K,TEMP_EMGT_TIME,FOR_1,FOR_2,FOR_3,Address_1,NW_REGN_COUNT,FLASH_MEMORY,GPRS_REG_COUNT,MAIN_BATTERY_VOLTAGE,ADC_BUFFER,BACKUP_BATTERY_VOLTAGE,GPRS_REG_ROAMING,GSM_REG_ROAMING,T_SPEED,FILTER,DATA_HEADER,TEMP_VERSION,CHECKSUM_BYTE,MN,VERSION_TEMP,FRM_VERSION,CURRENT_FRM_VERSION,HEX,TEMP_3,VOLT,TEMP_MAIN_BATTERY_VOLTAGE,J,RESTART;
 unsigned long int FRAME_NUMBER,TEMP_FRAME_NUMBER,TEMP_FRM_VERSION;
-extern unsigned int t_count,WRITE_ADDRESS,DATA,WATCH_DOG_KILL,WRITE_ADDRESS,TEMPS,WRITE_ADDRESS_MSB,WRITE_ADDRESS_LSB,BYTE;
+extern unsigned int t_count,WRITE_ADDRESS,DATA,WATCH_DOG_KILL,WRITE_ADDRESS,TEMPS,WRITE_ADDRESS_MSB,WRITE_ADDRESS_LSB,BYTE,MINUTE;
 extern char O;
 extern char LOG_DM[10],LAT_DM[10],TIME[10],GPS_BUSY,SPEED[4],SPEED_DATA_RX[10],WATCH_DOG,GPS_DIRECTION_DATA_VALID,IGNITION,PANIC_ALERT,PANIC_ALERT_PACKET,IGNITION_ON_PACKET,IGNITION_OFF_PACKET,POWER_SOURCE_PACKET,LOW_BATTERY_ALERT_PACKET,HOURS_MSB,HOURS_LSB,MIN_MSB,MIN_LSB,LON_DIRECTION,LAT_DIRECTION,LAT_DM_RX[10],LOG_DM_RX[10],COG[6],GPGA_DATA[10],ALTITUDE[8],HDOP[5],NO_OF_SAT,NAVIGATION_ACK,NAVIGATION_RX,GPS_RESTART,FIRM_DATA[150],MAIN_BAT_STATUS;
-_Bool GPS_RST_FLAG,DEVICE_RESTART_RX_1,WELCOME_STRING_FRAME_BOOT,SET_OTA_UPDATE,SETTING_CMD,SET_APN,SET_TCP,BSNL_CONNECT_FLAG,BSNL_CONNECT,CONNECT_FAIL,ALREADY_CONNECT,ALREADY_CONNECT_FLAG,QST_CMD_FLAG,HARSH_BRAKE_PACKET,HARSH_TURN_PACKET,HARSH_ACC_PACKET,BATTERY_CHARGED_PACKET,REFRESH,PRIMARY_IP,SECONDARY_IP,PRI_IP_PN_SMS,SEC_IP_PN_SMS,HEALTH_CMD2,DATA_SEND,k;
+_Bool GPS_RST_FLAG,DEVICE_RESTART_RX_1,WELCOME_STRING_FRAME_BOOT,SET_OTA_UPDATE,SETTING_CMD,SET_APN,SET_TCP,BSNL_CONNECT_FLAG,BSNL_CONNECT,CONNECT_FAIL,ALREADY_CONNECT,ALREADY_CONNECT_FLAG,QST_CMD_FLAG,HARSH_BRAKE_PACKET,HARSH_TURN_PACKET,HARSH_ACC_PACKET,BATTERY_CHARGED_PACKET,REFRESH,PRIMARY_IP,SECONDARY_IP,PRI_IP_PN_SMS,SEC_IP_PN_SMS,HEALTH_CMD2,DATA_SEND,k,IGNITION_ON_PACKET_SENT,IGNITION_OFF_PACKET_SENT;
 //extern unsigned int STP_DATA_RX,GET_STRPCI,STKPCI,GET_STP;
 const char OK_ACK[2]={'O','K'},
 ERROR_ACK[5]={'E','R','R','O','R'},
@@ -155,7 +155,15 @@ uint8_t READ[]={0x03,0x00,0x00,0x00};
 void GPRS_DISCONNECT(void)
 {
 restart5:
-	  R_UART2_SEND("AT+QIDEACT\r\n");ACK=0;ERROR_OCCURED=0;ACK_RX(4000,2,100,10);if(RESTART==ON){RESTART=OFF;goto restart5;}
+    R_UART2_SEND("AT+QIDEACT\r\n");
+    ACK=0;ERROR_OCCURED=0;
+    ACK_RX(4000,2,100,10);
+    TCP_CONNECTION_OPEN = OFF;
+    if(RESTART==ON)
+    {
+        RESTART=OFF;
+        goto restart5;
+    }
 }
 
 
@@ -309,10 +317,19 @@ void DEVICE_REPLY_IN_SMS(unsigned char REPLY)
 	
     if(REPLY==17)
 	{
-		// Send settings SMS to default number
+		// Send settings SMS to extracted sender number
 		R_UART2_SEND("AT+CMGF=1\r\n");
 		MS_TIMER(100);
-		R_UART2_SEND("AT+CMGS=\"8939575036\"\r\n");
+		R_UART2_SEND("AT+CMGS=\"" );
+		for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
+		{
+			if(PHONE_NUMBER_OF_SENDER[FOR_1] != 0x00)
+			{
+				R_UART2_SEND_User(PHONE_NUMBER_OF_SENDER[FOR_1]);
+			}
+			MS_TIMER(1);
+		}
+		R_UART2_SEND("\"\r\n");
 		MS_TIMER(100);
 		R_UART2_SEND("SETTINGS:-");
 		goto REPL_1;
@@ -320,10 +337,19 @@ void DEVICE_REPLY_IN_SMS(unsigned char REPLY)
 
 	else if(REPLY==200)
 	{
-		// Send VERSION SMS to default number
+		// Send VERSION SMS to extracted sender number
 		R_UART2_SEND("AT+CMGF=1\r\n");
 		MS_TIMER(100);
-		R_UART2_SEND("AT+CMGS=\"8939575036\"\r\n");
+		R_UART2_SEND("AT+CMGS=\"" );
+		for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
+		{
+			if(PHONE_NUMBER_OF_SENDER[FOR_1] != 0x00)
+			{
+				R_UART2_SEND_User(PHONE_NUMBER_OF_SENDER[FOR_1]);
+			}
+			MS_TIMER(1);
+		}
+		R_UART2_SEND("\"\r\n");
 		MS_TIMER(100);
 		R_UART2_SEND("VERSION: 1.0.0");
 		
@@ -337,10 +363,19 @@ void DEVICE_REPLY_IN_SMS(unsigned char REPLY)
 
 	else if(REPLY == 201)
 	{
-		// Send IMEI SMS to default number
+		// Send IMEI SMS to extracted sender number
 		R_UART2_SEND("AT+CMGF=1\r\n");
 		MS_TIMER(100);
-		R_UART2_SEND("AT+CMGS=\"8939575036\"\r\n");
+		R_UART2_SEND("AT+CMGS=\"" );
+		for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
+		{
+			if(PHONE_NUMBER_OF_SENDER[FOR_1] != 0x00)
+			{
+				R_UART2_SEND_User(PHONE_NUMBER_OF_SENDER[FOR_1]);
+			}
+			MS_TIMER(1);
+		}
+		R_UART2_SEND("\"\r\n");
 		MS_TIMER(100);
 		R_UART2_SEND("IMEI: ");
 		for(FOR_1=1; FOR_1<=15; FOR_1++)
@@ -364,7 +399,16 @@ else if(REPLY==11)
     REPL_8:
     R_UART2_SEND("AT+CMGF=1\r\n");
     MS_TIMER(100);
-    R_UART2_SEND("AT+CMGS=\"8939575036\"\r\n");
+    R_UART2_SEND("AT+CMGS=\"" );
+    for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
+    {
+        if(PHONE_NUMBER_OF_SENDER[FOR_1] != 0x00)
+        {
+            R_UART2_SEND_User(PHONE_NUMBER_OF_SENDER[FOR_1]);
+        }
+        MS_TIMER(1);
+    }
+    R_UART2_SEND("\"\r\n");
     MS_TIMER(100);
     
     R_UART2_SEND("H-ACCEL LEV:");
@@ -409,7 +453,16 @@ else if(REPLY==12)
 	R_UART2_SEND("AT+CMGF=1\r\n");
 	MS_TIMER(100);
 
-	R_UART2_SEND("AT+CMGS=\"8939575036\"\r\n");
+	R_UART2_SEND("AT+CMGS=\"" );
+	for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
+	{
+		if(PHONE_NUMBER_OF_SENDER[FOR_1] != 0x00)
+		{
+			R_UART2_SEND_User(PHONE_NUMBER_OF_SENDER[FOR_1]);
+		}
+		MS_TIMER(1);
+	}
+	R_UART2_SEND("\"\r\n");
 	MS_TIMER(100);
 
 	R_UART2_SEND("H-TURN LEV:");
@@ -446,7 +499,16 @@ else if(REPLY == 13)  // Harsh Brake confirmation
     unsigned int temp_value;
     R_UART2_SEND("AT+CMGF=1\r\n");
     MS_TIMER(100);
-    R_UART2_SEND("AT+CMGS=\"8939575036\"\r\n");
+    R_UART2_SEND("AT+CMGS=\"" );
+    for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
+    {
+        if(PHONE_NUMBER_OF_SENDER[FOR_1] != 0x00)
+        {
+            R_UART2_SEND_User(PHONE_NUMBER_OF_SENDER[FOR_1]);
+        }
+        MS_TIMER(1);
+    }
+    R_UART2_SEND("\"\r\n");
     MS_TIMER(100);
     
     R_UART2_SEND("H-BRAKE LEV:");
@@ -483,7 +545,16 @@ else if(REPLY==16)
 
     R_UART2_SEND("AT+CMGF=1\r\n");
     MS_TIMER(100);
-    R_UART2_SEND("AT+CMGS=\"8939575036\"\r\n");
+    R_UART2_SEND("AT+CMGS=\"" );
+    for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
+    {
+        if(PHONE_NUMBER_OF_SENDER[FOR_1] != 0x00)
+        {
+            R_UART2_SEND_User(PHONE_NUMBER_OF_SENDER[FOR_1]);
+        }
+        MS_TIMER(1);
+    }
+    R_UART2_SEND("\"\r\n");
     MS_TIMER(100);
     R_UART2_SEND("LOW-BAT-LEV:");
 
@@ -1227,7 +1298,7 @@ else if(REPLY == 42)
     MS_TIMER(200);  // Wait for '>' prompt
     
     // Step 3: Content - Latitude
-    R_UART2_SEND("Latitude � ");
+    R_UART2_SEND("Latitude: ");
     // LAT_DM format: DDMM.MMMM in your system
     // Convert to DD.DDDDDD format for output
     for(FOR_0 = 0; FOR_0 <= 7; FOR_0++)
@@ -1241,7 +1312,7 @@ else if(REPLY == 42)
     R_UART2_SEND("\n");
     
     // Longitude
-    R_UART2_SEND("Longitude � ");
+    R_UART2_SEND("Longitude: ");
     // LOG_DM format: DDDMM.MMMM in your system
     for(FOR_0 = 0; FOR_0 <= 8; FOR_0++)
     {
@@ -1254,7 +1325,7 @@ else if(REPLY == 42)
     R_UART2_SEND("\n");
     
     // Altitude
-    R_UART2_SEND("Altitude � ");
+    R_UART2_SEND("Altitude: ");
     // ALTITUDE array contains altitude string
     for(FOR_0 = 0; FOR_0 <= 4 && ALTITUDE[FOR_0] != 0x00 && ALTITUDE[FOR_0] != ' '; FOR_0++)
     {
@@ -1263,7 +1334,7 @@ else if(REPLY == 42)
     R_UART2_SEND("\n");
     
     // Speed
-    R_UART2_SEND("Speed � ");
+    R_UART2_SEND("Speed: ");
     // SPEED_DATA contains speed with decimal
     for(FOR_0 = 0; FOR_0 <= SPEED_DATA_LENGTH_COUNT; FOR_0++)
     {
@@ -1299,7 +1370,7 @@ else if(REPLY == 43)
     MS_TIMER(200);  // Wait for '>' prompt
     
     // Step 3: Content - Check PANIC status
-    R_UART2_SEND("SOS � ");
+    R_UART2_SEND("SOS ");
     
     // Check various panic-related flags
     if(PANIC_ALERT == ON || PANIC_CONTROL_STATE == ON || PANIC_ALERT_PACKET == ON)
@@ -1325,12 +1396,11 @@ else if(REPLY == 44)
 {
     unsigned int T_VAL;
     unsigned int sos_idx;
-
-    // Step 1: Fetch fresh ICCID from modem
-    ICCID_RX = 0;
-    t = 0;
+    
+    ICCID_RX = 0;  // Set flag to capture ICCID response in UART RX handler
     R_UART2_SEND("AT+QCCID\r\n");
-    MS_TIMER(500);   // give UART0 parser time to capture +QCCID response
+    //ACK_RX(40, 2, 50, 0);  // Wait for modem response, not blind timer
+    MS_TIMER(300);           // give modem time to send ICCID line after OK
 
     // Step 2: Fetch fresh network name
     NETWORK_NAME_RX = ON;
@@ -1376,7 +1446,10 @@ else if(REPLY == 44)
             R_UART2_SEND_User(ICCID[FOR_1]);
             MS_TIMER(1);
         }
-        else { break; }
+        else 
+        { 
+            break; 
+        }
     }
     R_UART2_SEND("\n");
 
@@ -2819,11 +2892,11 @@ void DATA_PRINT(char FORMAT)
     {
         if(PANIC_ALERT == ON)
         {
-            R_UART2_SEND("$PVT,VID,");
+            R_UART2_SEND("$PVT,LKSI,");
         }
         else
         {
-            R_UART2_SEND("$PVT,VID,");
+            R_UART2_SEND("$PVT,LKSI,");
         }
 
 /************************************************************************************************************************************************************/
@@ -2901,30 +2974,32 @@ void DATA_PRINT(char FORMAT)
         {
             R_UART2_SEND("EA,10,");
         }
-        else if(IGNITION_ON_PACKET == ON)
+        else if(IGNITION_ON_PACKET == ON && IGNITION_ON_PACKET_SENT == OFF)
         {
             R_UART2_SEND("IN,07,");
+            IGNITION_ON_PACKET_SENT = ON;
         }
-        else if(IGNITION_OFF_PACKET == ON)
+        else if(IGNITION_OFF_PACKET == ON && IGNITION_OFF_PACKET_SENT == OFF)
         {
             R_UART2_SEND("IF,08,");
+            IGNITION_OFF_PACKET_SENT = ON;
         }
         else if(NORMAL_PACKET == ON)
         {
-            R_UART2_SEND("NR,");
+            R_UART2_SEND("NR,01,");
 
-            if(IGNITION_ON_PACKET)
-            {
-                R_UART2_SEND("07,");
-            }
-            else if(PANIC_ALERT)
-            {
-                R_UART2_SEND("10,");
-            }
-            else
-            {
-                R_UART2_SEND("01,");
-            }
+            // if(IGNITION_ON_PACKET)
+            // {
+            //     R_UART2_SEND("07,");
+            // }
+            // else if(PANIC_ALERT)
+            // {
+            //     R_UART2_SEND("10,");
+            // }
+            // else
+            // {
+            //     R_UART2_SEND("01,");
+            // }
         }
 
         NOP();
@@ -3556,7 +3631,7 @@ void DATA_PRINT(char FORMAT)
         ((VOLT % 16) + 0x37)
     );
 
-    R_UART2_SEND(",*");
+    R_UART2_SEND("*");
     NOP();
     NOP();
 
@@ -3890,6 +3965,9 @@ restart_tracking:
             goto restart00;
         }
 
+        /* Health packet trigger moved to V_Control.c */
+        /* (Triggered every 5 minutes via 30-cycle counter in ignition ON mode) */
+
         /* TCP Connection Pooling - Only open if not already connected */
         if (TCP_CONNECTION_OPEN == OFF)
         {
@@ -3911,29 +3989,27 @@ restart_tracking:
             /* Connection successful - mark as open */
             TCP_CONNECTION_OPEN = ON;
             
-            /* Send LGN packet on successful TCP connection */
-            R_UART2_SEND("AT+QISEND\r\n");
-            MS_TIMER(500);
-            WELCOME_STRING();
-            R_UART2_SEND_User(CTRL_Z);
-            MS_TIMER(1000);
-            
-            /* Send HEL packet if health check requested */
-            if(HEALTH_PACKET_TO_SERVER == ON) {
+            /* Send LGN packet only once per boot (on first successful TCP connection) */
+            if (WELCOME_STRING_FRAME_BOOT == OFF)
+            {
                 R_UART2_SEND("AT+QISEND\r\n");
                 MS_TIMER(500);
-                HEL_STRING();
+                WELCOME_STRING();
                 R_UART2_SEND_User(CTRL_Z);
-                MS_TIMER(1000);
-                HEALTH_PACKET_TO_SERVER = OFF;
+                MS_TIMER(500);
+                WELCOME_STRING_FRAME_BOOT = ON;  /* Mark LGN as sent after boot */
             }
         }
 
         ACK = 0;
 
         /* Collect fresh data before sending (AT commands must run before AT+QISEND) */
-        GET_SIGNAL_STRENGTH();
-        if(INTERNET_CONNECTED==ON) 
+        if(PANIC_ALERT == 0) 
+        {
+            GET_SIGNAL_STRENGTH();
+        }
+
+        if(INTERNET_CONNECTED==ON &&  PANIC_ALERT==0) 
         { 
             GET_MCC_MNC_LAC_CELL_ID(); 
         }
@@ -3943,13 +4019,23 @@ restart_tracking:
 
         /* Send tracking data to the TCP server */
         R_UART2_SEND("AT+QISEND\r\n");
-        MS_TIMER(500);
+        ACK_RX(100, 2, 100, 200);  /* FIXED: Wait for '>' prompt before sending data */
         NORMAL_PACKET=ON;
 
         /* Send the actual tracking data frame */
         DATA_PRINT(0);
         R_UART2_SEND_User(CTRL_Z);  /* Ctrl+Z to end send */
-        MS_TIMER(1000);  /* Wait for SEND OK */
+        MS_TIMER(500);  /* Wait for SEND OK */
+
+        /* Send HEL packet if health check requested (every 5 minutes) */
+        if(HEALTH_PACKET_TO_SERVER == ON) {
+            R_UART2_SEND("AT+QISEND\r\n");
+            ACK_RX(100, 2, 100, 200);  /* FIXED: Wait for '>' prompt before sending data */
+            HEL_STRING();
+            R_UART2_SEND_User(CTRL_Z);
+            MS_TIMER(500);
+            HEALTH_PACKET_TO_SERVER = OFF;
+        }
 
         ACK = 0;
         ERROR_OCCURED = 0;
@@ -3959,6 +4045,10 @@ restart_tracking:
         /* Connection will be closed only on network failure or disconnect */
 
         HTTP_CONNECT_COUNT = 0;
+        
+        /* ✅ FIX STKTR DELAY: Exit after successful TCP packet send */
+        /* Prevent restart09 from executing SwitchNetwork() on every normal packet */
+        return;
     }
 
     if (FIRMWARE_UPDATE == ON)
@@ -4071,319 +4161,12 @@ restart09:
         MS_TIMER(200);
         GPRS_PS_EN = ON1;
         MS_TIMER(500);
-        MS_TIMER(500);
+        //MS_TIMER(500);
         BLUE_LED = OFF;
         MS_TIMER(500);
 
         SwitchNetwork();
     }
-}
-
-void HEALTH_STRING(void)
-{
-    R_UART2_SEND("$,HCHKR,777777,VIDD,V");
-
-    R_UART2_SEND_User(((CURRENT_FRM_VERSION/100) + 0x30));
-
-    R_UART2_SEND(".");
-
-    NOP();
-
-    TEMP_FRM_VERSION = CURRENT_FRM_VERSION % 100;
-
-    R_UART2_SEND_User(((TEMP_FRM_VERSION/10) + 0x30));
-
-    R_UART2_SEND(".");
-
-    NOP();
-
-    R_UART2_SEND_User(((TEMP_FRM_VERSION%10) + 0x30));
-
-    R_UART2_SEND(",");
-
-    NOP();
-
-/*****************************************************************************************************/
-
-    // IMEI NUMBER
-
-    for(FOR_1=1; FOR_1<=15; FOR_1++)
-    {
-        R_UART2_SEND_User(IMEI_EEPROM[FOR_1]);
-
-        NOP();
-
-        NOP();
-    }                                                           //IMEI NUMBER
-
-/*****************************************************************************************************/
-/*****************************************************************************************************/
-
-    // ALERT ID
-
-    R_UART2_SEND(",01,0");
-
-/*****************************************************************************************************/
-
-    for(FOR_1=0; FOR_1<=7; FOR_1++)
-    {
-        NOP();                                                  //LATITUDE AND DIRECTION
-
-        R_UART2_SEND_User(LAT_DM[FOR_1]);
-
-        if(FOR_1==1)
-        {
-            R_UART2_SEND(".");
-        }
-    }
-
-    if(LAT_DIRECTION=='N')
-    {
-        R_UART2_SEND(",N,");
-    }
-    else
-    {
-        R_UART2_SEND(",S,");
-    }
-
-/************************************************************************************************************************************************************/
-
-    for(FOR_1=0; FOR_1<=8; FOR_1++)
-    {
-        NOP();                                                  //LONGITUDE AND DIRECTION
-
-        R_UART2_SEND_User(LOG_DM[FOR_1]);
-
-        if(FOR_1==2)
-        {
-            R_UART2_SEND(".");
-        }
-    }
-
-    if(LON_DIRECTION=='E')
-    {
-        R_UART2_SEND(",E,");
-    }
-    else
-    {
-        R_UART2_SEND(",W,");
-    }
-
-    NOP();
-
-/************************************************************************************************************************************************************/
-
-    R_UART2_SEND_User(Array_0[GPS_DIRECTION_DATA_VALID]);
-
-    R_UART2_SEND(",");
-
-    NOP();                                                      //GPS VALID OR INVALID
-
-/************************************************************************************************************************************************************/
-
-    for(FOR_1=0; FOR_1<=5; FOR_1++)
-    {
-        R_UART2_SEND_User(((TIME[FOR_1] & 0xF0) >> 4) + 0X30);
-
-        R_UART2_SEND_User((TIME[FOR_1] & 0x0F) + 0X30);
-
-        //if(FOR_1==2 && REPLY==100){R_UART2_SEND("+");}
-        //if(FOR_1==2 && REPLY==1){R_UART2_SEND(" ");}
-
-        if(FOR_1==1)
-        {
-            R_UART2_SEND("20");
-        }
-    }
-
-    R_UART2_SEND(",");
-
-    if(COG_VALUE_COUNT==1)
-    {
-        R_UART2_SEND("00");
-
-        COG_VALUE_COUNT=3;
-
-        NOP();
-    }
-    else if(COG_VALUE_COUNT==2)
-    {
-        R_UART2_SEND("0");
-
-        COG_VALUE_COUNT=4;
-
-        NOP();
-    }
-    else
-    {
-        COG_VALUE_COUNT=5;
-    }
-
-    DECIMAL_POINT=OFF;
-
-    for(FOR_1=0; FOR_1<=COG_VALUE_COUNT; FOR_1++)
-    {
-        NOP();
-
-        if(COG[FOR_1]=='.' && DECIMAL_POINT==ON)
-        {
-            DECIMAL_POINT=OFF;
-
-            COG[FOR_1]='0';
-        }
-        else if(COG[FOR_1]=='.')
-        {
-            DECIMAL_POINT=ON;
-        }
-
-        R_UART2_SEND_User(COG[FOR_1]);
-    }
-
-/************************************************************************************************************************************************************/
-
-    if(ADD_ZERO_TO_SPEED==SET)
-    {
-        R_UART2_SEND("0");
-    }
-
-    R_UART2_SEND(",");
-
-    for(FOR_1=0; FOR_1<=SPEED_DATA_LENGTH_COUNT; FOR_1++)
-    {
-        NOP();
-
-        R_UART2_SEND_User(SPEED_DATA[FOR_1]);
-    }
-
-    DECIMAL_POINT_CAME_STOP_TX=OFF;
-
-    NOP();
-
-    R_UART2_SEND(",");
-
-    NOP();
-
-/************************************************************************************************************************************************************/
-
-    R_UART2_SEND_User(Array_0[GSM_STRENGTH/10]);
-
-    NOP();
-
-    R_UART2_SEND_User(Array_0[GSM_STRENGTH%10]);
-
-    NOP();                                                      //GSM SIGNAL STRENGTH
-
-/************************************************************************************************************************************************************/
-
-    R_UART2_SEND(",404,");
-
-    HEX_CHARACTER_CONVERSION=SET;
-
-    if(MNC_DATA_LENGTH==0 || MNC[0]==0x78)
-    {
-        R_UART2_SEND("00");
-    }
-    else
-    {
-        if(MNC_DATA_LENGTH>=2)
-        {
-            MNC_DATA_LENGTH=1;
-        }
-
-        for(FOR_1=0; FOR_1<=MNC_DATA_LENGTH; FOR_1++)
-        {
-            NOP();
-
-            R_UART2_SEND_User(MNC[FOR_1]);
-        }
-    }
-
-    HEX_CHARACTER_CONVERSION=CLR;
-
-    R_UART2_SEND(",");
-
-    PRINT_ZEROS(LAC_DATA_LENGTH_0);
-
-    for(FOR_1=0; FOR_1<=LAC_DATA_LENGTH_0; FOR_1++)
-    {
-        NOP();
-
-        R_UART2_SEND_User(LAC[FOR_1]);
-    }
-
-    R_UART2_SEND(",");
-
-    if(MAIN_BAT_STATUS==OFF)
-    {
-        R_UART2_SEND("0,");
-    }
-    else
-    {
-        MAIN_BAT_STATUS=ON;
-
-        R_UART2_SEND("1,");
-    }
-
-    NOP();                                                      // MAIN BATTERY STATUS
-
-    R_UART2_SEND_User(Array_0[IGNITION]);
-
-    NOP();
-
-    R_UART2_SEND(",");
-
-    NOP();                                                      // IGNITION
-
-/************************************************************************************************************************************************************/
-
-    BATTERY_MEASUREMENT=ON;
-
-    R_UART2_SEND_User(((MAIN_BATTERY_VOLTAGE/100) + 0x30));
-
-    VOLT=MAIN_BATTERY_VOLTAGE%100;
-
-    R_UART2_SEND_User(((VOLT/10) + 0x30));
-
-    NOP();
-
-    R_UART2_SEND(".");
-
-    R_UART2_SEND_User(((VOLT%10) + 0x30));
-
-    R_UART2_SEND(",");                                          //MAIN BATTERY VOLTAGE
-
-/************************************************************************************************************************************************************/
-
-    if(HEALTH_FRAME_NUMBER>=1000000)
-    {
-        HEALTH_FRAME_NUMBER=1;
-    }
-
-    TEMP_FRAME_NUMBER=HEALTH_FRAME_NUMBER;
-
-    R_UART2_SEND_User(((TEMP_FRAME_NUMBER/100000) + 0x30));
-
-    TEMP_FRAME_NUMBER=TEMP_FRAME_NUMBER%100000;
-
-    R_UART2_SEND_User(((TEMP_FRAME_NUMBER/10000) + 0x30));
-
-    TEMP_FRAME_NUMBER=TEMP_FRAME_NUMBER%10000;
-
-    R_UART2_SEND_User(((TEMP_FRAME_NUMBER/1000) + 0x30));
-
-    TEMP_FRAME_NUMBER=TEMP_FRAME_NUMBER%1000;
-
-    R_UART2_SEND_User(((TEMP_FRAME_NUMBER/100) + 0x30));
-
-    TEMP_FRAME_NUMBER=TEMP_FRAME_NUMBER%100;
-
-    R_UART2_SEND_User(((TEMP_FRAME_NUMBER/10) + 0x30));
-
-    R_UART2_SEND_User(((TEMP_FRAME_NUMBER%10) + 0x30));
-
-/************************************************************************************************************************************************************/
-
-    R_UART2_SEND(",ID");
 }
 
 void HEL_STRING(void)

@@ -5,7 +5,7 @@ extern char PANIC_NUMBER_RX,IGNITION_CTRL_RX,INITIAL_MESSAGE,P_LAT_DM_RX,FILE_CL
 extern char GSM_REG,GPRS_REG,SS_DATA_RX,GET_SS,dBm,SMS_MOBILE_NO[55],CELL_ID_DATA_LENGTH_0;
 extern char GPRS_CONNECTED,GSM_STRENGTH,INTERNET_CONNECTED,DISCONNECT,LOW_BATTERY_ALERT,HTTP_CONNECT_COUNT,VEICHLE_NUMBER[15],NW_NAME_RX,IMEI[16];
 extern unsigned int FOR_1,FOR_3,Address_1,NW_REGN_COUNT,FLASH_MEMORY,GPRS_REG_COUNT,MAIN_BATTERY_VOLTAGE,ADC_BUFFER,BACKUP_BATTERY_VOLTAGE,GPRS_REG_ROAMING,GSM_REG_ROAMING,T_SPEED,FILTER,DATA_HEADER,TEMP_VERSION,I[100];
-extern unsigned int t_count,WRITE_ADDRESS,DATA,WATCH_DOG_KILL,WRITE_ADDRESS,TEMPS,WRITE_ADDRESS_MSB,WRITE_ADDRESS_LSB,BYTE,P_D_L,PANIC_ALERT_TIME,HARSH_TURN_LEVEL,HARSH_BRAKE_LEVEL,OVER_SPEED;
+extern unsigned int t_count,WRITE_ADDRESS,DATA,WATCH_DOG_KILL,WRITE_ADDRESS,TEMPS,WRITE_ADDRESS_MSB,WRITE_ADDRESS_LSB,BYTE,P_D_L,PANIC_ALERT_TIME,HARSH_TURN_LEVEL,HARSH_BRAKE_LEVEL,OVER_SPEED,MINUTE;
 extern char LOG_DM[10],LAT_DM[10],TIME[10],GPS_BUSY,SPEED[4],/*GPS_RX,*/SPEED_DATA_RX[10],WATCH_DOG,FIRM_DATA[150],FILE[150];
 extern char GPS_DIRECTION_DATA_VALID,IGNITION,PANIC_ALERT,PANIC_ALERT_PACKET,IGNITION_ON_PACKET,IGNITION_OFF_PACKET,POWER_SOURCE_PACKET,LOW_BATTERY_ALERT_PACKET;
 extern char HOURS_MSB,HOURS_LSB,MIN_MSB,MIN_LSB,LON_DIRECTION,LAT_DIRECTION,LAT_DM_RX[10],LOG_DM_RX[10],COG[6],GPGA_DATA[10],ALTITUDE[8],HDOP[5],NO_OF_SAT,NAVIGATION_ACK,NAVIGATION_RX,GPS_RESTART,LAC_DATA_LENGTH_0,TEMP_PIP[16],TEMP_SIP[16],TEMP_PIP2[16],TEMP_SIP2[16];
@@ -25,6 +25,7 @@ extern _Bool VERSION_CMD_SET,GET_VLT_IMEI_PH_CMD,PANIC_CONTROL_STATE_1,k,GPS_STA
 extern unsigned int TEMP_3,HEALTH_ON_DURATON_LEVEL,HEALTH_ALERT_TIME,IGNITION_ON_UPDATE_TIME,IGNITION_OFF_UPDATE_TIME,HARSH_ACCEL_LEVEL,LOW_BAT_LEVEL,LB_LEVEL,HT_LEVEL,HB_LEVEL,P_D_L,TEMP_SLEEP_ON_TIME,SLEEP_ON_TIME,FOR_9;
 extern int AD;
 extern char p1,p2,p3,p4,Array_0[10],NEW_SMS_INBOX_ADDRESS[20],NEW_SMS,SPEED_DATA_LENGTH_COUNT,MAIN_BAT_STATUS,TEMP_PPN2[4],TEMP_SPN2[4];
+extern char PHONE_NUMBER_OF_SENDER[12];
 unsigned int FOR_9;
 //unsigned int NetworkCode;
 extern char VV;
@@ -138,17 +139,24 @@ void NEW_SMS_READ(void)
 		R_UART2_SEND("AT+CMGF=1\r\n");
 		MS_TIMER(100);
 		
-		// Send to default number: 8939575036
-		R_UART2_SEND("AT+CMGS=\"8939575036\"\r\n");
-		MS_TIMER(100);
+		// Send to extracted sender number
+		// R_UART2_SEND("AT+CMGS=\"");
+		// for(FOR_9=0; FOR_9<12; FOR_9++)
+		// {
+		// 	if(PHONE_NUMBER_OF_SENDER[FOR_9]==0 || PHONE_NUMBER_OF_SENDER[FOR_9]==' ')
+		// 		break;  // Stop at null terminator or space
+		// 	R_UART2_SEND_User(PHONE_NUMBER_OF_SENDER[FOR_9]);
+		// }
+		// R_UART2_SEND("\"\r\n");
+		// MS_TIMER(100);
 		
-		// Send the confirmation message
-		R_UART2_SEND("SMS received by VLT Tracker");
-		MS_TIMER(50);
+		// // Send the confirmation message
+		// R_UART2_SEND("SMS received by VLT Tracker");
+		// MS_TIMER(50);
 		
-		// Send Ctrl+Z to send the SMS
-		R_UART2_SEND_User(CTRL_Z);
-		MS_TIMER(500);
+		// // Send Ctrl+Z to send the SMS
+		// R_UART2_SEND_User(CTRL_Z);
+		// MS_TIMER(500);
 		
 		NEW_SMS = 0;  // Clear the flag after processing the SMS
 		if(NEW_SMS==0)
@@ -176,7 +184,7 @@ restart2:
 
 if(GET_SMS_CMD==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	OTA_PACKET=ON;
 	DEVICE_REPLY_IN_SMS(17);
 	UPDATE_ONLINE_DATA_FRAME();
@@ -186,27 +194,27 @@ if(GET_SMS_CMD==SET)
 
 if(VERSION_CMD_SET==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	DEVICE_REPLY_IN_SMS(200);
 	VERSION_CMD_SET=CLR;
 }
 
 if(SMS_CMD_REPLY==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 
 }
 
 if(GET_VLT_IMEI_PH_CMD==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	DEVICE_REPLY_IN_SMS(201);
 	GET_VLT_IMEI_PH_CMD=CLR;
 }
 
 if(HARSH_ACCEL_CMD==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	OTA_PACKET=ON;
 	CMD_DATA_WRITE_IN_EEROM(9);
 	//SMS_CMD_DATA_UPL(12);
@@ -217,7 +225,7 @@ if(HARSH_ACCEL_CMD==SET)
 
 if(SEND_IMEI == SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	OTA_PACKET = ON;           // Sets OTA packet flag
 	DEVICE_REPLY_IN_SMS(2);    // Calls function with parameter 2
 	SEND_IMEI = CLR;           // Clears the flag
@@ -226,7 +234,7 @@ if(SEND_IMEI == SET)
 // Add this where you process other commands
 if(HARSH_BRAKE_CMD_RX == 1)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Delete SMS
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	OTA_PACKET = 1;
 	CMD_DATA_WRITE_IN_EEROM(11);                 // Save to EEPROM (D==11 for Harsh Brake)
 	DEVICE_REPLY_IN_SMS(13);                      // Send confirmation (REPLY==13)
@@ -236,7 +244,7 @@ if(HARSH_BRAKE_CMD_RX == 1)
 
 if(HARSH_TURN_CMD==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	OTA_PACKET=ON;
 	CMD_DATA_WRITE_IN_EEROM(10);
 	//SMS_CMD_DATA_UPL(14);
@@ -249,7 +257,7 @@ if(HARSH_TURN_CMD==SET)
 ///************************************************************************************************************************************************************/
 if(LOW_BAT_LEVEL_CMD==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	OTA_PACKET=ON;
 	CMD_DATA_WRITE_IN_EEROM(14);
 	DEVICE_REPLY_IN_SMS(16);
@@ -262,7 +270,7 @@ if(LOW_BAT_LEVEL_CMD==SET)
 //UPDATE_APN=SET;
 if(UPDATE_APN==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	OTA_PACKET=ON;
 	CMD_DATA_WRITE_IN_EEROM(4);
 	//SMS_CMD_DATA_UPL(6);
@@ -276,7 +284,7 @@ if(UPDATE_APN==SET)
 // UPDATE EMERGECY NUMBER
 if(UPDATE_EMERGENCY_NUMBER==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	OTA_PACKET=ON;
 	CMD_DATA_WRITE_IN_EEROM(5);
 	//SMS_CMD_DATA_UPL(3);
@@ -287,7 +295,7 @@ if(UPDATE_EMERGENCY_NUMBER==SET)
 
 if(DEVICE_RESET_CMD==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	OTA_PACKET=ON;
 	DEVICE_REPLY_IN_SMS(3);
 	DEVICE_RESET_CMD=CLR;
@@ -298,7 +306,7 @@ if(DEVICE_RESET_CMD==SET)
 
 if(HEALTH_CMD2==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	HEALTH_FRAME_NUMBER++;
 	OTA_PACKET=ON;
 	DEVICE_REPLY_IN_SMS(102);
@@ -309,7 +317,7 @@ if(HEALTH_CMD2==SET)
 
 if(ACTIVATION_CMD==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	HEALTH_FRAME_NUMBER++;
 	OTA_PACKET=ON;
 	DEVICE_REPLY_IN_SMS(101);
@@ -320,7 +328,7 @@ if(ACTIVATION_CMD==SET)
 
 if(HEALTH_ON_DURATON_CMD==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	OTA_PACKET=ON;
 	CMD_DATA_WRITE_IN_EEROM(13);
 	//SMS_CMD_DATA_UPL(18);
@@ -333,14 +341,14 @@ if(HEALTH_ON_DURATON_CMD==SET)
 
 if(PNET_CMD_REPLY==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	//MANUAL_NET(1);
 	DEVICE_REPLY_IN_SMS(20);
 	PNET_CMD_REPLY=CLR;	
 }
 if(SNET_CMD_REPLY==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	//MANUAL_NET(2);
 	DEVICE_REPLY_IN_SMS(21);
 	SNET_CMD_REPLY=CLR;	
@@ -348,14 +356,14 @@ if(SNET_CMD_REPLY==SET)
 
 if(PROF_CMD_REPLY == SET)
 {
-    R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+    // R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
     DEVICE_REPLY_IN_SMS(28);
     PROF_CMD_REPLY = CLR;
 }
 
 if(INTVL_CMD_REPLY == SET)
 {
-    R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+    // R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
     // Save all 5 intervals to EEPROM
     // EEPROM addresses 111-115 (free addresses from your map)
     i2c_writen(0xA0, 0XFE, 111, (TEMP_TRC_INTVL >> 8));    // TRC high byte
@@ -385,7 +393,7 @@ if(INTVL_CMD_REPLY == SET)
 
 if(UPDATE_REGISTRATION_NUMBER_1==SET)
 {
-	R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+	// R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");  // Centralized SMS delete in NEW_SMS block
 	OTA_PACKET=ON;
 	CMD_DATA_WRITE_IN_EEROM(8);
 	//SMS_CMD_DATA_UPL(4);
@@ -402,16 +410,12 @@ if(SETDEF_CMD_REPLY == SET)
 
 if(SOSCLR_CMD_REPLY == SET)
 {
-	/*
     PANIC_ALERT = CLR;
     PANIC_ALERT_PACKET = OFF;
     PANIC_CONTROL_STATE = CLR;
-    PANIC_CONTROL_STATE_1 = OFF;
-    PANIC_TIME_START = CLR;
-    PANIC_TIME_STOP = CLR;
-    DEVICE_REPLY_IN_SMS(33);
-    SOSCLR_CMD_REPLY = CLR;
-    	*/
+    PANIC_CONTROL_STATE_1 = ON;  // Set to ON so next PVT sends EA,11 (emergency cleared)
+    //PANIC_TIME_START = CLR;
+    //PANIC_TIME_STOP = CLR;
     DEVICE_REPLY_IN_SMS(33);
     SOSCLR_CMD_REPLY = CLR;
 }
@@ -621,7 +625,8 @@ OTA_PACKET=ON; //14,13,12,11,10,09,5,2,1
 //SMS_CMD_DATA_UPL(15);
 //DEVICE_REPLY_IN_SMS(10);
 IGNITION_OFF_UPDATE_TIME=3;
-IGNITION_ON_UPDATE_TIME=HARSH_ACCEL_LEVEL=HARSH_TURN_LEVEL=HARSH_BRAKE_LEVEL=LOW_BAT_LEVEL=HEALTH_ON_DURATON_LEVEL=1;
+IGNITION_ON_UPDATE_TIME=HARSH_ACCEL_LEVEL=HARSH_TURN_LEVEL=HARSH_BRAKE_LEVEL=HEALTH_ON_DURATON_LEVEL=1;
+LOW_BAT_LEVEL=70;  /* Default: 70% low battery threshold */
 P_D_L=5;
 TEMP_APN[0]='s';
 TEMP_APN[1]='e';
@@ -799,47 +804,47 @@ void SwitchNetwork(void)
 {
 	//if(BSNL_CONNECT==1 || NWP_CMD_SET==1)
 	//{
-R_UART2_SEND("AT+QSPN?\r\n ");
-MS_TIMER(500);
-R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-MS_TIMER(1000);
-R_UART2_SEND("AT+STKENV=\"D30782020181900180\"\r\n"); // Open Menu items
-MS_TIMER(1000);
-R_UART2_SEND("AT+STKTR=\"810301240402028281830100900102\"\r\n"); // Select Network
-MS_TIMER(1000);
-if(NWP_CMD_SET==SET)
-{
-R_UART2_SEND("AT+STKTR=\"810301240402028281830100900116\"\r\n"); ////NetworkCode=2;  // BSNL F
-MS_TIMER(500);
-NWP_CMD_SET=CLR;
-	
-}
-if(NWS_CMD_SET==SET)
-{
-	R_UART2_SEND("AT+STKTR=\"810301240402028281830100900115\"\r\n"); ////NetworkCode=2;  // BSNL F
-MS_TIMER(500);
-//NWP_CMD_SET=CLR;
+    R_UART2_SEND("AT+QSPN?\r\n ");
+    MS_TIMER(500);
+    R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+    MS_TIMER(1000);
+    R_UART2_SEND("AT+STKENV=\"D30782020181900180\"\r\n"); // Open Menu items
+    MS_TIMER(1000);
+    R_UART2_SEND("AT+STKTR=\"810301240402028281830100900102\"\r\n"); // Select Network
+    MS_TIMER(1000);
+    if(NWP_CMD_SET==SET)
+    {
+    R_UART2_SEND("AT+STKTR=\"810301240402028281830100900116\"\r\n"); ////NetworkCode=2;  // BSNL F
+    MS_TIMER(500);
+    NWP_CMD_SET=CLR;
+        
+    }
+    if(NWS_CMD_SET==SET)
+    {
+        R_UART2_SEND("AT+STKTR=\"810301240402028281830100900115\"\r\n"); ////NetworkCode=2;  // BSNL F
+    MS_TIMER(500);
+    //NWP_CMD_SET=CLR;
 
-NWS_CMD_SET=CLR;
-}
-//MS_TIMER(2000);// Auto Network Select
-R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n");//NetworkCode=1;  // Vodafone P
-MS_TIMER(500);
-GPRS_PS_EN=OFF;
-MS_TIMER(20000);
-GPRS_PS_EN=ON;
-MS_TIMER(500);
-R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-MS_TIMER(500);
-R_UART2_SEND("AT+QSTK?\r\n");
-MS_TIMER(500);
-//QSTK();
-R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
-MS_TIMER(500);
+    NWS_CMD_SET=CLR;
+    }
+    //MS_TIMER(2000);// Auto Network Select
+    R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n");//NetworkCode=1;  // Vodafone P
+    MS_TIMER(500);
+    GPRS_PS_EN=OFF;
+    MS_TIMER(20000);
+    GPRS_PS_EN=ON;
+    MS_TIMER(500);
+    R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+    MS_TIMER(500);
+    R_UART2_SEND("AT+QSTK?\r\n");
+    MS_TIMER(500);
+    //QSTK();
+    R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
+    MS_TIMER(500);
 
-BSNL_CONNECT=0;
-BSNL_CONNECT_FLAG=1;
-	//}
+    BSNL_CONNECT=0;
+    BSNL_CONNECT_FLAG=1;
+        //}
 }
 
 
@@ -858,6 +863,7 @@ BSNL_CONNECT_FLAG=1;
  * 7. Added MS_TIMER delay after CNMI set for modem to process
  * 8. Corrected \r\n consistency (all commands use \r\n)
  *===========================================================================*/
+//#define TCP_MODE '2'
 
 void GSM_INTZ(char MODE)
 {
@@ -1043,6 +1049,13 @@ restart8:
 
         i = CLR;
 
+        /****** Initialize DATA_MODE TCP Send ******/
+        if (MODE == DATA_MODE)
+        {
+            R_UART2_SEND("AT+QISEND\r\n");
+            ACK_RX(100, 2, 100, 200);  /* FIXED: Wait for '>' prompt before sending data */
+        }
+
         for (SMS = 0; SMS <= 4; SMS++)
         {
             if (SMS_MOBILE_NO[i] == '0' && SMS_MOBILE_NO[i + 1] == '0' && SMS_MOBILE_NO[i + 2] == '0' && SMS_MOBILE_NO[i + 3] == '0' && MODE == SMS_MODE)
@@ -1070,31 +1083,48 @@ restart2:
             }
 
             /*****************************************************************************************************/
-            // PACKET HEADER, PACKET HEADER
+            // PACKET HEADER
             if (MODE == SMS_MODE)
             {
                 R_UART2_SEND_User(D_SYM);
+                R_UART2_SEND("EPB,");
                 NOP();
             }
             else if (MODE == DATA_MODE)
             {
-                //LONGITUDE_CONVERSION();
-                //LATITUDE_CONVERSION();
-                R_UART2_SEND("$,");
+                CHECKSUM_BYTE = 0;
+                R_UART2_SEND("$EPB,");
+                CHECKSUM_BYTE ^= 0x24;
+                CHECKSUM_BYTE ^= 0x45;
+                CHECKSUM_BYTE ^= 0x50;
+                CHECKSUM_BYTE ^= 0x42;
+                CHECKSUM_BYTE ^= 0x2C;
             }
-
-            R_UART2_SEND("EPB,");
 
             /*****************************************************************************************************/
             // Emergency Message - EMR OR Stop Message (SEM)
             if (PANIC_CONTROL_STATE == ON)
             {
                 R_UART2_SEND("EMR,");
+                if (MODE == DATA_MODE)
+                {
+                    CHECKSUM_BYTE ^= 0x45;  // 'E'
+                    CHECKSUM_BYTE ^= 0x4D;  // 'M'
+                    CHECKSUM_BYTE ^= 0x52;  // 'R'
+                    CHECKSUM_BYTE ^= 0x2C;  // ','
+                }
             }
 
             if (PANIC_CONTROL_STATE == OFF)
             {
                 R_UART2_SEND("SEM,");
+                if (MODE == DATA_MODE)
+                {
+                    CHECKSUM_BYTE ^= 0x53;  // 'S'
+                    CHECKSUM_BYTE ^= 0x45;  // 'E'
+                    CHECKSUM_BYTE ^= 0x4D;  // 'M'
+                    CHECKSUM_BYTE ^= 0x2C;  // ','
+                }
                 PANIC_CONTROL_STATE_1 = ON;
             }
 
@@ -1276,45 +1306,31 @@ restart2:
             R_UART2_SEND(",");
 
             /************************************************************************************************************************************************************/
-            //REPLY NUMBER
+            //REPLY NUMBER (EMERGENCY NUMBER)
             for (FOR_9 = 0; FOR_9 <= 9; FOR_9++)
             {
                 R_UART2_SEND_User(REPLY_NUMBER[FOR_9]);
                 NOP();
             }
 
-            R_UART2_SEND(",");
-
             /************************************************************************************************************************************************************/
-            // CELL ID
-            HEX_CHARACTER_CONVERSION = SET;
-
-            PRINT_ZEROS(CELL_ID_DATA_LENGTH_0);
-
-            for (FOR_1 = 0; FOR_1 <= CELL_ID_DATA_LENGTH_0; FOR_1++)
+            // CHECKSUM & TERMINATOR (AIS140 Table 6F format)
+            if (MODE == SMS_MODE)
             {
-                NOP();
-                R_UART2_SEND_User(CELL_ID[FOR_1]);
+                R_UART2_SEND(",*");
             }
-
-            R_UART2_SEND(",");
-            NOP();
-
-            PRINT_ZEROS(LAC_DATA_LENGTH_0);
-
-            /************************************************************************************************************************************************************/
-            //LAC
-            for (FOR_1 = 0; FOR_1 <= LAC_DATA_LENGTH_0; FOR_1++)
+            else if (MODE == DATA_MODE)
             {
+                R_UART2_SEND(",");
+                CHECKSUM_BYTE ^= 0x2C;
+                
+                // Send 2-byte HEX checksum
                 NOP();
-                R_UART2_SEND_User(LAC[FOR_1]);
+                R_UART2_SEND_User((((CHECKSUM_BYTE >> 4) & 0x0F) < 10) ? ((CHECKSUM_BYTE >> 4) + 0x30) : ((CHECKSUM_BYTE >> 4) + 0x37));
+                R_UART2_SEND_User(((CHECKSUM_BYTE & 0x0F) < 10) ? ((CHECKSUM_BYTE & 0x0F) + 0x30) : ((CHECKSUM_BYTE & 0x0F) + 0x37));
+                
+                R_UART2_SEND(",*");
             }
-
-            HEX_CHARACTER_CONVERSION = CLR;
-
-            /************************************************************************************************************************************************************/
-            // CRC
-            R_UART2_SEND(",00000000,*");
 
             /************************************************************************************************************************************************************/
             if (MODE == SMS_MODE)
@@ -1338,6 +1354,16 @@ restart2:
 
             if (MODE == DATA_MODE)
             {
+                /****** Send EPB Packet via TCP Connection ******/
+                NOP();
+                R_UART2_SEND_User(CTRL_Z);
+                MS_TIMER(1000);
+                
+                if (SMS_FAIL_COUNT >= 1)
+                {
+                    SMS_FAIL_COUNT = 0;
+                    RESTART = OFF;
+                }
                 goto restart12;
             }
 

@@ -201,8 +201,8 @@ void GPS_UART_RX_1(unsigned int UART1_BUFFER)
 		    }
 		case 1:
 		    {
-		    if(UART1_BUFFER=='A' || UART1_BUFFER=='D'){GPS_DIRECTION_DATA_VALID=ON;CHARGE_STATE=ON;}
-		    else{GPS_DIRECTION_DATA_VALID=OFF;CHARGE_STATE=OFF;}
+		    if(UART1_BUFFER=='A' || UART1_BUFFER=='D'){GPS_DIRECTION_DATA_VALID=ON;/*CHARGE_STATE=ON;*/}  // P1.7/P5.1 now read-only (ignition sense)
+		    else{GPS_DIRECTION_DATA_VALID=OFF;/*CHARGE_STATE=OFF;*/}  // Commented out - P1.7 is shorted to P5.1 on PCB
 	            break;
 		    }
 		    case 2:

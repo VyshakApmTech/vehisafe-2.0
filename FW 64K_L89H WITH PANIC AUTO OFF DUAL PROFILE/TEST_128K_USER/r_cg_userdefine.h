@@ -67,8 +67,8 @@ User definitions
 #define BLUE_LED P2_bit.no6
 #define CHARGE_STATE P1_bit.no7
 #define RESET_SW P1_bit.no0
-#define IGNITION_SW P6_bit.no3
-#define GPS_PWR_EN P5_bit.no1
+#define IGNITION_SW P5_bit.no1
+#define GPS_PWR_EN P5_bit.no0
 #define FLASH_HOLD P7_bit.no1
 #define HOOTER P7_bit.no2
 #define FLASH_WP P1_bit.no5

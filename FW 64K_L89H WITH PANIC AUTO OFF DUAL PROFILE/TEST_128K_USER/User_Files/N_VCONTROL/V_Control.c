@@ -19,9 +19,9 @@ extern char CPIN;
 extern char P_LAT_DM[10],P_TIME[10],P_SEND_TIME[10],P_LOG_DM[10],P_SEND_LOG_DM[10],P_SEND_LAT_DM[10],FTP_ADDRESS[8],FTP_CONNECT_COUNT;
 extern char FILE_ADDR,V_NO_LEN;
 extern unsigned int CHECKSUM_BYTE,MN,VERSION_TEMP,FRM_VERSION,CURRENT_FRM_VERSION,HEX;
-extern _Bool WELCOME_STRING_FRAME,FIRMWARE_UPDATE,IGNITION_CONTROL_STATE,POWER_SOURCE,SYSTEM_READY,NORMAL_PACKET;
+extern _Bool WELCOME_STRING_FRAME,FIRMWARE_UPDATE,IGNITION_CONTROL_STATE,POWER_SOURCE,SYSTEM_READY,NORMAL_PACKET,HEALTH_PACKET_TO_SERVER,IGNITION_ON_PACKET_SENT,IGNITION_OFF_PACKET_SENT;
 extern _Bool HTTP_DOWNLOAD_ACK,FTP_ACK,FTP_DOWNLOAD_ACK,FIRMWARE_DOWNLOADED,FILE_ACK,FILE_DOWNLOAD,FLAG,STOP_FILE_READING,IMEI_RX,IMEI_ACK_RX;
-extern _Bool GPS_STANDBY,WATCH_DOG_FORCE_KILL,RTC_DONE,POWER_SOURCE_RECONNECT_PACKET,VLT_STARTUP,PANIC_TIME_START,PANIC_TIME_STOP;
+extern _Bool GPS_STANDBY,WATCH_DOG_FORCE_KILL,RTC_DONE,POWER_SOURCE_RECONNECT_PACKET,VLT_STARTUP,PANIC_TIME_START,PANIC_TIME_STOP,PANIC_CONTROL_STATE_1;
 extern unsigned int MINUTE,UPDATE_TIME,TEMP_MAIN_BATTERY_VOLTAGE,PANIC_TIME,I_HOURS;
 extern int AD;
 extern char p1,p2,p3,p4,LB_LEVEL;
@@ -57,185 +57,231 @@ char INT_BAT_PERCENTAGE;
 //      #define WHO_AM_I_MPU6050   0x75 // Should return 0x68
 //      #define INT_STATUS	 0x3A
       #define MPU6050_ADDRESS    0xD4//0xD0
- void SYSTEM_STATUS(void)
- {
- if(IGNITION_SW==CLOSE)
-{
-//UPDATE_TIME_ON_TIME=5;
-IGNITION=ON;
-GPRS_PS_EN=ON;
 
-     if(VLT_STARTUP==CLR && IGNITION_ON_PACKET==OFF && NORMAL_PACKET==ON)
-     {
-     NORMAL_PACKET=OFF;
-     IGNITION_ON_PACKET=ON;
-     VLT_STARTUP=SET;
-     WELCOME_STRING_FRAME=ON;
-     }
-else if(IGNITION_ON_PACKET==OFF && NORMAL_PACKET==OFF)
-{
-IGNITION_ON_PACKET=ON;
-}
-else if(IGNITION_ON_PACKET==ON  && NORMAL_PACKET==OFF)
-{
-IGNITION_OFF_PACKET=OFF;IGNITION_ON_PACKET=ON; NORMAL_PACKET=ON;
-}
-else if(IGNITION_ON_PACKET==ON  && NORMAL_PACKET==ON)
-{
-IGNITION_ON_PACKET=OFF;
-NORMAL_PACKET=ON;
-}
-else if(IGNITION_OFF_PACKET==ON && NORMAL_PACKET==ON)
-{
-IGNITION_OFF_PACKET=IGNITION_ON_PACKET=OFF;
-NORMAL_PACKET=ON;
-}
-}
-if(IGNITION_SW==OPEN)
-{
-IGNITION=OFF;
 
-     if(VLT_STARTUP==SET && NORMAL_PACKET==ON)
-     {
-     NORMAL_PACKET=OFF;
-     IGNITION_OFF_PACKET=ON;
-     }
-else if(IGNITION_OFF_PACKET==OFF && NORMAL_PACKET==OFF)
+void SYSTEM_STATUS(void)
 {
-IGNITION_OFF_PACKET=ON;
+    if(IGNITION_SW==CLOSE)
+    {
+        //UPDATE_TIME_ON_TIME=5;
+        IGNITION=ON;
+        IGNITION_OFF_PACKET=OFF;  // Clear stuck OFF flag when ignition closes
+        IGNITION_OFF_PACKET_SENT=OFF;  // Reset gate so OFF packet can be sent on next OFF event
+        
+        GPRS_PS_EN=ON;
+
+        if(VLT_STARTUP==CLR && IGNITION_ON_PACKET==OFF && NORMAL_PACKET==ON)
+        {
+            NORMAL_PACKET=OFF;
+            IGNITION_ON_PACKET=ON;
+            VLT_STARTUP=SET;
+            WELCOME_STRING_FRAME=ON;
+        }
+        else if(IGNITION_ON_PACKET==OFF && NORMAL_PACKET==OFF)
+        {
+        IGNITION_ON_PACKET=ON;
+        }
+        else if(IGNITION_ON_PACKET==ON  && NORMAL_PACKET==OFF)
+        {
+            IGNITION_OFF_PACKET=OFF;
+            IGNITION_ON_PACKET=ON; 
+            NORMAL_PACKET=ON;
+        }
+        else if(IGNITION_ON_PACKET==ON  && NORMAL_PACKET==ON)
+        {
+        IGNITION_ON_PACKET=OFF;
+        NORMAL_PACKET=ON;
+        }
+        else if(IGNITION_OFF_PACKET==ON && NORMAL_PACKET==ON)
+        {
+        IGNITION_OFF_PACKET=IGNITION_ON_PACKET=OFF;
+        NORMAL_PACKET=ON;
+        }
+    }
+
+    if(IGNITION_SW==OPEN)
+    {
+        IGNITION=OFF;
+        IGNITION_ON_PACKET=OFF;  // Clear stuck ON flag when ignition opens
+        IGNITION_ON_PACKET_SENT=OFF;  // Reset gate so IN packet can be sent on next ON event
+        IGNITION_OFF_PACKET=ON;
+        if(VLT_STARTUP==SET && NORMAL_PACKET==ON)
+        {
+            NORMAL_PACKET=OFF;
+            IGNITION_OFF_PACKET=ON;
+        }
+        else if(IGNITION_OFF_PACKET == ON && IGNITION_OFF_PACKET_SENT == OFF)
+        {
+            IGNITION_OFF_PACKET= ON;
+            IGNITION_OFF_PACKET_SENT = OFF;
+        }
+        // else if(IGNITION_OFF_PACKET==OFF && NORMAL_PACKET==OFF)
+        // {
+        //     IGNITION_OFF_PACKET=ON;
+        // }
+        // else if(IGNITION_OFF_PACKET==ON  && NORMAL_PACKET==OFF)
+        // {
+        //     IGNITION_OFF_PACKET=OFF; 
+        //     NORMAL_PACKET=ON;
+        // }
+        // else if(IGNITION_OFF_PACKET==ON  && NORMAL_PACKET==ON)
+        // {
+        //     IGNITION_OFF_PACKET=OFF;
+        //     NORMAL_PACKET=ON;
+        // }
+        // else if(IGNITION_ON_PACKET==ON &&  NORMAL_PACKET==ON)
+        // {
+        //     IGNITION_OFF_PACKET=IGNITION_ON_PACKET=OFF;
+        //     NORMAL_PACKET=ON;
+        // }
+    }
 }
-//else if(IGNITION_OFF_PACKET==ON  && NORMAL_PACKET==OFF)
-//{
-//IGNITION_OFF_PACKET=OFF; 
-//NORMAL_PACKET=ON;
-//}
-//else if(IGNITION_OFF_PACKET==ON  && NORMAL_PACKET==ON)
-//{
-//IGNITION_OFF_PACKET=OFF;
-//NORMAL_PACKET=ON;
-//}
-//else if(IGNITION_ON_PACKET==ON &&  NORMAL_PACKET==ON)
-//{
-//IGNITION_OFF_PACKET=IGNITION_ON_PACKET=OFF;
-//NORMAL_PACKET=ON;
-//}
-}
- }
+
 void VLT_RUNNING_MODE(void)
 {
-	//WATCHDOG_ON();
-	//UPDATE_ONLINE_DATA_FRAME();
-	//WATCHDOG_OFF();
-/*************************************************************************************/
-// MODE:- IGNITION ON
-/*************************************************************************************/
-if(IGNITION_SW==CLOSE)
-{
-//UPDATE_TIME_ON_TIME=5;
-GPRS_PS_EN=ON1;
-MS_TIMER(1500);
-    R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-    MS_TIMER(500);
-    R_UART2_SEND("AT+QSTK?\r\n");
-MS_TIMER(500);
-QSTK();
-    R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
-     MS_TIMER(300);
-//     if(VLT_STARTUP==CLR && IGNITION_ON_PACKET==OFF && NORMAL_PACKET==ON){NORMAL_PACKET=OFF;IGNITION_ON_PACKET=ON;}
-//else if(IGNITION_ON_PACKET==OFF && NORMAL_PACKET==OFF){IGNITION_ON_PACKET=ON;}
-//else if(IGNITION_ON_PACKET==ON  && NORMAL_PACKET==OFF){IGNITION_ON_PACKET=OFF; NORMAL_PACKET=ON;}
-//else if(IGNITION_ON_PACKET==ON  && NORMAL_PACKET==ON){IGNITION_ON_PACKET=OFF; NORMAL_PACKET=ON;}
-//else if(IGNITION_OFF_PACKET==ON && NORMAL_PACKET==ON){IGNITION_OFF_PACKET=IGNITION_ON_PACKET=OFF; NORMAL_PACKET=ON;}
-if(MINUTE>=10)
-{
+    //WATCHDOG_ON();
+    //UPDATE_ONLINE_DATA_FRAME();
+    //WATCHDOG_OFF();
 
-WATCHDOG_ON();
-VLT_STARTUP=CLR;
-//MINUTE=0;
-IGNITION=ON;
-R_TAU0_Channel0_Stop();
-MINUTE=I_HOURS=CLR;//INTERNET_CONNECTED=2;
-UPDATE_ONLINE_DATA_FRAME();
-R_TAU0_Channel0_Start();
-VLT_STARTUP_INITIAL=SET;
-WATCHDOG_OFF();
-}
-}
-/*************************************************************************************/
-// MODE:- IGNITION OFF
-/*************************************************************************************/
-if(IGNITION_SW==OPEN)
-{
-IGNITION=OFF;
-//     if(VLT_STARTUP==SET && NORMAL_PACKET==ON){NORMAL_PACKET=OFF;IGNITION_OFF_PACKET=ON;}
-//else if(IGNITION_OFF_PACKET==OFF && NORMAL_PACKET==OFF){IGNITION_OFF_PACKET=ON;}
-//else if(IGNITION_OFF_PACKET==ON  && NORMAL_PACKET==OFF){IGNITION_OFF_PACKET=OFF; NORMAL_PACKET=ON;}
-//else if(IGNITION_OFF_PACKET==ON  && NORMAL_PACKET==ON){IGNITION_OFF_PACKET=OFF; NORMAL_PACKET=ON;}
-//else if(IGNITION_ON_PACKET==ON &&  NORMAL_PACKET==ON){IGNITION_OFF_PACKET=IGNITION_ON_PACKET=OFF; NORMAL_PACKET=ON;}
-if(MINUTE>=600)
-{
-WATCHDOG_ON();
-GPRS_PS_EN=ON1;
-MS_TIMER(1500);
-    R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-    MS_TIMER(500);
-    R_UART2_SEND("AT+QSTK?\r\n");
-MS_TIMER(500);
-QSTK();
-    R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
-     MS_TIMER(300);
-R_TAU0_Channel0_Stop();
-MINUTE=I_HOURS=CLR;
-UPDATE_ONLINE_DATA_FRAME();
-R_TAU0_Channel0_Start();
-GPRS_DISCONNECT();
-INTERNET_CONNECTED=OFF;
-GPRS_PS_EN=OFF1;
-R_TAU0_Channel0_Start();
-WATCHDOG_OFF();
-}
-}	
-///*************************************************************************************/
-//// MODE:- STARTUP
-///*************************************************************************************/
-if(VLT_STARTUP_INITIAL==SET && IGNITION_SW==OPEN)
-{
-WATCHDOG_ON();
-IGNITION=OFF;
-NORMAL_PACKET=OFF;
-GPRS_PS_EN=ON1;
-MS_TIMER(1500);
-    R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-    MS_TIMER(500);
-    R_UART2_SEND("AT+QSTK?\r\n");
-MS_TIMER(500);
-QSTK();
-    R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
-     MS_TIMER(300);
-R_TAU0_Channel0_Stop();
-UPDATE_ONLINE_DATA_FRAME();
-R_TAU0_Channel0_Start();
-GPRS_DISCONNECT();
-INTERNET_CONNECTED=OFF;
-GPRS_PS_EN=OFF1;
-R_TAU0_Channel0_Start();
-VLT_STARTUP=CLR;
-VLT_STARTUP_INITIAL=CLR;
-WATCHDOG_OFF();
-}
-///*************************************************************************************/	 
-//// SEND UNTILL PANIC DURATION
-///*************************************************************************************/	 
+    /*************************************************************************************/
+    // MODE:- IGNITION ON
+    /*************************************************************************************/
+    if(IGNITION_SW==CLOSE)
+    {
+        //UPDATE_TIME_ON_TIME=5;
+        GPRS_PS_EN=ON1;
+        MS_TIMER(1500);
 
-//if(PANIC_TIME_START==SET || PANIC_TIME_STOP==SET)
-//{
-//WATCHDOG_ON();
-//MS_TIMER(10);
-//GPRS_PS_EN=ON1;
-////UPDATE_ONLINE_DATA_FRAME();
-//WATCHDOG_OFF();	
-//}
+        //R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");  // ← REMOVED: Hardcoded network switch
+        //MS_TIMER(500);
+        //R_UART2_SEND("AT+QSTK?\r\n");
+        //MS_TIMER(500);
+        //QSTK();
+        //R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
+        //MS_TIMER(300);
 
+        //     if(VLT_STARTUP==CLR && IGNITION_ON_PACKET==OFF && NORMAL_PACKET==ON){NORMAL_PACKET=OFF;IGNITION_ON_PACKET=ON;}
+        //else if(IGNITION_ON_PACKET==OFF && NORMAL_PACKET==OFF){IGNITION_ON_PACKET=ON;}
+        //else if(IGNITION_ON_PACKET==ON  && NORMAL_PACKET==OFF){IGNITION_ON_PACKET=OFF; NORMAL_PACKET=ON;}
+        //else if(IGNITION_ON_PACKET==ON  && NORMAL_PACKET==ON){IGNITION_ON_PACKET=OFF; NORMAL_PACKET=ON;}
+        //else if(IGNITION_OFF_PACKET==ON && NORMAL_PACKET==ON){IGNITION_OFF_PACKET=IGNITION_ON_PACKET=OFF; NORMAL_PACKET=ON;}
+
+        if(MINUTE>=10)
+        {
+            /* Health packet trigger every 5 minutes (30 cycles × 10 sec = 300 sec) */
+            static unsigned int health_packet_cycle_count = 0;
+
+            WATCHDOG_ON();
+            VLT_STARTUP=CLR;
+            //MINUTE=0;
+            IGNITION=ON;
+
+            health_packet_cycle_count++;
+
+            if(health_packet_cycle_count >= 10)
+            {
+                health_packet_cycle_count = 0;
+                HEALTH_PACKET_TO_SERVER = ON;  /* Trigger health packet */
+            }
+
+            R_TAU0_Channel0_Stop();
+            MINUTE=I_HOURS=CLR;//INTERNET_CONNECTED=2;
+            UPDATE_ONLINE_DATA_FRAME();
+            R_TAU0_Channel0_Start();
+            VLT_STARTUP_INITIAL=SET;
+            WATCHDOG_OFF();
+        }
+    }
+
+    /*************************************************************************************/
+    // MODE:- IGNITION OFF
+    /*************************************************************************************/
+    if(IGNITION_SW==OPEN)
+    {
+        IGNITION=OFF;
+
+        //     if(VLT_STARTUP==SET && NORMAL_PACKET==ON){NORMAL_PACKET=OFF;IGNITION_OFF_PACKET=ON;}
+        //else if(IGNITION_OFF_PACKET==OFF && NORMAL_PACKET==OFF){IGNITION_OFF_PACKET=ON;}
+        //else if(IGNITION_OFF_PACKET==ON  && NORMAL_PACKET==OFF){IGNITION_OFF_PACKET=OFF; NORMAL_PACKET=ON;}
+        //else if(IGNITION_OFF_PACKET==ON  && NORMAL_PACKET==ON){IGNITION_OFF_PACKET=OFF; NORMAL_PACKET=ON;}
+        //else if(IGNITION_ON_PACKET==ON &&  NORMAL_PACKET==ON){IGNITION_OFF_PACKET=IGNITION_ON_PACKET=OFF; NORMAL_PACKET=ON;}
+
+        if(IGNITION_OFF_PACKET == ON && IGNITION_OFF_PACKET_SENT == OFF)
+        {
+            UPDATE_ONLINE_DATA_FRAME();   // DATA_PRINT will select IF,08
+            R_TAU0_Channel0_Start();
+            GPRS_DISCONNECT();
+        }
+        
+        if(MINUTE>=600)
+        {
+            WATCHDOG_ON();
+            GPRS_PS_EN=ON1;
+            MS_TIMER(1500);
+
+            //R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");  // ← REMOVED: Hardcoded network switch
+            //MS_TIMER(500);
+            //R_UART2_SEND("AT+QSTK?\r\n");
+            //MS_TIMER(500);
+            //QSTK();
+            //R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
+            //MS_TIMER(300);
+
+            R_TAU0_Channel0_Stop();
+            MINUTE=I_HOURS=CLR;
+            UPDATE_ONLINE_DATA_FRAME();
+            R_TAU0_Channel0_Start();
+            GPRS_DISCONNECT();
+            INTERNET_CONNECTED=OFF;
+            GPRS_PS_EN=OFF1;
+            R_TAU0_Channel0_Start();
+            WATCHDOG_OFF();
+        }
+    }
+
+    ///*************************************************************************************/
+    //// MODE:- STARTUP
+    ///*************************************************************************************/
+    if(VLT_STARTUP_INITIAL==SET && IGNITION_SW==OPEN)
+    {
+        WATCHDOG_ON();
+        IGNITION=OFF;
+        NORMAL_PACKET=OFF;
+        GPRS_PS_EN=ON1;
+        MS_TIMER(1500);
+
+        //R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");  // ← REMOVED: Hardcoded network switch
+        //MS_TIMER(500);
+        //R_UART2_SEND("AT+QSTK?\r\n");
+        //MS_TIMER(500);
+        //QSTK();
+        //R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
+        //MS_TIMER(300);
+
+        R_TAU0_Channel0_Stop();
+        UPDATE_ONLINE_DATA_FRAME();
+        R_TAU0_Channel0_Start();
+        GPRS_DISCONNECT();
+        INTERNET_CONNECTED=OFF;
+        GPRS_PS_EN=OFF1;
+        R_TAU0_Channel0_Start();
+        VLT_STARTUP=CLR;
+        VLT_STARTUP_INITIAL=CLR;
+        WATCHDOG_OFF();
+    }
+
+    ///*************************************************************************************/
+    //// SEND UNTILL PANIC DURATION
+    ///*************************************************************************************/
+
+    //if(PANIC_TIME_START==SET || PANIC_TIME_STOP==SET)
+    //{
+    //    WATCHDOG_ON();
+    //    MS_TIMER(10);
+    //    GPRS_PS_EN=ON1;
+    //    //UPDATE_ONLINE_DATA_FRAME();
+    //    WATCHDOG_OFF();
+    //}
 }	 
 	 
 	 
@@ -247,16 +293,27 @@ void SYSTEM_ALERT_CHECK(void)
 
     if(PANIC_ALERT==1)
     {
+        uint8_t i;
         PANIC_ALERT_PACKET=ON;
         WATCHDOG_ON();
         PANIC_TIME_START=ON;
         PANIC_TIME=CLR;
         GPRS_PS_EN=ON1;
         MS_TIMER(1);
-        GSM_INTZ(SMS_MODE);
-        UPDATE_ONLINE_DATA_FRAME();
-        //PANIC_ALERT=0;
-        //PANIC_ALERT_PACKET=OFF;
+        //GSM_INTZ(SMS_MODE);  // ← Commented: SMS via phone numbers
+        PANIC_CONTROL_STATE = ON;  // Set ON for packets 1-5 (EMR type)
+        for (i = 1; i <= 5; i++)
+        {
+            GSM_INTZ(DATA_MODE);          // ← EPB via TCP (packets 1-5: EMR)
+            UPDATE_ONLINE_DATA_FRAME();   // ← PVT via TCP (packets 1-5: EA,10)
+        }
+        // Send 6th packet separately to guarantee execution
+        PANIC_CONTROL_STATE = OFF;       // 6th packet: SEM type
+        PANIC_CONTROL_STATE_1 = ON;      // 6th packet: EA,11 type
+        GSM_INTZ(DATA_MODE);             // ← 6th EPB: SEM
+        UPDATE_ONLINE_DATA_FRAME();      // ← 6th PVT: EA,11 (clears PANIC_TIME_START)
+        PANIC_ALERT=0;
+        PANIC_ALERT_PACKET=OFF;
         WATCHDOG_OFF();
     }
     
