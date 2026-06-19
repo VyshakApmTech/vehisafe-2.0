@@ -33,7 +33,7 @@ _Bool PNET_CMD_REPLY,SNET_CMD_REPLY,NWP_CMD_SET,NWS_CMD_SET;
 extern char LOW_BAT_LEVEL_RX,LOW_BAT_LEVEL_CMD;
 extern unsigned long int HEALTH_FRAME_NUMBER;
 extern _Bool PRIMARY_IP,SECONDARY_IP,GET_PPN_CMD,GET_SPN_CMD,PRIMARY_PN,SECONDARY_PN;
-
+#define    SIMMAKE_IDEMIA_3P
 
 
 void QSTK(void)
@@ -60,39 +60,111 @@ void QSTK(void)
 
 void MANUAL_NET(unsigned int N)
 {
-R_UART2_SEND("AT+CIMI\r\n ");
-MS_TIMER(500);
-R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-MS_TIMER(500);
-R_UART2_SEND("AT+STKENV=\"D30782020181900180\"\r\n"); // Open Menu items
-MS_TIMER(500);
-R_UART2_SEND("AT+STKTR=\"810301240402028281830100900102\"\r\n"); // SELECT Network
-MS_TIMER(500);
-if(N==1)
-{
-R_UART2_SEND("AT+STKTR=\"810301240402028281830100900115\"\r\n");//NetworkCode=1;// Vodafone P
-MS_TIMER(500);
-MS_TIMER(20000);// Auto Network SELECT
-GPRS_PS_EN=OFF1;
-MS_TIMER(500);
-GPRS_PS_EN=ON1;
-MS_TIMER(500);
-R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-MS_TIMER(500);
-}
-if(N==2)
-{
-R_UART2_SEND("AT+STKTR=\"810301240402028281830100900116\"\r\n");//NetworkCode=1;  // BSNL F
-MS_TIMER(500);
-MS_TIMER(20000);// Auto Network SELECT
-GPRS_PS_EN=OFF1;
-MS_TIMER(500);
-GPRS_PS_EN=ON1;
-MS_TIMER(500);
-R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-MS_TIMER(500);
+    if(N==0)
+    {
+        return;
+    }
+    if(N != 0)
+    {
+        #if defined(SIMMAKE_IDEMIA_3P)
+            R_UART2_SEND("AT+CIMI\r\n ");
+            MS_TIMER(500);
+            //R_UART2_SEND("AT+QSTK\"\r\n ");
+            R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+            MS_TIMER(500);
+            R_UART2_SEND("AT+STKENV=\"D30782020181900101\"\r\n"); // Open Menu items
+            MS_TIMER(500);
+            // R_UART2_SEND("AT+STKTR=\"810301240402028281830100900102\"\r\n"); // SELECT Network
+            // MS_TIMER(500); //dont know what it is , commented by vyshak
 
-}
+            if(N==1)
+            {
+                R_UART2_SEND("AT+STKTR=\"810301240082028281830100900101\"\r\n");//NetworkCode=1;// Vodafone P
+                MS_TIMER(500);
+                MS_TIMER(1000);// Auto Network SELECT
+                GPRS_PS_EN=OFF1;
+                MS_TIMER(500);
+                GPRS_PS_EN=ON1;
+                MS_TIMER(500);
+                //R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+                MS_TIMER(500);
+            }
+            if(N==2)
+            {
+                R_UART2_SEND("AT+STKTR=\"810301240082028281830100900102\"\r\n");//NetworkCode=1;  // BSNL F
+                MS_TIMER(500);
+                MS_TIMER(1000);// Auto Network SELECT
+                GPRS_PS_EN=OFF1;
+                MS_TIMER(500);
+                GPRS_PS_EN=ON1;
+                MS_TIMER(500);
+                //R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+                MS_TIMER(500);
+            }
+            if(N==3)
+            {
+                R_UART2_SEND("AT+STKTR=\"810301240082028281830100900103\"\r\n");  // Airtel code
+                MS_TIMER(500);
+                MS_TIMER(1000);  // Auto Network SELECT
+                GPRS_PS_EN=OFF1;
+                MS_TIMER(500);
+                GPRS_PS_EN=ON1;
+                MS_TIMER(500);
+                //R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n");
+                MS_TIMER(500);
+            }
+
+
+        #else
+            R_UART2_SEND("AT+CIMI\r\n ");
+            MS_TIMER(500);
+            R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+            MS_TIMER(500);
+            R_UART2_SEND("AT+STKENV=\"D30782020181900180\"\r\n"); // Open Menu items
+            MS_TIMER(500);
+            R_UART2_SEND("AT+STKTR=\"810301240402028281830100900102\"\r\n"); // SELECT Network
+            MS_TIMER(500);
+
+            if(N==1)
+            {
+                R_UART2_SEND("AT+STKTR=\"810301240402028281830100900115\"\r\n");//NetworkCode=1;// Vodafone P
+                MS_TIMER(500);
+                MS_TIMER(1000);// Auto Network SELECT
+                GPRS_PS_EN=OFF1;
+                MS_TIMER(500);
+                GPRS_PS_EN=ON1;
+                MS_TIMER(500);
+                R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+                MS_TIMER(500);
+            }
+            if(N==2)
+            {
+                R_UART2_SEND("AT+STKTR=\"810301240402028281830100900116\"\r\n");//NetworkCode=1;  // BSNL F
+                MS_TIMER(500);
+                MS_TIMER(1000);// Auto Network SELECT
+                GPRS_PS_EN=OFF1;
+                MS_TIMER(500);
+                GPRS_PS_EN=ON1;
+                MS_TIMER(500);
+                R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+                MS_TIMER(500);
+            }
+            if(N==3)
+            {
+                R_UART2_SEND("AT+STKTR=\"810301240402028281830100900114\"\r\n");  // Airtel code
+                MS_TIMER(500);
+                MS_TIMER(1000);  // Auto Network SELECT
+                GPRS_PS_EN=OFF1;
+                MS_TIMER(500);
+                GPRS_PS_EN=ON1;
+                MS_TIMER(500);
+                R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n");
+                MS_TIMER(500);
+            }
+        #endif
+    }
+    R_UART2_SEND("AT+CIMI\r\n ");
+
 }
 
 
@@ -515,272 +587,268 @@ if(SETFOTA_CMD_REPLY == SET)
     DEVICE_REPLY_IN_SMS(37);
     SETFOTA_CMD_REPLY = CLR;
     t = 0;
-}
-if(GETPROF_CMD_REPLY == SET)
-{
-    DEVICE_REPLY_IN_SMS(38);
-    GETPROF_CMD_REPLY = CLR;
-}
+    }
+    if(GETPROF_CMD_REPLY == SET)
+    {
+        DEVICE_REPLY_IN_SMS(38);
+        GETPROF_CMD_REPLY = CLR;
+    }
 
-if(GETSOSTMO_CMD_REPLY == SET)
-{
-    DEVICE_REPLY_IN_SMS(39);
-    GETSOSTMO_CMD_REPLY = CLR;
-}
+    if(GETSOSTMO_CMD_REPLY == SET)
+    {
+        DEVICE_REPLY_IN_SMS(39);
+        GETSOSTMO_CMD_REPLY = CLR;
+    }
 
-if(GETVSTAT_CMD_REPLY == SET)
-{
-    // Refresh status data before sending
-    GET_SIGNAL_STRENGTH();        // Updates GSM_STRENGTH and dBm
-    BATTERY_MEASUREMENT = ON;      // Ensure fresh battery readings
-    MS_TIMER(10);
-    
-    DEVICE_REPLY_IN_SMS(40);
-    GETVSTAT_CMD_REPLY = CLR;
-}
+    if(GETVSTAT_CMD_REPLY == SET)
+    {
+        // Refresh status data before sending
+        GET_SIGNAL_STRENGTH();        // Updates GSM_STRENGTH and dBm
+        BATTERY_MEASUREMENT = ON;      // Ensure fresh battery readings
+        MS_TIMER(10);
+        
+        DEVICE_REPLY_IN_SMS(40);
+        GETVSTAT_CMD_REPLY = CLR;
+    }
 
-if(GETSRVDTL_CMD_REPLY == SET)
-{
-    DEVICE_REPLY_IN_SMS(41);
-    GETSRVDTL_CMD_REPLY = CLR;
-}
-if(GETLOC_CMD_REPLY == SET)
-{
-    // Refresh GPS data before sending
-    GET_GPS_DATA();           // Updates LAT_DM, LOG_DM, etc.
-    GET_SPEED_DATA();         // Updates SPEED_DATA
-    MS_TIMER(10);
-    
-    DEVICE_REPLY_IN_SMS(42);
-    GETLOC_CMD_REPLY = CLR;
-}
-if(GETPANIC_CMD_REPLY == SET)
-{
-    DEVICE_REPLY_IN_SMS(43);
-    GETPANIC_CMD_REPLY = CLR;
-}
+    if(GETSRVDTL_CMD_REPLY == SET)
+    {
+        DEVICE_REPLY_IN_SMS(41);
+        GETSRVDTL_CMD_REPLY = CLR;
+    }
+    if(GETLOC_CMD_REPLY == SET)
+    {
+        // Refresh GPS data before sending
+        GET_GPS_DATA();           // Updates LAT_DM, LOG_DM, etc.
+        GET_SPEED_DATA();         // Updates SPEED_DATA
+        MS_TIMER(10);
+        
+        DEVICE_REPLY_IN_SMS(42);
+        GETLOC_CMD_REPLY = CLR;
+    }
+    if(GETPANIC_CMD_REPLY == SET)
+    {
+        DEVICE_REPLY_IN_SMS(43);
+        GETPANIC_CMD_REPLY = CLR;
+    }
 
-if(GETVINFO_CMD_REPLY == SET)
-{
-    R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
-    DEVICE_REPLY_IN_SMS(44);
-    GETVINFO_CMD_REPLY = CLR;
-}
-
-
+    if(GETVINFO_CMD_REPLY == SET)
+    {
+        R_UART2_SEND("AT+QMGDA=\"DEL ALL\"\r\n");
+        DEVICE_REPLY_IN_SMS(44);
+        GETVINFO_CMD_REPLY = CLR;
+    }
 
 
 
 
 
-if(SMS_PIN_WRONG==SET)
-{
-OTA_PACKET=ON;
-//DEVICE_REPLY_IN_SMS(0);
-SMS_PIN_WRONG=CLR;
-}
-
-//	UPDATE INTERVAL TIME FOR IGNITION ON
-if(UPDATE_INTERVAL_TIME_FOR_IGNITION_ON_CMD==SET)
-{
-OTA_PACKET=ON;
-CMD_DATA_WRITE_IN_EEROM(1);
-//SMS_CMD_DATA_UPL(1);
-//DEVICE_REPLY_IN_SMS(4);
-UPDATE_INTERVAL_TIME_FOR_IGNITION_ON_CMD=CLR;
-}
-//	UPDATE INTERVAL TIME FOR IGNITION OFF
-if(UPDATE_INTERVAL_TIME_FOR_IGNITION_OFF_CMD==SET)
-{
-OTA_PACKET=ON;
-CMD_DATA_WRITE_IN_EEROM(2);
-//SMS_CMD_DATA_UPL(2);
-//DEVICE_REPLY_IN_SMS(5);
-UPDATE_INTERVAL_TIME_FOR_IGNITION_OFF_CMD=CLR;
-}
-//	UPDATE REGISTRATION NUMBER
-if(UPDATE_REGISTRATION_NUMBER==SET)
-{
-OTA_PACKET=ON;
-CMD_DATA_WRITE_IN_EEROM(3);
-//SMS_CMD_DATA_UPL(4);
-//DEVICE_REPLY_IN_SMS(6);
-UPDATE_REGISTRATION_NUMBER=CLR;
-}
 
 
-// UPDATE REPLY NUMBER
-if(UPDATE_RP_NO==SET)
-{
-OTA_PACKET=ON;
-CMD_DATA_WRITE_IN_EEROM(7);
-//SMS_CMD_DATA_UPL(5);
-//DEVICE_REPLY_IN_SMS(9);
-UPDATE_RP_NO=CLR;
-}
+    if(SMS_PIN_WRONG==SET)
+    {
+    OTA_PACKET=ON;
+    //DEVICE_REPLY_IN_SMS(0);
+    SMS_PIN_WRONG=CLR;
+    }
 
-if(DEVICE_CLEAR_CMD==SET)
-{
-OTA_PACKET=ON; //14,13,12,11,10,09,5,2,1
-//SMS_CMD_DATA_UPL(15);
-//DEVICE_REPLY_IN_SMS(10);
-IGNITION_OFF_UPDATE_TIME=3;
-IGNITION_ON_UPDATE_TIME=HARSH_ACCEL_LEVEL=HARSH_TURN_LEVEL=HARSH_BRAKE_LEVEL=HEALTH_ON_DURATON_LEVEL=1;
-LOW_BAT_LEVEL=70;  /* Default: 70% low battery threshold */
-P_D_L=5;
-TEMP_APN[0]='s';
-TEMP_APN[1]='e';
-TEMP_APN[2]='n';
-TEMP_APN[3]='s';
-TEMP_APN[4]='e';
-TEMP_APN[5]='m';
-TEMP_APN[6]='2';
-TEMP_APN[7]='m';
-//TEMP_APN[8]='m';
-//TEMP_APN[9]='s';
-APN_LENGTH=7;
-for(FOR_9=0;FOR_9<=11;FOR_9++)
-{
-TEMP_PIP2[FOR_9]=TEMP_PIP[FOR_9];
-NOP();
-}
-for(FOR_9=0;FOR_9<=11;FOR_9++)
-{
-TEMP_SIP2[FOR_9]=TEMP_SIP[FOR_9];
-NOP();
-}
-//TEMP_PPN2[0]='9';TEMP_PPN2[1]='0';TEMP_PPN2[2]='0';TEMP_PPN2[3]='0';
-//TEMP_SPN2[0]='9';TEMP_SPN2[1]='0';TEMP_SPN2[2]='0';TEMP_SPN2[3]='0';
-CMD_DATA_WRITE_IN_EEROM(1);CMD_DATA_WRITE_IN_EEROM(2);CMD_DATA_WRITE_IN_EEROM(4);CMD_DATA_WRITE_IN_EEROM(5);CMD_DATA_WRITE_IN_EEROM(9);CMD_DATA_WRITE_IN_EEROM(10);CMD_DATA_WRITE_IN_EEROM(11);CMD_DATA_WRITE_IN_EEROM(12);CMD_DATA_WRITE_IN_EEROM(13);CMD_DATA_WRITE_IN_EEROM(14);
-UPDATE_ONLINE_DATA_FRAME();
-DEVICE_CLEAR_CMD=CLR;
-WATCHDOG_ON();
-WATCH_DOG=NONE;
-MS_TIMER(900);
-}
-
-if(HARSH_TURN_CMD==SET)
-{
-OTA_PACKET=ON;
-CMD_DATA_WRITE_IN_EEROM(10);
-//SMS_CMD_DATA_UPL(14);
-//DEVICE_REPLY_IN_SMS(12);
-HT_LEVEL=HARSH_TURN_LEVEL;
-HARSH_TURN_CMD=CLR;
-}
+    //	UPDATE INTERVAL TIME FOR IGNITION ON
+    if(UPDATE_INTERVAL_TIME_FOR_IGNITION_ON_CMD==SET)
+    {
+    OTA_PACKET=ON;
+    CMD_DATA_WRITE_IN_EEROM(1);
+    //SMS_CMD_DATA_UPL(1);
+    //DEVICE_REPLY_IN_SMS(4);
+    UPDATE_INTERVAL_TIME_FOR_IGNITION_ON_CMD=CLR;
+    }
+    //	UPDATE INTERVAL TIME FOR IGNITION OFF
+    if(UPDATE_INTERVAL_TIME_FOR_IGNITION_OFF_CMD==SET)
+    {
+    OTA_PACKET=ON;
+    CMD_DATA_WRITE_IN_EEROM(2);
+    //SMS_CMD_DATA_UPL(2);
+    //DEVICE_REPLY_IN_SMS(5);
+    UPDATE_INTERVAL_TIME_FOR_IGNITION_OFF_CMD=CLR;
+    }
+    //	UPDATE REGISTRATION NUMBER
+    if(UPDATE_REGISTRATION_NUMBER==SET)
+    {
+    OTA_PACKET=ON;
+    CMD_DATA_WRITE_IN_EEROM(3);
+    //SMS_CMD_DATA_UPL(4);
+    //DEVICE_REPLY_IN_SMS(6);
+    UPDATE_REGISTRATION_NUMBER=CLR;
+    }
 
 
-// if(HARSH_BRAKE_CMD==SET)
-// {
-// OTA_PACKET=ON;
-// CMD_DATA_WRITE_IN_EEROM(11);
-// //SMS_CMD_DATA_UPL(13);
-// //DEVICE_REPLY_IN_SMS(13);
-// HB_LEVEL=HARSH_BRAKE_LEVEL;
-// HARSH_BRAKE_CMD=CLR;
-// }
-if(PANIC_ON_DURATON_CMD==SET)
-{
-OTA_PACKET=ON;
-CMD_DATA_WRITE_IN_EEROM(12);
-//SMS_CMD_DATA_UPL(17);
-//DEVICE_REPLY_IN_SMS(14);
-PANIC_ALERT_TIME=P_D_L;
-PANIC_ON_DURATON_CMD=CLR;
-}
+    // UPDATE REPLY NUMBER
+    if(UPDATE_RP_NO==SET)
+    {
+    OTA_PACKET=ON;
+    CMD_DATA_WRITE_IN_EEROM(7);
+    //SMS_CMD_DATA_UPL(5);
+    //DEVICE_REPLY_IN_SMS(9);
+    UPDATE_RP_NO=CLR;
+    }
+
+    if(DEVICE_CLEAR_CMD==SET)
+    {
+    OTA_PACKET=ON; //14,13,12,11,10,09,5,2,1
+    //SMS_CMD_DATA_UPL(15);
+    //DEVICE_REPLY_IN_SMS(10);
+    IGNITION_OFF_UPDATE_TIME=3;
+    IGNITION_ON_UPDATE_TIME=HARSH_ACCEL_LEVEL=HARSH_TURN_LEVEL=HARSH_BRAKE_LEVEL=HEALTH_ON_DURATON_LEVEL=1;
+    LOW_BAT_LEVEL=70;  /* Default: 70% low battery threshold */
+    P_D_L=5;
+    TEMP_APN[0]='s';
+    TEMP_APN[1]='e';
+    TEMP_APN[2]='n';
+    TEMP_APN[3]='s';
+    TEMP_APN[4]='e';
+    TEMP_APN[5]='m';
+    TEMP_APN[6]='2';
+    TEMP_APN[7]='m';
+    //TEMP_APN[8]='m';
+    //TEMP_APN[9]='s';
+    APN_LENGTH=7;
+    for(FOR_9=0;FOR_9<=11;FOR_9++)
+    {
+    TEMP_PIP2[FOR_9]=TEMP_PIP[FOR_9];
+    NOP();
+    }
+    for(FOR_9=0;FOR_9<=11;FOR_9++)
+    {
+    TEMP_SIP2[FOR_9]=TEMP_SIP[FOR_9];
+    NOP();
+    }
+    //TEMP_PPN2[0]='9';TEMP_PPN2[1]='0';TEMP_PPN2[2]='0';TEMP_PPN2[3]='0';
+    //TEMP_SPN2[0]='9';TEMP_SPN2[1]='0';TEMP_SPN2[2]='0';TEMP_SPN2[3]='0';
+    CMD_DATA_WRITE_IN_EEROM(1);CMD_DATA_WRITE_IN_EEROM(2);CMD_DATA_WRITE_IN_EEROM(4);CMD_DATA_WRITE_IN_EEROM(5);CMD_DATA_WRITE_IN_EEROM(9);CMD_DATA_WRITE_IN_EEROM(10);CMD_DATA_WRITE_IN_EEROM(11);CMD_DATA_WRITE_IN_EEROM(12);CMD_DATA_WRITE_IN_EEROM(13);CMD_DATA_WRITE_IN_EEROM(14);
+    UPDATE_ONLINE_DATA_FRAME();
+    DEVICE_CLEAR_CMD=CLR;
+    WATCHDOG_ON();
+    WATCH_DOG=NONE;
+    MS_TIMER(900);
+    }
+
+    if(HARSH_TURN_CMD==SET)
+    {
+    OTA_PACKET=ON;
+    CMD_DATA_WRITE_IN_EEROM(10);
+    //SMS_CMD_DATA_UPL(14);
+    //DEVICE_REPLY_IN_SMS(12);
+    HT_LEVEL=HARSH_TURN_LEVEL;
+    HARSH_TURN_CMD=CLR;
+    }
 
 
-
-//UPDATE PIP & PN FROM SMS
-if(PRI_IP_PN_SMS==SET)
-{
-//CHECK_IP(2);
-//DEVICE_REPLY_IN_SMS(20);
-PRI_IP_PN_SMS=CLR;
-}
-//UPDATE SIP & PN FROM SMS
-if(SEC_IP_PN_SMS==SET)
-{
-//CHECK_IP(3);
-//DEVICE_REPLY_IN_SMS(21);
-PRI_IP_PN_SMS=CLR;
-}
-//UPDATE PIP FROM SERVER
-if(GET_PIP_CMD==SET)
-{
-//CHECK_IP(0);
-//DEVICE_REPLY_IN_SMS(18);
-GET_PIP_CMD=CLR;
-}
-//UPDATE SIP FROM SERVER
-if(GET_SIP_CMD==SET)
-{
-OTA_PACKET=ON;
-//CHECK_IP(1);
-//DEVICE_REPLY_IN_SMS(19);
-GET_SIP_CMD=CLR;
-}
-if(GET_PPN_CMD==SET)
-{
-//CHECK_IP(4);
-//DEVICE_REPLY_IN_SMS(22);
-GET_PPN_CMD=CLR;
-}
-if(GET_SPN_CMD==SET)
-{
-OTA_PACKET=ON;
-//CHECK_IP(5);
-//DEVICE_REPLY_IN_SMS(23);
-GET_SPN_CMD=CLR;
-}
-if(SET_SLEEP_ON_CMD==SET)
-{
-OTA_PACKET=ON;
-//DEVICE_REPLY_IN_SMS(24);
-SET_SLEEP_ON_CMD=CLR;
-}
-if(SET_SLEEP_OFF_CMD==SET)
-{
-OTA_PACKET=ON;
-//DEVICE_REPLY_IN_SMS(25);
-SET_SLEEP_OFF_CMD=CLR;
-}
-if(OVER_SPEED_CMD==SET)
-{
-OTA_PACKET=ON;
-OVER_SPEED=TEMP_OVS_LEVEL;
-CMD_DATA_WRITE_IN_EEROM(15);
-//DEVICE_REPLY_IN_SMS(26);
-OVER_SPEED_CMD=CLR;
-}
-if(SLEEP_ON_TIME_CMD==SET)
-{
-OTA_PACKET=ON;
-SLEEP_ON_TIME=TEMP_SLEEP_ON_TIME;
-CMD_DATA_WRITE_IN_EEROM(16);
-//DEVICE_REPLY_IN_SMS(24);
-SLEEP_ON_TIME_CMD=CLR;
-}
-if(SLEEP_OFF_TIME_CMD==SET)
-{
-OTA_PACKET=ON;
-SLEEP_OFF_TIME=TEMP_SLEEP_OFF_TIME;
-CMD_DATA_WRITE_IN_EEROM(17);
-//DEVICE_REPLY_IN_SMS(25);
-SLEEP_OFF_TIME_CMD=CLR;
-}
-if(GET_EMGT_TIME_CMD==SET)
-{
-OTA_PACKET=ON;
-//EMGT_TIME=TEMP_EMGT_TIME;
-CMD_DATA_WRITE_IN_EEROM(18);
-//DEVICE_REPLY_IN_SMS(27);
-GET_EMGT_TIME_CMD=CLR;
-}
+    // if(HARSH_BRAKE_CMD==SET)
+    // {
+    // OTA_PACKET=ON;
+    // CMD_DATA_WRITE_IN_EEROM(11);
+    // //SMS_CMD_DATA_UPL(13);
+    // //DEVICE_REPLY_IN_SMS(13);
+    // HB_LEVEL=HARSH_BRAKE_LEVEL;
+    // HARSH_BRAKE_CMD=CLR;
+    // }
+    if(PANIC_ON_DURATON_CMD==SET)
+    {
+    OTA_PACKET=ON;
+    CMD_DATA_WRITE_IN_EEROM(12);
+    //SMS_CMD_DATA_UPL(17);
+    //DEVICE_REPLY_IN_SMS(14);
+    PANIC_ALERT_TIME=P_D_L;
+    PANIC_ON_DURATON_CMD=CLR;
+    }
 
 
 
-
+    //UPDATE PIP & PN FROM SMS
+    if(PRI_IP_PN_SMS==SET)
+    {
+    //CHECK_IP(2);
+    //DEVICE_REPLY_IN_SMS(20);
+    PRI_IP_PN_SMS=CLR;
+    }
+    //UPDATE SIP & PN FROM SMS
+    if(SEC_IP_PN_SMS==SET)
+    {
+    //CHECK_IP(3);
+    //DEVICE_REPLY_IN_SMS(21);
+    PRI_IP_PN_SMS=CLR;
+    }
+    //UPDATE PIP FROM SERVER
+    if(GET_PIP_CMD==SET)
+    {
+    //CHECK_IP(0);
+    //DEVICE_REPLY_IN_SMS(18);
+    GET_PIP_CMD=CLR;
+    }
+    //UPDATE SIP FROM SERVER
+    if(GET_SIP_CMD==SET)
+    {
+    OTA_PACKET=ON;
+    //CHECK_IP(1);
+    //DEVICE_REPLY_IN_SMS(19);
+    GET_SIP_CMD=CLR;
+    }
+    if(GET_PPN_CMD==SET)
+    {
+    //CHECK_IP(4);
+    //DEVICE_REPLY_IN_SMS(22);
+    GET_PPN_CMD=CLR;
+    }
+    if(GET_SPN_CMD==SET)
+    {
+    OTA_PACKET=ON;
+    //CHECK_IP(5);
+    //DEVICE_REPLY_IN_SMS(23);
+    GET_SPN_CMD=CLR;
+    }
+    if(SET_SLEEP_ON_CMD==SET)
+    {
+    OTA_PACKET=ON;
+    //DEVICE_REPLY_IN_SMS(24);
+    SET_SLEEP_ON_CMD=CLR;
+    }
+    if(SET_SLEEP_OFF_CMD==SET)
+    {
+    OTA_PACKET=ON;
+    //DEVICE_REPLY_IN_SMS(25);
+    SET_SLEEP_OFF_CMD=CLR;
+    }
+    if(OVER_SPEED_CMD==SET)
+    {
+    OTA_PACKET=ON;
+    OVER_SPEED=TEMP_OVS_LEVEL;
+    CMD_DATA_WRITE_IN_EEROM(15);
+    //DEVICE_REPLY_IN_SMS(26);
+    OVER_SPEED_CMD=CLR;
+    }
+    if(SLEEP_ON_TIME_CMD==SET)
+    {
+    OTA_PACKET=ON;
+    SLEEP_ON_TIME=TEMP_SLEEP_ON_TIME;
+    CMD_DATA_WRITE_IN_EEROM(16);
+    //DEVICE_REPLY_IN_SMS(24);
+    SLEEP_ON_TIME_CMD=CLR;
+    }
+    if(SLEEP_OFF_TIME_CMD==SET)
+    {
+    OTA_PACKET=ON;
+    SLEEP_OFF_TIME=TEMP_SLEEP_OFF_TIME;
+    CMD_DATA_WRITE_IN_EEROM(17);
+    //DEVICE_REPLY_IN_SMS(25);
+    SLEEP_OFF_TIME_CMD=CLR;
+    }
+    if(GET_EMGT_TIME_CMD==SET)
+    {
+    OTA_PACKET=ON;
+    //EMGT_TIME=TEMP_EMGT_TIME;
+    CMD_DATA_WRITE_IN_EEROM(18);
+    //DEVICE_REPLY_IN_SMS(27);
+    GET_EMGT_TIME_CMD=CLR;
+    }
 
 }
 
@@ -788,63 +856,77 @@ GET_EMGT_TIME_CMD=CLR;
 
 void InitM95(void)   ///TESTING
 {
-GPRS_PS_EN=OFF1;
-MS_TIMER(1500);
-GPRS_PS_EN=ON1;	
-MS_TIMER(1500);
-R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-MS_TIMER(500);
-R_UART2_SEND("AT+QSTK?\r\n");
-MS_TIMER(500);
-//R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
-MS_TIMER(500);
-}
-
-void SwitchNetwork(void)
-{
-	//if(BSNL_CONNECT==1 || NWP_CMD_SET==1)
-	//{
-    R_UART2_SEND("AT+QSPN?\r\n ");
-    MS_TIMER(500);
-    R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-    MS_TIMER(1000);
-    R_UART2_SEND("AT+STKENV=\"D30782020181900180\"\r\n"); // Open Menu items
-    MS_TIMER(1000);
-    R_UART2_SEND("AT+STKTR=\"810301240402028281830100900102\"\r\n"); // Select Network
-    MS_TIMER(1000);
-    if(NWP_CMD_SET==SET)
-    {
-    R_UART2_SEND("AT+STKTR=\"810301240402028281830100900116\"\r\n"); ////NetworkCode=2;  // BSNL F
-    MS_TIMER(500);
-    NWP_CMD_SET=CLR;
-        
-    }
-    if(NWS_CMD_SET==SET)
-    {
-        R_UART2_SEND("AT+STKTR=\"810301240402028281830100900115\"\r\n"); ////NetworkCode=2;  // BSNL F
-    MS_TIMER(500);
-    //NWP_CMD_SET=CLR;
-
-    NWS_CMD_SET=CLR;
-    }
-    //MS_TIMER(2000);// Auto Network Select
-    R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n");//NetworkCode=1;  // Vodafone P
-    MS_TIMER(500);
-    GPRS_PS_EN=OFF;
-    MS_TIMER(20000);
-    GPRS_PS_EN=ON;
-    MS_TIMER(500);
+    GPRS_PS_EN=OFF1;
+    MS_TIMER(1500);
+    GPRS_PS_EN=ON1;	
+    MS_TIMER(1500);
     R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
     MS_TIMER(500);
     R_UART2_SEND("AT+QSTK?\r\n");
     MS_TIMER(500);
-    //QSTK();
-    R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
+    //R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
     MS_TIMER(500);
+}
 
-    BSNL_CONNECT=0;
-    BSNL_CONNECT_FLAG=1;
-        //}
+void SwitchNetwork(void)
+{
+    // #ifdef SIMMAKE_IDEMIA_3P
+    //     if(NWP_CMD_SET==SET)
+    //     {
+    //         VI_CONNECT=1;
+    //     }
+    //     if(NWS_CMD_SET==SET)
+    //     {
+    //         BSNL_CONNECT=1;
+    //     }
+    //     if(NWT_CMD_SET==SET)
+    //     {
+    //         ATL_CONNECT=1;
+    //     }
+    // #else
+        //if(BSNL_CONNECT==1 || NWP_CMD_SET==1)
+        //{
+        R_UART2_SEND("AT+QSPN?\r\n ");
+        MS_TIMER(500);
+        R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+        MS_TIMER(1000);
+        R_UART2_SEND("AT+STKENV=\"D30782020181900180\"\r\n"); // Open Menu items
+        MS_TIMER(1000);
+        R_UART2_SEND("AT+STKTR=\"810301240402028281830100900102\"\r\n"); // Select Network
+        MS_TIMER(1000);
+        if(NWP_CMD_SET==SET)
+        {
+            R_UART2_SEND("AT+STKTR=\"810301240402028281830100900116\"\r\n"); ////NetworkCode=2;  // BSNL F
+            MS_TIMER(500);
+            NWP_CMD_SET=CLR;
+        }
+        if(NWS_CMD_SET==SET)
+        {
+            R_UART2_SEND("AT+STKTR=\"810301240402028281830100900115\"\r\n"); ////NetworkCode=2;  // BSNL F
+            MS_TIMER(500);
+            //NWP_CMD_SET=CLR;
+            NWS_CMD_SET=CLR;
+        }
+
+        //MS_TIMER(2000);// Auto Network Select
+        R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n");//NetworkCode=1;  // Vodafone P
+        MS_TIMER(500);
+        GPRS_PS_EN=OFF;
+        MS_TIMER(20000);
+        GPRS_PS_EN=ON;
+        MS_TIMER(500);
+        R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+        MS_TIMER(500);
+        R_UART2_SEND("AT+QSTK?\r\n");
+        MS_TIMER(500);
+        //QSTK();
+        R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
+        MS_TIMER(500);
+
+        BSNL_CONNECT=0;
+        BSNL_CONNECT_FLAG=1;
+            //}
+    // #endif
 }
 
 

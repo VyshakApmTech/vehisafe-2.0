@@ -35,7 +35,7 @@ char TEMP_HACL_VALUE[3];  // For storing the HACL value (e.g., "30")
 //char PRIM_PORT[6];
 char PROF_CMD_FRAME_RX;
 char PROF_CMD_REPLY;
-char TEMP_PROF;
+char TEMP_PROF = 0;;
 char SETDEF_CMD_FRAME_RX,SETDEF_CMD_REPLY;
 char SOSCLR_CMD_FRAME_RX,SOSCLR_CMD_REPLY;
 char SOSTMO_CMD_FRAME_RX,SOSTMO_CMD_REPLY;
@@ -1161,7 +1161,7 @@ if(UART0_BUFFER==CONNECT_FAIL_ACK[I[76]])
 		I[4]=0;ERROR_OCCURED=1;
 		}
 	}
-	else{I[4]=0;}	
+	else{I[4]=0;}
 
 	/* Detect unsolicited CLOSED response from modem (connection closed by server) */
 	if((UART0_BUFFER=='C' && I[38]==0) || (UART0_BUFFER=='L' && I[38]==1) || (UART0_BUFFER=='O' && I[38]==2) || (UART0_BUFFER=='S' && I[38]==3) || (UART0_BUFFER=='E' && I[38]==4) || (UART0_BUFFER=='D' && I[38]==5))

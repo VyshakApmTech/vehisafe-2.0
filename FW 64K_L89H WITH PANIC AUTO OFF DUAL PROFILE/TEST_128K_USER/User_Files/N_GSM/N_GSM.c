@@ -19,7 +19,7 @@ const char OK_ACK[2]={'O','K'},
 ERROR_ACK[5]={'E','R','R','O','R'},
 VODAFONE_ACK[15]={'+','C','O','P','S',':',' ','0',',','0',',','"','a','i','r'},
 VODAFONE_ACK_V[15]={'+','C','O','P','S',':',' ','0',',','0',',','"','V','o','d'},
-GET_IN_SMS[4]={'C','M','T',','},
+//GET_IN_SMS[4]={'C','M','T',','},
 CONNECT_ACK[7]={'C','O','N','N','E','C','T'},
 CONNECT_FAIL_ACK[12]={'C','O','N','N','E','C','T',' ','F','A','I','L'},
 ALREADY_CONNECT_ACK[15]={'A','L','R','E','A','D','Y',' ','C','O','N','N','E','C','T'},
@@ -27,11 +27,11 @@ SIGNAL_STRENGTH_ACK[5]={'C','S','Q',':',' '},
 NW_DIS_CONNECT[9]={'P','D','P',' ','D','E','A','C','T'},
 PANIC_MOBILE_NUMBER_ACK[18]={'S','E','T',' ','E','N','O',' ','I','M','E','I',' ','2','2','0','2','='},
 HTTP_RESPONSE_FAIL[4]={'h','t','t','p',},
-V_RESTART[3]={'V','R',':'},
+//V_RESTART[3]={'V','R',':'},
 VN_ACK[3]={'V','N',':'},
 FIRM_UPDATE_CTRL[3]={'S','U',':'},
-SETTINGS_UPDATE_CTRL[3]={'U','S',':'},
-NETMODE_UPDATE_CTRL[3]={'N','M',':'},
+//SETTINGS_UPDATE_CTRL[3]={'U','S',':'},
+//NETMODE_UPDATE_CTRL[3]={'N','M',':'},
 PANIC_CTRL[4]={'P','S','A',':'},
 IGNITION_CTRL[4]={'I','G','S',':'},
 IMEI_ACK[9]={'A','T','+','G','S','N','\r','\r','\n'},
@@ -51,9 +51,9 @@ GET_IMEI_SMS_CMD[13]={'G','E','T',' ','V','L','T',' ','I','M','E','I',' '},
 DEVICE_RESET_CMD_FRAME[14]={'S','E','T',' ','V','L','T',' ','R','E','S','E','T',' '},
 SET_APN_FRAME[8]={'S','E','T',' ','A','P','N',' '},
 //SET_TCP_FRAME[8]={'S','E','T',' ','T','C','P',' '},
-APN_S_FRAME[6]={'A','C','C','P','N',':'},
+//APN_S_FRAME[6]={'A','C','C','P','N',':'},
 GET_SMS_FRAME[12]={'G','E','T',' ','S','E','T','T','I','N','G','S'},
-GET_VERSION_CMD[12]={'G','E','T',' ','V','E','R','S','I','O','N',' '},
+//GET_VERSION_CMD[12]={'G','E','T',' ','V','E','R','S','I','O','N',' '},
 	
 GET_ACT_MESSAGE[5]={'A','C','T','V',','},
 GET_HEALTH_MESSAGE_FRAME[5]={'H','C','H','K',','},
@@ -78,8 +78,8 @@ VEICHLE_NUMBER[15]={'0','0','0','0','0','0','0','0','0','0','0','0','0','0'},
 IMEI[16]={'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'},//={'8','6','8','3','2','4','0','2','6','3','7','0','8','7','6','8'},
 Array_0[10]={'0','1','2','3','4','5','6','7','8','9'},
 NETWORK_NAME[8]={'0','0','0','0','0','0','0','0'},
-P_LAT_DM[10]={'0','0','0','0','0','0','0','0',},
-P_LOG_DM[10]={'0','0','0','0','0','0','0','0',},
+//P_LAT_DM[10]={'0','0','0','0','0','0','0','0',},
+//P_LOG_DM[10]={'0','0','0','0','0','0','0','0',},
 SMS_MOBILE_NO[52]={'9','9','9','9','9','9','9','9','9','9','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',},
 REPLY_NUMBER[10]={'0','0','0','0','0','0','0','0','0','0'};
 
@@ -638,25 +638,85 @@ else if(REPLY == 28)
     // Check if profile is valid (1, 2, or 3)
     if(TEMP_PROF == '1' || TEMP_PROF == '2' || TEMP_PROF == '3')
     {
-        // Read current profile from EEPROM (use a free address � e.g. 60)
+        // Step 1: Read current profile from EEPROM (address 60)
         unsigned char current_prof = i2c_readn(0xA0, 0XFE, 60);
         MS_TIMER(2);
 
-        if(current_prof == (TEMP_PROF & 0x0F))  // same profile already set
+        // Step 2: If profile is different, write new profile to EEPROM and apply
+        if(current_prof != (TEMP_PROF & 0x0F))
         {
-            R_UART2_SEND("Profile Same");
+            i2c_writen(0xA0, 0XFE, 60, (TEMP_PROF & 0x0F));
+            MS_TIMER(5);
+        }
+
+        // Step 3: Setup SMS mode
+        R_UART2_SEND("AT+CMGF=1\r\n");
+        MS_TIMER(100);
+
+        // Step 4: Send to the ACTUAL sender number stored during SMS receive
+        R_UART2_SEND("AT+CMGS=\"");
+        for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
+        {
+            if(PHONE_NUMBER_OF_SENDER[FOR_1] != 0x00)
+            {
+                R_UART2_SEND_User(PHONE_NUMBER_OF_SENDER[FOR_1]);
+            }
+            MS_TIMER(1);
+        }
+        R_UART2_SEND("\"\r\n");
+        MS_TIMER(200);   // wait for '>' prompt
+
+        // Step 5: Content - send profile change status
+        if(current_prof == (TEMP_PROF & 0x0F))
+        {
+            R_UART2_SEND("Profile ");
+            R_UART2_SEND_User(TEMP_PROF);
+            R_UART2_SEND(" Already Set");
         }
         else
         {
-            // Write new profile to EEPROM
-            i2c_writen(0xA0, 0XFE, 60, (TEMP_PROF & 0x0F));
-            MS_TIMER(5);
-            R_UART2_SEND("Profile Change Requested");
+            R_UART2_SEND("Profile Changed to ");
+            R_UART2_SEND_User(TEMP_PROF);
         }
+
+        // Step 6: Send SMS
+        MS_TIMER(10);
+        R_UART2_SEND_User(CTRL_Z);
+        ACK_RX(2500, 2, 500, 100);
+
+        // Refresh network name after profile switch
+        MS_TIMER(500);  // Wait for network to update
+        NETWORK_NAME_RX = ON;
+        R_UART2_SEND("AT+COPS?\r\n");
+        ACK_RX(40, 2, 50, 0);
+        NETWORK_NAME_RX = OFF;
+
+        goto restart11;
     }
     else
     {
-        R_UART2_SEND("Invalid Profile");
+        // Invalid profile - send error via SMS
+        R_UART2_SEND("AT+CMGF=1\r\n");
+        MS_TIMER(100);
+
+        R_UART2_SEND("AT+CMGS=\"");
+        for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
+        {
+            if(PHONE_NUMBER_OF_SENDER[FOR_1] != 0x00)
+            {
+                R_UART2_SEND_User(PHONE_NUMBER_OF_SENDER[FOR_1]);
+            }
+            MS_TIMER(1);
+        }
+        R_UART2_SEND("\"\r\n");
+        MS_TIMER(200);
+
+        R_UART2_SEND("Invalid Profile (1,2,3)");
+
+        MS_TIMER(10);
+        R_UART2_SEND_User(CTRL_Z);
+        ACK_RX(2500, 2, 500, 100);
+        goto restart11;
     }
 }
 
@@ -3662,6 +3722,8 @@ void DATA_PRINT(char FORMAT)
 
 void UPDATE_ONLINE_DATA_FRAME(void)
 {
+    unsigned char current_profile;
+
     if (REFRESH == ON)
     {
         REFRESH = OFF;
@@ -3882,7 +3944,27 @@ restart4:
 
         /************************************************************************************************************************************************************/
 
-        R_UART2_SEND("AT+QICSGP=1,\"sensem2m\"\r\n");
+        // Read current profile from EEPROM offset 60
+        current_profile = i2c_readn(0xA0, 0XFE, 60);
+        MS_TIMER(2);
+
+        if(current_profile == 0x01)  // Vodafone
+        {
+            R_UART2_SEND("AT+QICSGP=1,\"sensem2m\"\r\n");
+        }
+        else if(current_profile == 0x02)  // BSNL
+        {
+            R_UART2_SEND("AT+QICSGP=1,\"bsnlnet\"\r\n");
+        }
+        else if(current_profile == 0x03)  // Airtel
+        {
+            R_UART2_SEND("AT+QICSGP=1,\"airtelgprs.com\"\r\n");
+        }
+        else
+        {
+            R_UART2_SEND("AT+QICSGP=1,\"sensem2m\"\r\n");  // Default to Vodafone
+        }
+
         ACK_RX(100, 2, 10, 10);
 
         if (RESTART == ON)

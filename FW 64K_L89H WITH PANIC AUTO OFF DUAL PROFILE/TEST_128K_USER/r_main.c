@@ -65,6 +65,7 @@
 	void CMD_DATA_WRITE_IN_EEROM(char D);
 	void CMD_DATA_READ_IN_EEPROM(void);
 	void GSM_SMS_DIAG(void);
+	extern void MANUAL_NET(unsigned int N);
 	
 	
 	
@@ -101,22 +102,27 @@
 	{
 	    R_MAIN_UserInit();
 	    /* Start user code. Do not edit comment generated here */
-	    
 	    while (1U)
 	    {
-		GET_GPS_DATA();
-		    
-	    /////if(GPS_STANDBY==OFF){WATCHDOG_ON();GET_GPS_DATA();WATCHDOG_OFF();}
-	    if(GPS_DIRECTION_DATA_VALID==ON && GPS_STANDBY==OFF){WATCHDOG_ON();RTC_SET();WATCHDOG_OFF();}
-	    
-	            
+			if(TEMP_PROF != 0)
+			{
+            	MANUAL_NET(TEMP_PROF - '0');
+				TEMP_PROF = 0;
+				
+			}
+				
+			/////if(GPS_STANDBY==OFF){WATCHDOG_ON();GET_GPS_DATA();WATCHDOG_OFF();}
+			if(GPS_DIRECTION_DATA_VALID==ON && GPS_STANDBY==OFF)
+			{
+				WATCHDOG_ON();RTC_SET();WATCHDOG_OFF();
+			}
 			NEW_SMS_READ();
 			SYSTEM_STATUS();          // ← ADD THIS LINE!
-		    VLT_RUNNING_MODE();
+			VLT_RUNNING_MODE();
 			//ACC_GYRO_READ();
-		    WATCHDOG_OFF();
-		    SYSTEM_ALERT_CHECK();
-		    //UPDATE_SETTING();
+			WATCHDOG_OFF();
+			SYSTEM_ALERT_CHECK();
+			//UPDATE_SETTING();
 			//UPDATE_ONLINE_DATA_FRAME_1();
 			//UPDATE_ONLINE_DATA_FRAME();
 	    }

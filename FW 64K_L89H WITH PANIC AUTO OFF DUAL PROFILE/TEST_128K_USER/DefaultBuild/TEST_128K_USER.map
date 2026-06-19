@@ -1,4 +1,4 @@
-Renesas Optimizing Linker (W3.08.00 )             16-Jun-2026 19:01:12
+Renesas Optimizing Linker (W3.08.00 )             19-Jun-2026 18:56:54
 
 *** Options ***
 
@@ -105,25 +105,25 @@ SECTION                            START      END         SIZE   ALIGN
 .monitor1
                                   000000ce  000000d7         a   1
 .data
-                                  000000d8  0000023b       164   2
+                                  000000d8  00000228       151   2
 .text
-                                  0000023c  00000675       43a   1
+                                  00000229  00000662       43a   1
 PFDL_COD
-                                  00000676  00000703        8e   2
+                                  00000664  000006f1        8e   2
 .RLIB
-                                  00000704  00000adf       3dc   1
+                                  000006f2  00000acd       3dc   1
 .const
-                                  00002000  0000353a      153b   2
+                                  00002000  00003574      1575   2
 .textf
-                                  0000353b  0000d86c      a332   1
+                                  00003575  0000d9ff      a48b   1
 .monitor2
                                   0000fe00  0000ffff       200   1
 .bss
                                   000fef00  000ff91c       a1d   2
 .dataR
-                                  000ff91e  000ffa81       164   2
+                                  000ff91e  000ffa6e       151   2
 RAM_VECT_n
-                                  000ffa82  000ffb15        94   2
+                                  000ffa70  000ffb03        94   2
 .sbss
                                   000ffe20  000ffe20         0   2
 .sdataR
@@ -131,9 +131,9 @@ RAM_VECT_n
 
 *** Total Section Size ***
 
-RAMDATA SECTION:  00000c15 Byte(s)
-ROMDATA SECTION:  00001937 Byte(s)
-PROGRAM SECTION:  0000abd6 Byte(s)
+RAMDATA SECTION:  00000c02 Byte(s)
+ROMDATA SECTION:  0000195e Byte(s)
+PROGRAM SECTION:  0000ad2f Byte(s)
 
 *** Symbol List ***
 
@@ -165,185 +165,187 @@ FILE=DefaultBuild\r_main.obj
 FILE=DefaultBuild\N_GPS.obj
                                   000000da  00000138        5f
 FILE=DefaultBuild\N_GSM.obj
-                                  0000013a  00000239       100
+                                  0000013a  00000225        ec
 FILE=DefaultBuild\V_Control.obj
-                                  0000023a  0000023b         2
+                                  00000226  00000227         2
+FILE=DefaultBuild\N_GSM_RESPONSE_HANDLE.obj
+                                  00000228  00000228         1
 
 SECTION=.text
 FILE=DefaultBuild\cstart.obj
-                                  0000023c  00000295        5a
+                                  00000229  00000282        5a
   _start
-                                  0000023c         0   none ,g         0
+                                  00000229         0   none ,g         0
   _exit
-                                  00000294         0   none ,g         1
+                                  00000281         0   none ,g         1
 FILE=DefaultBuild\u_interrupts.obj
-                                  00000296  00000675       3e0
+                                  00000283  00000662       3e0
   _watchdog_intrpt@1
-                                  00000296        20   func ,l         0
+                                  00000283        20   func ,l         0
   _lvi_intrpt@1
-                                  000002b6        20   func ,l         0
+                                  000002a3        20   func ,l         0
   _intp0_intrpt@1
-                                  000002d6        20   func ,l         0
+                                  000002c3        20   func ,l         0
   _intp1_intrpt@1
-                                  000002f6        20   func ,l         0
+                                  000002e3        20   func ,l         0
   _intp2_intrpt@1
-                                  00000316        20   func ,l         0
+                                  00000303        20   func ,l         0
   _intp3_intrpt@1
-                                  00000336        20   func ,l         0
+                                  00000323        20   func ,l         0
   _intp4_intrpt@1
-                                  00000356        20   func ,l         0
+                                  00000343        20   func ,l         0
   _intp5_intrpt@1
-                                  00000376        20   func ,l         0
+                                  00000363        20   func ,l         0
   _intst2_interrupt@1
-                                  00000396        20   func ,l         0
+                                  00000383        20   func ,l         0
   _intsr2_interrupt@1
-                                  000003b6        20   func ,l         0
+                                  000003a3        20   func ,l         0
   _intsre2_interrupt@1
-                                  000003d6        20   func ,l         0
+                                  000003c3        20   func ,l         0
   _intst0_interrupt@1
-                                  000003f6        20   func ,l         0
+                                  000003e3        20   func ,l         0
   _intsr0_interrupt@1
-                                  00000416        20   func ,l         0
+                                  00000403        20   func ,l         0
   _intsre0_interrupt@1
-                                  00000436        20   func ,l         0
+                                  00000423        20   func ,l         0
   _intst1_interrupt@1
-                                  00000456        20   func ,l         0
+                                  00000443        20   func ,l         0
   _intsr1_interrupt@1
-                                  00000476        20   func ,l         0
+                                  00000463        20   func ,l         0
   _intsre1_interrupt@1
-                                  00000496        20   func ,l         0
+                                  00000483        20   func ,l         0
   _intsic_interrupt@1
-                                  000004b6        20   func ,l         0
+                                  000004a3        20   func ,l         0
   _inttm00_interrupt@1
-                                  000004d6        20   func ,l         0
+                                  000004c3        20   func ,l         0
   _inttm01_interrupt@1
-                                  000004f6        20   func ,l         0
+                                  000004e3        20   func ,l         0
   _inttm02_interrupt@1
-                                  00000516        20   func ,l         0
+                                  00000503        20   func ,l         0
   _inttm03_interrupt@1
-                                  00000536        20   func ,l         0
+                                  00000523        20   func ,l         0
   _intad_interrupt@1
-                                  00000556        20   func ,l         0
+                                  00000543        20   func ,l         0
   _intrtc_interrrupt@1
-                                  00000576        20   func ,l         0
+                                  00000563        20   func ,l         0
   _intit_interrrupt@1
-                                  00000596        20   func ,l         0
+                                  00000583        20   func ,l         0
   _intkr_interrupt@1
-                                  000005b6        20   func ,l         0
+                                  000005a3        20   func ,l         0
   _inttm04_interrupt@1
-                                  000005d6        20   func ,l         0
+                                  000005c3        20   func ,l         0
   _inttm05_interrupt@1
-                                  000005f6        20   func ,l         0
+                                  000005e3        20   func ,l         0
   _inttm06_interrupt@1
-                                  00000616        20   func ,l         0
+                                  00000603        20   func ,l         0
   _inttm07_interrupt@1
-                                  00000636        20   func ,l         0
+                                  00000623        20   func ,l         0
   _intfl_interrupt@1
-                                  00000656        20   func ,l         0
+                                  00000643        20   func ,l         0
 
 SECTION=PFDL_COD
 FILE=pfdl
-                                  00000676  00000703        8e
+                                  00000664  000006f1        8e
   _PFDL_Open
-                                  00000676         0   none ,g         2
+                                  00000664         0   none ,g         2
   PFDL_Open
-                                  00000676         0   none ,g         0
+                                  00000664         0   none ,g         0
   _PFDL_Execute
-                                  00000691         0   none ,g         9
+                                  0000067f         0   none ,g         9
   PFDL_Execute
-                                  00000691         0   none ,g         0
+                                  0000067f         0   none ,g         0
   PFDL_Execute_firmware
-                                  000006c7         0   none ,l         1
+                                  000006b5         0   none ,l         1
   PFDL_Execute_erase
-                                  000006d1         0   none ,l         1
+                                  000006bf         0   none ,l         1
   PFDL_Execute_read
-                                  000006e2         0   none ,l         1
+                                  000006d0         0   none ,l         1
   PFDL_Execute_read_next
-                                  000006e6         0   none ,l         1
+                                  000006d4         0   none ,l         1
   PFDL_Execute_exit
-                                  000006f1         0   none ,l         1
+                                  000006df         0   none ,l         1
   _PFDL_Handler
-                                  000006f2         0   none ,g         b
+                                  000006e0         0   none ,g         b
   PFDL_Handler
-                                  000006f2         0   none ,g         0
+                                  000006e0         0   none ,g         0
   _PFDL_Close
-                                  000006f8         0   none ,g         1
+                                  000006e6         0   none ,g         1
   PFDL_Close
-                                  000006f8         0   none ,g         0
+                                  000006e6         0   none ,g         0
 
 SECTION=.RLIB
 FILE=_COM_fdiv
-                                  00000704  00000890       18d
+                                  000006f2  0000087e       18d
   __COM_fdiv
-                                  00000763         0   none ,g         1
+                                  00000751         0   none ,g         1
 FILE=_COM_ftoul
-                                  00000891  0000089c         c
+                                  0000087f  0000088a         c
   __COM_ftoul
-                                  00000891         0   none ,g         1
+                                  0000087f         0   none ,g         1
 FILE=_COM_imul
-                                  0000089d  000008ab         f
+                                  0000088b  00000899         f
   __COM_imul
-                                  0000089d         0   none ,g         1
+                                  0000088b         0   none ,g         1
 FILE=_COM_sidiv
-                                  000008ac  000008cd        22
+                                  0000089a  000008bb        22
   __COM_sidiv
-                                  000008ae         0   none ,g         2
+                                  0000089c         0   none ,g         2
 FILE=_COM_sirem
-                                  000008ce  000008ed        20
+                                  000008bc  000008db        20
   __COM_sirem
-                                  000008ce         0   none ,g         1
+                                  000008bc         0   none ,g         1
 FILE=_COM_ucdiv
-                                  000008ee  0000091a        2d
+                                  000008dc  00000908        2d
   __COM_ucdiv
-                                  000008f1         0   none ,g         2
+                                  000008df         0   none ,g         2
 FILE=_COM_ucrem
-                                  0000091b  00000945        2b
+                                  00000909  00000933        2b
   __COM_ucrem
-                                  0000091b         0   none ,g         2
+                                  00000909         0   none ,g         2
 FILE=_COM_uidiv
-                                  00000946  0000096f        2a
+                                  00000934  0000095d        2a
   __COM_uidiv
-                                  00000948         0   none ,g        51
+                                  00000936         0   none ,g        51
 FILE=_COM_uirem
-                                  00000970  00000998        29
+                                  0000095e  00000986        29
   __COM_uirem
-                                  00000970         0   none ,g        54
+                                  0000095e         0   none ,g        54
 FILE=_COM_uldiv
-                                  00000999  000009d4        3c
+                                  00000987  000009c2        3c
   __COM_uldiv
-                                  0000099e         0   none ,g        16
+                                  0000098c         0   none ,g        16
 FILE=_COM_ulrem
-                                  000009d5  00000a0e        3a
+                                  000009c3  000009fc        3a
   __COM_ulrem
-                                  000009d7         0   none ,g        17
+                                  000009c5         0   none ,g        17
 FILE=_COM_ultof
-                                  00000a0f  00000a14         6
+                                  000009fd  00000a02         6
   __COM_ultof
-                                  00000a0f         0   none ,g         1
+                                  000009fd         0   none ,g         1
 FILE=_REL_ftol
-                                  00000a15  00000a49        35
+                                  00000a03  00000a37        35
   __REL_ftol
-                                  00000a15         0   none ,g         1
+                                  00000a03         0   none ,g         1
 FILE=_REL_f_inf
-                                  00000a4a  00000a51         8
+                                  00000a38  00000a3f         8
   __REL_f_inf
-                                  00000a4a         0   none ,g         2
+                                  00000a38         0   none ,g         2
 FILE=_REL_f_norm
-                                  00000a52  00000a61        10
+                                  00000a40  00000a4f        10
   __REL_f_norm
-                                  00000a52         0   none ,g         2
+                                  00000a40         0   none ,g         2
 FILE=_REL_f_round
-                                  00000a62  00000a74        13
+                                  00000a50  00000a62        13
   __REL_f_round
-                                  00000a62         0   none ,g         1
+                                  00000a50         0   none ,g         1
 FILE=_REL_ltof
-                                  00000a75  00000abe        4a
+                                  00000a63  00000aac        4a
   __REL_ltof
-                                  00000a75         0   none ,g         1
+                                  00000a63         0   none ,g         1
 FILE=_COM_lshr
-                                  00000abf  00000adf        21
+                                  00000aad  00000acd        21
   __COM_lshr
-                                  00000ac9         0   none ,g         1
+                                  00000ab7         0   none ,g         1
 
 SECTION=.const
 FILE=DefaultBuild\r_main.obj
@@ -351,7 +353,7 @@ FILE=DefaultBuild\r_main.obj
 FILE=DefaultBuild\N_GPS.obj
                                   0000206c  0000209d        32
 FILE=DefaultBuild\N_GSM.obj
-                                  0000209e  00002f03       e66
+                                  0000209e  00002f7f       ee2
   _OK_ACK
                                   0000209e         2   data ,g         1
   _ERROR_ACK
@@ -360,568 +362,556 @@ FILE=DefaultBuild\N_GSM.obj
                                   000020a5         f   data ,g         1
   _VODAFONE_ACK_V
                                   000020b4         f   data ,g         1
-  _GET_IN_SMS
-                                  000020c3         4   data ,g         0
   _CONNECT_ACK
-                                  000020c7         7   data ,g         1
+                                  000020c3         7   data ,g         1
   _CONNECT_FAIL_ACK
-                                  000020ce         c   data ,g         1
+                                  000020ca         c   data ,g         1
   _ALREADY_CONNECT_ACK
-                                  000020da         f   data ,g         1
+                                  000020d6         f   data ,g         1
   _SIGNAL_STRENGTH_ACK
-                                  000020e9         5   data ,g         1
+                                  000020e5         5   data ,g         1
   _NW_DIS_CONNECT
-                                  000020ee         9   data ,g         1
+                                  000020ea         9   data ,g         1
   _PANIC_MOBILE_NUMBER_ACK
-                                  000020f7        12   data ,g         1
+                                  000020f3        12   data ,g         1
   _HTTP_RESPONSE_FAIL
-                                  00002109         4   data ,g         1
-  _V_RESTART
-                                  0000210d         3   data ,g         0
+                                  00002105         4   data ,g         1
   _VN_ACK
-                                  00002110         3   data ,g         0
+                                  00002109         3   data ,g         0
   _FIRM_UPDATE_CTRL
-                                  00002113         3   data ,g         1
-  _SETTINGS_UPDATE_CTRL
-                                  00002116         3   data ,g         0
-  _NETMODE_UPDATE_CTRL
-                                  00002119         3   data ,g         0
+                                  0000210c         3   data ,g         1
   _PANIC_CTRL
-                                  0000211c         4   data ,g         1
+                                  0000210f         4   data ,g         1
   _IGNITION_CTRL
-                                  00002120         4   data ,g         1
+                                  00002113         4   data ,g         1
   _IMEI_ACK
-                                  00002124         9   data ,g         1
+                                  00002117         9   data ,g         1
   _GSM_NW_REG
-                                  0000212d         8   data ,g         1
+                                  00002120         8   data ,g         1
   _GPRS_NW_REG
-                                  00002135         9   data ,g         1
+                                  00002128         9   data ,g         1
   _CPIN_READY
-                                  0000213e         b   data ,g         1
+                                  00002131         b   data ,g         1
   _HTTP_DOWNLOAD
-                                  00002149         8   data ,g         1
+                                  0000213c         8   data ,g         1
   _FTP_ADDRESS_ACK
-                                  00002151         8   data ,g         1
+                                  00002144         8   data ,g         1
   _FILE_DOWNLOAD_ACK
-                                  00002159         8   data ,g         1
+                                  0000214c         8   data ,g         1
   _SET_TCP_FRAME
-                                  00002161         8   data ,g         1
+                                  00002154         8   data ,g         1
   _SETTING_CMD_FRAME
-                                  00002169         d   data ,g         1
+                                  0000215c         d   data ,g         1
   _ENGINEER_MODE_FRAME_1
-                                  00002176         9   data ,g         1
+                                  00002169         9   data ,g         1
   _ENGINEER_MODE_FRAME_2
-                                  0000217f         a   data ,g         1
+                                  00002172         a   data ,g         1
   _NEW_SMS_FRAME
-                                  00002189         b   data ,g         1
+                                  0000217c         b   data ,g         1
   _PHONE_NUMBER_OF_SENDER_FRAME
-                                  00002194        17   data ,g         1
+                                  00002187        17   data ,g         1
   _GET_IMEI_SMS_CMD
-                                  000021ab         d   data ,g         1
+                                  0000219e         d   data ,g         1
   _DEVICE_RESET_CMD_FRAME
-                                  000021b8         e   data ,g         1
+                                  000021ab         e   data ,g         1
   _SET_APN_FRAME
-                                  000021c6         8   data ,g         0
-  _APN_S_FRAME
-                                  000021ce         6   data ,g         0
+                                  000021b9         8   data ,g         0
   _GET_SMS_FRAME
-                                  000021d4         c   data ,g         1
-  _GET_VERSION_CMD
-                                  000021e0         c   data ,g         0
+                                  000021c1         c   data ,g         1
   _GET_ACT_MESSAGE
-                                  000021ec         5   data ,g         1
+                                  000021cd         5   data ,g         1
   _GET_HEALTH_MESSAGE_FRAME
-                                  000021f1         5   data ,g         1
+                                  000021d2         5   data ,g         1
   _NWA_CMD_FRAME
-                                  000021f6         a   data ,g         1
+                                  000021d7         a   data ,g         1
   _NWI_CMD_FRAME
-                                  00002200         a   data ,g         1
+                                  000021e1         a   data ,g         1
   _NWS_CMD_FRAME
-                                  0000220a         a   data ,g         1
+                                  000021eb         a   data ,g         1
   _QST_CMD_FRAME
-                                  00002214         8   data ,g         1
+                                  000021f5         8   data ,g         1
   _DEVICE_RESTART_ACK
-                                  0000221c         c   data ,g         1
+                                  000021fd         c   data ,g         1
   _GET_GPS_CLEAR_S_FRAME
-                                  00002228         9   data ,g         1
+                                  00002209         9   data ,g         1
   _NW_NAME_ACK
-                                  00002231         5   data ,g         1
+                                  00002212         5   data ,g         1
 FILE=DefaultBuild\GSM_INTZ_AND_SMS_HANDLING.obj
-                                  00002f04  000033bf       4bc
+                                  00002f80  000033f8       479
 FILE=DefaultBuild\N_GSM_RESPONSE_HANDLE.obj
-                                  000033c0  000034ff       140
+                                  000033fa  00003539       140
   _QCCID_ACK
-                                  000033c0         8   data ,g         0
+                                  000033fa         8   data ,g         0
   _GET_GETVINFO_FRAME
-                                  000033c8         9   data ,g         1
+                                  00003402         9   data ,g         1
   _GET_PANIC_FRAME
-                                  000033d1         9   data ,g         1
+                                  0000340b         9   data ,g         1
   _GET_LOCATION_FRAME
-                                  000033da         c   data ,g         1
+                                  00003414         c   data ,g         1
   _GET_SERVERDETAILS_FRAME
-                                  000033e6        11   data ,g         1
+                                  00003420        11   data ,g         1
   _GET_VSTATUS_FRAME
-                                  000033f7         b   data ,g         1
+                                  00003431         b   data ,g         1
   _GET_SOSTIMEOUT_FRAME
-                                  00003402         e   data ,g         1
+                                  0000343c         e   data ,g         1
   _GET_PROFILE_FRAME
-                                  00003410         b   data ,g         1
+                                  0000344a         b   data ,g         1
   _SET_FOTA_FRAME
-                                  0000341b         9   data ,g         1
+                                  00003455         9   data ,g         1
   _SET_SOSSET_FRAME
-                                  00003424         b   data ,g         1
+                                  0000345e         b   data ,g         1
   _SET_BTS_FRAME
-                                  0000342f         8   data ,g         1
+                                  00003469         8   data ,g         1
   _SET_SOSTIMEOUT_FRAME
-                                  00003437         f   data ,g         1
+                                  00003471         f   data ,g         1
   _SET_SOSCLR_FRAME
-                                  00003446         a   data ,g         1
+                                  00003480         a   data ,g         1
   _SET_DEFAULT_FRAME
-                                  00003450         b   data ,g         1
+                                  0000348a         b   data ,g         1
   _SET_VRESET_FRAME
-                                  0000345b         a   data ,g         1
+                                  00003495         a   data ,g         1
   _SET_INTERVAL_FRAME
-                                  00003465         d   data ,g         1
+                                  0000349f         d   data ,g         1
   _SET_VEHREG_FRAME
-                                  00003472         b   data ,g         1
+                                  000034ac         b   data ,g         1
   _SET_PROFILE_FRAME
-                                  0000347d         c   data ,g         1
+                                  000034b7         c   data ,g         1
   _SET_SERVER1_FRAME
-                                  00003489         c   data ,g         1
+                                  000034c3         c   data ,g         1
   _SET_SERVER2_FRAME
-                                  00003495         c   data ,g         1
+                                  000034cf         c   data ,g         1
   _SET_HEALTH_FRAME
-                                  000034a1         f   data ,g         1
+                                  000034db         f   data ,g         1
   _GET_VERSION_FRAME
-                                  000034b0         c   data ,g         1
+                                  000034ea         c   data ,g         1
   _GET_VLT_IMEI_PH_FRAME
-                                  000034bc        13   data ,g         1
+                                  000034f6        13   data ,g         1
   _SET_HACL_FRAME
-                                  000034cf         a   data ,g         1
+                                  00003509         a   data ,g         1
   _SET_HBRK_FRAME
-                                  000034d9         a   data ,g         1
+                                  00003513         a   data ,g         1
   _SET_HTRN_FRAME
-                                  000034e3         a   data ,g         1
+                                  0000351d         a   data ,g         1
   _SET_LBAT_FRAME
-                                  000034ed         a   data ,g         1
+                                  00003527         a   data ,g         1
   _SET_APN_FRAME2
-                                  000034f7         9   data ,g         1
+                                  00003531         9   data ,g         1
 FILE=DefaultBuild\FIRMWARE_HANDLING.obj
-                                  00003500  0000353a        3b
+                                  0000353a  00003574        3b
 
 SECTION=.textf
 FILE=DefaultBuild\stkinit.obj
-                                  0000353b  0000357e        44
+                                  00003575  000035b8        44
   _stkinit
-                                  0000353b         0   none ,g         1
+                                  00003575         0   none ,g         1
   LSTINIT1
-                                  00003549         0   none ,l         1
+                                  00003583         0   none ,l         1
   LSTINIT2
-                                  00003573         0   none ,l         2
+                                  000035ad         0   none ,l         2
   LSTINIT3
-                                  0000357e         0   none ,l         2
+                                  000035b8         0   none ,l         2
 FILE=DefaultBuild\r_main.obj
-                                  0000357f  000038a3       325
+                                  000035b9  000038eb       333
   _convert
-                                  0000357f        c1   func ,g         0
+                                  000035b9        c1   func ,g         0
   _main
-                                  00003640        34   func ,g         1
+                                  0000367a        42   func ,g         1
   _R_MAIN_UserInit
-                                  00003674       1fb   func ,g         1
+                                  000036bc       1fb   func ,g         1
   _READ_DEVICE_ID
-                                  0000386f        35   func ,g         1
+                                  000038b7        35   func ,g         1
 FILE=DefaultBuild\r_systeminit.obj
-                                  000038a4  0000396f        cc
+                                  000038ec  000039b7        cc
   _R_Systeminit
-                                  000038a4        2f   func ,g         1
+                                  000038ec        2f   func ,g         1
   _hdwinit
-                                  000038d3        9d   func ,g         1
+                                  0000391b        9d   func ,g         1
 FILE=DefaultBuild\r_cg_cgc.obj
-                                  00003970  000039ae        3f
+                                  000039b8  000039f6        3f
   _R_CGC_Create
-                                  00003970        3f   func ,g         1
+                                  000039b8        3f   func ,g         1
 FILE=DefaultBuild\r_cg_cgc_user.obj
-                                  000039af  000039b1         3
+                                  000039f7  000039f9         3
   _R_CGC_Get_ResetSource
-                                  000039af         3   func ,g         1
+                                  000039f7         3   func ,g         1
 FILE=DefaultBuild\r_cg_wdt.obj
-                                  000039b2  000039bc         b
+                                  000039fa  00003a04         b
   _R_WDT_Create
-                                  000039b2         7   func ,g         1
+                                  000039fa         7   func ,g         1
   _R_WDT_Restart
-                                  000039b9         4   func ,g         2
+                                  00003a01         4   func ,g         2
 FILE=DefaultBuild\r_cg_wdt_user.obj
-                                  000039bd  000039cc        10
+                                  00003a05  00003a14        10
   _WATCHDOG_ON
-                                  000039bd         8   func ,g        11
+                                  00003a05         8   func ,g        11
   _WATCHDOG_OFF
-                                  000039c5         8   func ,g         f
+                                  00003a0d         8   func ,g         f
 FILE=DefaultBuild\r_cg_port.obj
-                                  000039cd  00003a00        34
+                                  00003a15  00003a48        34
   _R_PORT_Create
-                                  000039cd        34   func ,g         1
+                                  00003a15        34   func ,g         1
 FILE=DefaultBuild\r_cg_intc.obj
-                                  00003a01  00003a92        92
+                                  00003a49  00003ada        92
   _R_INTC_Create
-                                  00003a01        5a   func ,g         1
+                                  00003a49        5a   func ,g         1
   _R_INTC1_Start
-                                  00003a5b         7   func ,g         2
+                                  00003aa3         7   func ,g         2
   _R_INTC1_Stop
-                                  00003a62         7   func ,g         0
+                                  00003aaa         7   func ,g         0
   _R_INTC2_Start
-                                  00003a69         7   func ,g         0
+                                  00003ab1         7   func ,g         0
   _R_INTC2_Stop
-                                  00003a70         7   func ,g         0
+                                  00003ab8         7   func ,g         0
   _R_INTC3_Start
-                                  00003a77         7   func ,g         2
+                                  00003abf         7   func ,g         2
   _R_INTC3_Stop
-                                  00003a7e         7   func ,g         0
+                                  00003ac6         7   func ,g         0
   _R_INTC4_Start
-                                  00003a85         7   func ,g         1
+                                  00003acd         7   func ,g         1
   _R_INTC4_Stop
-                                  00003a8c         7   func ,g         0
+                                  00003ad4         7   func ,g         0
 FILE=DefaultBuild\r_cg_intc_user.obj
-                                  00003a93  00003b00        6e
+                                  00003adb  00003b48        6e
   _r_intc1_interrupt
-                                  00003a93        62   func ,g         2
+                                  00003adb        62   func ,g         2
   _r_intc3_interrupt
-                                  00003af5         4   func ,g         2
+                                  00003b3d         4   func ,g         2
   _r_intc4_interrupt
-                                  00003af9         4   func ,g         2
+                                  00003b41         4   func ,g         2
   _r_intc2_interrupt
-                                  00003afd         4   func ,g         2
+                                  00003b45         4   func ,g         2
 FILE=DefaultBuild\r_cg_serial.obj
-                                  00003b01  00003ddc       2dc
+                                  00003b49  00003e24       2dc
   _R_SAU0_Create
-                                  00003b01        14   func ,g         1
+                                  00003b49        14   func ,g         1
   _R_UART1_Create
-                                  00003b15        74   func ,g         1
+                                  00003b5d        74   func ,g         1
   _R_UART1_Start
-                                  00003b89        26   func ,g         5
+                                  00003bd1        26   func ,g         5
   _R_UART1_Stop
-                                  00003baf        1e   func ,g         5
+                                  00003bf7        1e   func ,g         5
   _R_UART1_Receive
-                                  00003bcd        18   func ,g         0
+                                  00003c15        18   func ,g         0
   _R_UART1_Send
-                                  00003be5        26   func ,g         0
+                                  00003c2d        26   func ,g         0
   _R_CSI00_Create
-                                  00003c0b        5a   func ,g         1
+                                  00003c53        5a   func ,g         1
   _R_CSI00_Start
-                                  00003c65        26   func ,g         1
+                                  00003cad        26   func ,g         1
   _R_CSI00_Stop
-                                  00003c8b        18   func ,g         0
+                                  00003cd3        18   func ,g         0
   _R_CSI00_Send_Receive
-                                  00003ca3        34   func ,g         4
+                                  00003ceb        34   func ,g         4
   _R_SAU1_Create
-                                  00003cd7         e   func ,g         1
+                                  00003d1f         e   func ,g         1
   _R_UART2_Create
-                                  00003ce5        76   func ,g         1
+                                  00003d2d        76   func ,g         1
   _R_UART2_Start
-                                  00003d5b        26   func ,g         1
+                                  00003da3        26   func ,g         1
   _R_UART2_Stop
-                                  00003d81        1e   func ,g         0
+                                  00003dc9        1e   func ,g         0
   _R_UART2_Receive
-                                  00003d9f        18   func ,g         0
+                                  00003de7        18   func ,g         0
   _R_UART2_Send
-                                  00003db7        26   func ,g         0
+                                  00003dff        26   func ,g         0
 FILE=DefaultBuild\r_cg_serial_user.obj
-                                  00003ddd  00003f0a       12e
+                                  00003e25  00003f52       12e
   _r_uart1_interrupt_receive
-                                  00003ddd        64   func ,g         2
+                                  00003e25        64   func ,g         2
   _r_uart1_interrupt_send
-                                  00003e41        15   func ,g         2
+                                  00003e89        15   func ,g         2
   _r_uart2_interrupt_receive
-                                  00003e56        3e   func ,g         2
+                                  00003e9e        3e   func ,g         2
   _r_uart2_interrupt_send
-                                  00003e94        15   func ,g         2
+                                  00003edc        15   func ,g         2
   _r_csi00_interrupt
-                                  00003ea9        62   func ,g         2
+                                  00003ef1        62   func ,g         2
 FILE=DefaultBuild\r_cg_adc.obj
-                                  00003f0b  00003f69        5f
+                                  00003f53  00003fb1        5f
   _R_ADC_Create
-                                  00003f0b        3c   func ,g         2
+                                  00003f53        3c   func ,g         2
   _R_ADC_Start
-                                  00003f47         a   func ,g         2
+                                  00003f8f         a   func ,g         2
   _R_ADC_Stop
-                                  00003f51         a   func ,g         0
+                                  00003f99         a   func ,g         0
   _R_ADC_Set_OperationOn
-                                  00003f5b         4   func ,g         1
+                                  00003fa3         4   func ,g         1
   _R_ADC_Set_OperationOff
-                                  00003f5f         4   func ,g         0
+                                  00003fa7         4   func ,g         0
   _R_ADC_Get_Result
-                                  00003f63         7   func ,g         0
+                                  00003fab         7   func ,g         0
 FILE=DefaultBuild\r_cg_adc_user.obj
-                                  00003f6a  00003f71         8
+                                  00003fb2  00003fb9         8
   _r_adc_interrupt
-                                  00003f6a         8   func ,g         2
+                                  00003fb2         8   func ,g         2
 FILE=DefaultBuild\r_cg_timer.obj
-                                  00003f72  00004133       1c2
+                                  00003fba  0000417b       1c2
   _R_TAU0_Create
-                                  00003f72       122   func ,g         1
+                                  00003fba       122   func ,g         1
   _R_TAU0_Channel0_Start
-                                  00004094        10   func ,g         8
+                                  000040dc        10   func ,g         8
   _R_TAU0_Channel0_Stop
-                                  000040a4        10   func ,g         4
+                                  000040ec        10   func ,g         4
   _R_TAU0_Channel1_Start
-                                  000040b4        10   func ,g         1
+                                  000040fc        10   func ,g         1
   _R_TAU0_Channel1_Stop
-                                  000040c4        10   func ,g         1
+                                  0000410c        10   func ,g         1
   _R_TAU0_Channel2_Start
-                                  000040d4        10   func ,g         1
+                                  0000411c        10   func ,g         1
   _R_TAU0_Channel2_Stop
-                                  000040e4        10   func ,g         0
+                                  0000412c        10   func ,g         0
   _R_TAU0_Channel3_Start
-                                  000040f4        10   func ,g         1
+                                  0000413c        10   func ,g         1
   _R_TAU0_Channel3_Stop
-                                  00004104        10   func ,g         1
+                                  0000414c        10   func ,g         1
   _R_TAU0_Channel4_Start
-                                  00004114        10   func ,g         1
+                                  0000415c        10   func ,g         1
   _R_TAU0_Channel4_Stop
-                                  00004124        10   func ,g         0
+                                  0000416c        10   func ,g         0
 FILE=DefaultBuild\r_cg_timer_user.obj
-                                  00004134  000042d3       1a0
+                                  0000417c  0000431b       1a0
   _r_tau0_channel0_interrupt
-                                  00004134         4   func ,g         2
+                                  0000417c         4   func ,g         2
   _r_tau0_channel1_interrupt
-                                  00004138         4   func ,g         2
+                                  00004180         4   func ,g         2
   _r_tau0_channel2_interrupt
-                                  0000413c       161   func ,g         2
+                                  00004184       161   func ,g         2
   _r_tau0_channel3_interrupt
-                                  0000429d         4   func ,g         2
+                                  000042e5         4   func ,g         2
   _r_tau0_channel4_interrupt
-                                  000042a1        33   func ,g         2
+                                  000042e9        33   func ,g         2
 FILE=DefaultBuild\r_cg_rtc.obj
-                                  000042d4  000043ce        fb
+                                  0000431c  00004416        fb
   _R_RTC_Create
-                                  000042d4        26   func ,g         1
+                                  0000431c        26   func ,g         1
   _R_RTC_Start
-                                  000042fa         4   func ,g         1
+                                  00004342         4   func ,g         1
   _R_RTC_Stop
-                                  000042fe         4   func ,g         0
+                                  00004346         4   func ,g         0
   _R_RTC_Get_CounterValue
-                                  00004302        4a   func ,g         0
+                                  0000434a        4a   func ,g         0
   _R_RTC_Set_CounterValue
-                                  0000434c        83   func ,g         0
+                                  00004394        83   func ,g         0
 FILE=DefaultBuild\N_IIC.obj
-                                  000043cf  000044d7       109
+                                  00004417  0000451f       109
   _i2c_delay
-                                  000043cf         6   func ,g        17
+                                  00004417         6   func ,g        17
   _i2c_start
-                                  000043d5        1d   func ,g         7
+                                  0000441d        1d   func ,g         7
   _i2c_stop
-                                  000043f2        19   func ,g         5
+                                  0000443a        19   func ,g         5
   _i2c_wbyte
-                                  0000440b        48   func ,g        12
+                                  00004453        48   func ,g        12
   _i2c_rbyte
-                                  00004453        3c   func ,g         2
+                                  0000449b        3c   func ,g         2
   _i2c_ack
-                                  0000448f        34   func ,g        12
+                                  000044d7        34   func ,g        12
   _i2c_nack
-                                  000044c3        15   func ,g         2
+                                  0000450b        15   func ,g         2
 FILE=DefaultBuild\N_EEPROM.obj
-                                  000044d8  00004635       15e
+                                  00004520  0000467d       15e
   _i2c_writen
-                                  000044d8        37   func ,g        54
+                                  00004520        37   func ,g        54
   _i2c_readn
-                                  0000450f        47   func ,g        41
+                                  00004557        47   func ,g        42
   _i2c_PAGE_WRITE
-                                  00004556        6e   func ,g         0
+                                  0000459e        6e   func ,g         0
   _i2c_writen_2
-                                  000045c4        37   func ,g         5
+                                  0000460c        37   func ,g         5
   _i2c_readn_3
-                                  000045fb        3b   func ,g         7
+                                  00004643        3b   func ,g         7
 FILE=DefaultBuild\N_GPS.obj
-                                  00004636  00004c45       610
+                                  0000467e  00004c8d       610
   _GPS_NAVIGATION_MODE
-                                  00004636        62   func ,g         0
+                                  0000467e        62   func ,g         0
   _GPS_STATIONARY_MODE
-                                  00004698        3c   func ,g         0
+                                  000046e0        3c   func ,g         0
   _BAUD_RATE_AND_INITIAL_SETTINGS
-                                  000046d4         1   func ,g         0
+                                  0000471c         1   func ,g         0
   _GPS_NORMAL_MODE
-                                  000046d5        63   func ,g         0
+                                  0000471d        63   func ,g         0
   _GET_GPS_DATA
-                                  00004738        90   func ,g         2
+                                  00004780        90   func ,g         1
   _GPS_UART_RX_1
-                                  000047c8       1ba   func ,g         1
+                                  00004810       1ba   func ,g         1
   _GPS_UART_RX_2
-                                  00004982       10f   func ,g         1
+                                  000049ca       10f   func ,g         1
   _GPS_UART_RX_3
-                                  00004a91        87   func ,g         1
+                                  00004ad9        87   func ,g         1
   _GPS_UART_RX_4
-                                  00004b18        1c   func ,g         1
+                                  00004b60        1c   func ,g         1
   _GPS_UART_RX_5
-                                  00004b34        9a   func ,g         1
+                                  00004b7c        9a   func ,g         1
   _RTC_SET
-                                  00004bce        77   func ,g         1
+                                  00004c16        77   func ,g         1
   _GPS_SLEEP_MODE
-                                  00004c45         1   func ,g         0
+                                  00004c8d         1   func ,g         0
 FILE=DefaultBuild\N_GSM.obj
-                                  00004c46  00008f37      42f2
+                                  00004c8e  000090a4      4417
   _GPRS_DISCONNECT
-                                  00004c46        2f   func ,g         4
+                                  00004c8e        2f   func ,g         4
   _UPDATE_SETTING
-                                  00004c75        1e   func ,g         0
+                                  00004cbd        1e   func ,g         0
   _GET_SIGNAL_STRENGTH
-                                  00004c93        30   func ,g         4
+                                  00004cdb        30   func ,g         4
   _GET_NETWORK_NAME
-                                  00004cc3        2c   func ,g         2
+                                  00004d0b        2c   func ,g         2
   _DEVICE_REPLY_IN_SMS
-                                  00004cef      1c2f   func ,g        20
+                                  00004d37      1d22   func ,g        20
   _BATTERY_PERCENTAGE_CALCULATE
-                                  0000691e        8a   func ,g         0
+                                  00006a59        8a   func ,g         0
   _GET_TIME
-                                  000069a8        1f   func ,g         3
+                                  00006ae3        1f   func ,g         3
   _PRINT_ZEROS
-                                  000069c7        1f   func ,g         1
+                                  00006b02        1f   func ,g         1
   _PRINT_ZEROS_2
-                                  000069e6        1f   func ,g         a
+                                  00006b21        1f   func ,g         a
   _GET_DEGREES
-                                  00006a05        31   func ,g         3
+                                  00006b40        31   func ,g         3
   _GET_SPEED_DATA
-                                  00006a36        88   func ,g         5
+                                  00006b71        88   func ,g         5
   _GET_IMEI
-                                  00006abe        7d   func ,g         5
+                                  00006bf9        7d   func ,g         5
   _GET_MCC_MNC_LAC_CELL_ID
-                                  00006b3b       37d   func ,g         2
+                                  00006c76       37d   func ,g         2
   _WELCOME_STRING
-                                  00006eb8       1e3   func ,g         1
+                                  00006ff3       1e3   func ,g         1
   _BOOT_STRING
-                                  0000709b        22   func ,g         0
+                                  000071d6        22   func ,g         0
   _STORE_LAST_LOCATION
-                                  000070bd        ad   func ,g         0
+                                  000071f8        ad   func ,g         0
   _READ_LAST_LOCATION
-                                  0000716a       109   func ,g         1
+                                  000072a5       109   func ,g         1
   _DATA_PRINT
-                                  00007273       a3f   func ,g         1
+                                  000073ae       a3f   func ,g         1
   _UPDATE_ONLINE_DATA_FRAME
-                                  00007cb2       53b   func ,g         c
+                                  00007ded       56d   func ,g         c
   _HEL_STRING
-                                  000081ed       224   func ,g         1
+                                  0000835a       224   func ,g         1
   _DATA_TO_ARRAY
-                                  00008411       7c0   func ,g         1
+                                  0000857e       7c0   func ,g         1
   _SEND_WREN_COMMAND
-                                  00008bd1        1d   func ,g         2
+                                  00008d3e        1d   func ,g         2
   _WRITE_STATUS_REGISTER
-                                  00008bee        20   func ,g         0
+                                  00008d5b        20   func ,g         0
   _READ_STATUS_REGISTER
-                                  00008c0e        20   func ,g         0
+                                  00008d7b        20   func ,g         0
   _CHIP_ERASE
-                                  00008c2e        26   func ,g         1
+                                  00008d9b        26   func ,g         1
   _WAIT_UNTILL_FLASH_BUSY
-                                  00008c54        2b   func ,g         1
+                                  00008dc1        2b   func ,g         1
   _SEND_COMMA_TO_ARRAY
-                                  00008c7f         9   func ,g        15
+                                  00008dec         9   func ,g        15
   _FLASH_WRITE
-                                  00008c88        c0   func ,g         1
+                                  00008df5        c0   func ,g         1
   _READ_FLASH_MEM
-                                  00008d48       1f0   func ,g         0
+                                  00008eb5       1f0   func ,g         0
 FILE=DefaultBuild\N_DELAY.obj
-                                  00008f38  00008f61        2a
+                                  000090a5  000090ce        2a
   _MS_TIMER
-                                  00008f38        15   func ,g       1ac
+                                  000090a5        15   func ,g       1b9
   _US_TIMER
-                                  00008f4d        15   func ,g         0
+                                  000090ba        15   func ,g         0
 FILE=DefaultBuild\V_Control.obj
-                                  00008f62  00009457       4f6
+                                  000090cf  000095c4       4f6
   _SYSTEM_STATUS
-                                  00008f62        9d   func ,g         1
+                                  000090cf        9d   func ,g         1
   _VLT_RUNNING_MODE
-                                  00008fff        e9   func ,g         1
+                                  0000916c        e9   func ,g         1
   _SYSTEM_ALERT_CHECK
-                                  000090e8       1a1   func ,g         1
+                                  00009255       1a1   func ,g         1
   _BATTERY_PERCENTAGE_CALC
-                                  00009289        a8   func ,g         1
+                                  000093f6        a8   func ,g         1
   _ACC_GRY_INTZ
-                                  00009331        55   func ,g         0
+                                  0000949e        55   func ,g         0
   _ACC_GYRO_READ
-                                  00009386        d2   func ,g         0
+                                  000094f3        d2   func ,g         0
 FILE=DefaultBuild\N_Serial.obj
-                                  00009458  00009597       140
+                                  000095c5  00009704       140
   _R_UART2_SEND_User
-                                  00009458        7b   func ,g       102
+                                  000095c5        7b   func ,g       107
   _R_UART2_SEND
-                                  000094d3        13   func ,g       1b1
+                                  00009640        13   func ,g       1b9
   _R_UART1_Send_1_User
-                                  000094e6        11   func ,g         1
+                                  00009653        11   func ,g         1
   _R_UART1_SEND
-                                  000094f7        13   func ,g         4
+                                  00009664        13   func ,g         4
   _R_CSI00_SEND
-                                  0000950a         e   func ,g        10
+                                  00009677         e   func ,g        10
   _SEND_TO_ARRAY
-                                  00009518        13   func ,g        1a
+                                  00009685        13   func ,g        1a
   _SEND_TO_ARRAY_Value
-                                  0000952b        6d   func ,g        29
+                                  00009698        6d   func ,g        29
 FILE=DefaultBuild\GSM_INTZ_AND_SMS_HANDLING.obj
-                                  00009598  0000a8d5      133e
+                                  00009705  0000aa68      1364
   _QSTK
-                                  00009598        1d   func ,g         0
+                                  00009705        1d   func ,g         0
   _MANUAL_NET
-                                  000095b5        b7   func ,g         0
+                                  00009722        dd   func ,g         1
   _NEW_SMS_READ
-                                  0000966c       834   func ,g         1
+                                  000097ff       834   func ,g         1
   _InitM95
-                                  00009ea0        37   func ,g         0
+                                  0000a033        37   func ,g         0
   _SwitchNetwork
-                                  00009ed7        b9   func ,g         1
+                                  0000a06a        b9   func ,g         1
   _GSM_INTZ
-                                  00009f90       5f8   func ,g         8
+                                  0000a123       5f8   func ,g         8
   _GSM_SMS_DIAG
-                                  0000a588       34e   func ,g         1
+                                  0000a71b       34e   func ,g         1
 FILE=DefaultBuild\N_GSM_RESPONSE_HANDLE.obj
-                                  0000a8d6  0000d445      2b70
+                                  0000aa69  0000d5d8      2b70
   _ACK_RX
-                                  0000a8d6       2b9   func ,g        41
+                                  0000aa69       2b9   func ,g        43
   _CMD_DATA_READ_IN_EEPROM
-                                  0000ab8f       6f1   func ,g         1
+                                  0000ad22       6f1   func ,g         1
   _PIN_CHECK
-                                  0000b280        d8   func ,g         5
+                                  0000b413        d8   func ,g         5
   _CMD_DATA_WRITE_IN_EEROM
-                                  0000b358       5c3   func ,g        1e
+                                  0000b4eb       5c3   func ,g        1e
   _GSM_UART_RX
-                                  0000b91b      1b2b   func ,g         1
+                                  0000baae      1b2b   func ,g         1
 FILE=DefaultBuild\FIRMWARE_HANDLING.obj
-                                  0000d446  0000d62e       1e9
+                                  0000d5d9  0000d7c1       1e9
   _ADDRESS_INC
-                                  0000d446        1b   func ,g         0
+                                  0000d5d9        1b   func ,g         0
   _EEPROM_FILE_WRITE
-                                  0000d461        93   func ,g         1
+                                  0000d5f4        93   func ,g         1
   _FILE_CLOSE
-                                  0000d4f4        59   func ,g         2
+                                  0000d687        59   func ,g         2
   _FIRMWARE_DOWNLOAD_FROM_M95
-                                  0000d54d        e2   func ,g         1
+                                  0000d6e0        e2   func ,g         1
 FILE=DefaultBuild\N_IEEPROM.obj
-                                  0000d62f  0000d765       137
+                                  0000d7c2  0000d8f8       137
   _fdl_clcok_init
-                                  0000d62f        38   func ,g         0
+                                  0000d7c2        38   func ,g         0
   _blank_check
-                                  0000d667        44   func ,g         0
+                                  0000d7fa        44   func ,g         0
   _block_erase
-                                  0000d6ab        2c   func ,g         0
+                                  0000d83e        2c   func ,g         0
   _fdl_write
-                                  0000d6d7        43   func ,g         0
+                                  0000d86a        43   func ,g         0
   _fdl_read
-                                  0000d71a        46   func ,g         0
+                                  0000d8ad        46   func ,g         0
   _delay
-                                  0000d760         6   func ,g         1
+                                  0000d8f3         6   func ,g         1
 FILE=DefaultBuild\r_cg_pfdl.obj
-                                  0000d766  0000d86c       107
+                                  0000d8f9  0000d9ff       107
   _R_FDL_Create
-                                  0000d766         8   func ,g         0
+                                  0000d8f9         8   func ,g         0
   _R_FDL_Write
-                                  0000d76e        35   func ,g         0
+                                  0000d901        35   func ,g         0
   _R_FDL_Read
-                                  0000d7a3        23   func ,g         0
+                                  0000d936        23   func ,g         0
   _R_FDL_Erase
-                                  0000d7c6        2b   func ,g         0
+                                  0000d959        2b   func ,g         0
   _R_FDL_Open
-                                  0000d7f1        12   func ,g         0
+                                  0000d984        12   func ,g         0
   _R_FDL_Close
-                                  0000d803         8   func ,g         0
+                                  0000d996         8   func ,g         0
   _R_FDL_BlankCheck
-                                  0000d80b        31   func ,g         0
+                                  0000d99e        31   func ,g         0
   _R_FDL_IVerify
-                                  0000d83c        31   func ,g         0
+                                  0000d9cf        31   func ,g         0
 
 SECTION=.monitor2
 FILE=rlink_generates_02
@@ -1211,7 +1201,7 @@ FILE=DefaultBuild\N_GSM.obj
   _SMS_FAIL
                                   000ff26f         1   data ,g        4a
   _NETWORK_NAME_RX
-                                  000ff270         1   data ,g         7
+                                  000ff270         1   data ,g         9
   _BATTERY_MEASUREMENT
                                   000ff271         1   data ,g         b
   _IGNITION_CTRL_RX
@@ -1307,7 +1297,7 @@ FILE=DefaultBuild\N_GSM.obj
   _TEMP_EMGT_TIME
                                   000ff40e         2   data ,g         6
   _FOR_1
-                                  000ff410         2   data ,g       184
+                                  000ff410         2   data ,g       18a
   _FOR_2
                                   000ff412         2   data ,g        12
   _FOR_3
@@ -1607,7 +1597,7 @@ FILE=DefaultBuild\N_GSM.obj
   _NEW_SMS
                                   000ff5dd         1   data ,g         8
   _PHONE_NUMBER_OF_SENDER
-                                  000ff5de         c   data ,g        1a
+                                  000ff5de         c   data ,g        1c
   _TEMP_REGN_NUMBER
                                   000ff5ea         f   data ,g         1
   _SET_APN_FRAME_RX
@@ -1924,20 +1914,18 @@ FILE=DefaultBuild\N_GSM_RESPONSE_HANDLE.obj
                                   000ff817         1   data ,g         5
   _PROF_CMD_REPLY
                                   000ff818         1   data ,g         3
-  _TEMP_PROF
-                                  000ff819         1   data ,g         3
   _SETDEF_CMD_FRAME_RX
-                                  000ff81a         1   data ,g         4
+                                  000ff819         1   data ,g         4
   _SETDEF_CMD_REPLY
-                                  000ff81b         1   data ,g         3
+                                  000ff81a         1   data ,g         3
   _SOSCLR_CMD_FRAME_RX
-                                  000ff81c         1   data ,g         4
+                                  000ff81b         1   data ,g         4
   _SOSCLR_CMD_REPLY
-                                  000ff81d         1   data ,g         3
+                                  000ff81c         1   data ,g         3
   _SOSTMO_CMD_FRAME_RX
-                                  000ff81e         1   data ,g         4
+                                  000ff81d         1   data ,g         4
   _SOSTMO_CMD_REPLY
-                                  000ff81f         1   data ,g         3
+                                  000ff81e         1   data ,g         3
   _TEMP_SOSTMO
                                   000ff820         2   data ,g         4
   _SOSSET_CMD_FRAME_RX
@@ -2245,7 +2233,7 @@ FILE=DefaultBuild\N_GPS.obj
   _NAVIGATION_FRAME_ACK
                                   000ff979         6   data ,g         1
 FILE=DefaultBuild\N_GSM.obj
-                                  000ff980  000ffa7f       100
+                                  000ff980  000ffa6b        ec
   _CGATT_POLL_COUNT
                                   000ff980         1   data ,g         0
   _GSM_STRENGTH
@@ -2260,147 +2248,147 @@ FILE=DefaultBuild\N_GSM.obj
                                   000ff9a2         a   data ,g        23
   _NETWORK_NAME
                                   000ff9ac         8   data ,g         c
-  _P_LAT_DM
-                                  000ff9b4         a   data ,g         0
-  _P_LOG_DM
-                                  000ff9be         a   data ,g         0
   _SMS_MOBILE_NO
-                                  000ff9c8        34   data ,g         f
+                                  000ff9b4        34   data ,g         f
   _REPLY_NUMBER
-                                  000ff9fc         a   data ,g         3
+                                  000ff9e8         a   data ,g         3
   _TEMP_PIP
-                                  000ffa06        10   data ,g         1
+                                  000ff9f2        10   data ,g         1
   _TEMP_PIP2
-                                  000ffa16        10   data ,g         7
+                                  000ffa02        10   data ,g         7
   _TEMP_SIP
-                                  000ffa26        10   data ,g         1
+                                  000ffa12        10   data ,g         1
   _TEMP_SIP2
-                                  000ffa36        10   data ,g         7
+                                  000ffa22        10   data ,g         7
   _TEMP_PPN
-                                  000ffa46         6   data ,g         0
+                                  000ffa32         6   data ,g         0
   _TEMP_PPN2
-                                  000ffa4c         6   data ,g         6
+                                  000ffa38         6   data ,g         6
   _TEMP_SPN
-                                  000ffa52         6   data ,g         0
+                                  000ffa3e         6   data ,g         0
   _TEMP_SPN2
-                                  000ffa58         6   data ,g         6
+                                  000ffa44         6   data ,g         6
   _TEMP_APN
-                                  000ffa5e         f   data ,g        16
+                                  000ffa4a         f   data ,g        16
   _FLASH_WRITE_ADDRESS
-                                  000ffa6e         4   data ,g         5
+                                  000ffa5a         4   data ,g         5
   _RECORD_ARRAY_ADDRESS
-                                  000ffa72         2   data ,g         5
+                                  000ffa5e         2   data ,g         5
   _FLASH_BYTE
-                                  000ffa74         2   data ,g         5
+                                  000ffa60         2   data ,g         5
   _RDSR
-                                  000ffa76         1   data ,g         1
+                                  000ffa62         1   data ,g         1
   _WRSR
-                                  000ffa77         2   data ,g         1
+                                  000ffa63         2   data ,g         1
   _WREN
-                                  000ffa79         1   data ,g         1
+                                  000ffa65         1   data ,g         1
   _CE
-                                  000ffa7a         1   data ,g         1
+                                  000ffa66         1   data ,g         1
   _STATUS_REG
-                                  000ffa7b         1   data ,g         1
+                                  000ffa67         1   data ,g         1
   _READ
-                                  000ffa7c         4   data ,g         0
+                                  000ffa68         4   data ,g         0
 FILE=DefaultBuild\V_Control.obj
-                                  000ffa80  000ffa81         2
+                                  000ffa6c  000ffa6d         2
   _health_packet_cycle_count@1@VLT_RUNNING_MODE
-                                  000ffa80         2   data ,l         3
+                                  000ffa6c         2   data ,l         3
+FILE=DefaultBuild\N_GSM_RESPONSE_HANDLE.obj
+                                  000ffa6e  000ffa6e         1
+  _TEMP_PROF
+                                  000ffa6e         1   data ,g         8
 
 SECTION=RAM_VECT_n
 FILE=DefaultBuild\u_ram_vector.obj
-                                  000ffa82  000ffb15        94
+                                  000ffa70  000ffb03        94
   _RAM_INTWDTI_ISR
-                                  000ffa82         4   data ,g         2
+                                  000ffa70         4   data ,g         2
   _RAM_INTLVI_ISR
-                                  000ffa86         4   data ,g         2
+                                  000ffa74         4   data ,g         2
   _RAM_INTP0_ISR
-                                  000ffa8a         4   data ,g         2
+                                  000ffa78         4   data ,g         2
   _RAM_INTP1_ISR
-                                  000ffa8e         4   data ,g         4
+                                  000ffa7c         4   data ,g         4
   _RAM_INTP2_ISR
-                                  000ffa92         4   data ,g         4
+                                  000ffa80         4   data ,g         4
   _RAM_INTP3_ISR
-                                  000ffa96         4   data ,g         4
+                                  000ffa84         4   data ,g         4
   _RAM_INTP4_ISR
-                                  000ffa9a         4   data ,g         4
+                                  000ffa88         4   data ,g         4
   _RAM_INTP5_ISR
-                                  000ffa9e         4   data ,g         2
+                                  000ffa8c         4   data ,g         2
   _RAM_INTST2_ISR
-                                  000ffaa2         4   data ,g         4
+                                  000ffa90         4   data ,g         4
   _RAM_INTSR2_ISR
-                                  000ffaa6         4   data ,g         4
+                                  000ffa94         4   data ,g         4
   _RAM_INTSRE2_ISR
-                                  000ffaaa         4   data ,g         2
+                                  000ffa98         4   data ,g         2
   _RAM_INTST0_ISR
-                                  000ffaae         4   data ,g         4
+                                  000ffa9c         4   data ,g         4
   _RAM_INTSR0_ISR
-                                  000ffab2         4   data ,g         2
+                                  000ffaa0         4   data ,g         2
   _RAM_INTSRE0_ISR
-                                  000ffab6         4   data ,g         2
+                                  000ffaa4         4   data ,g         2
   _RAM_INTST1_ISR
-                                  000ffaba         4   data ,g         4
+                                  000ffaa8         4   data ,g         4
   _RAM_INTSR1_ISR
-                                  000ffabe         4   data ,g         4
+                                  000ffaac         4   data ,g         4
   _RAM_INTSRE1_ISR
-                                  000ffac2         4   data ,g         2
+                                  000ffab0         4   data ,g         2
   _RAM_INTIICA0_ISR
-                                  000ffac6         4   data ,g         2
+                                  000ffab4         4   data ,g         2
   _RAM_INTTM00_ISR
-                                  000ffaca         4   data ,g         4
+                                  000ffab8         4   data ,g         4
   _RAM_INTTM01_ISR
-                                  000fface         4   data ,g         4
+                                  000ffabc         4   data ,g         4
   _RAM_INTTM02_ISR
-                                  000ffad2         4   data ,g         4
+                                  000ffac0         4   data ,g         4
   _RAM_INTTM03_ISR
-                                  000ffad6         4   data ,g         4
+                                  000ffac4         4   data ,g         4
   _RAM_INTAD_ISR
-                                  000ffada         4   data ,g         4
+                                  000ffac8         4   data ,g         4
   _RAM_INTRTC_ISR
-                                  000ffade         4   data ,g         2
+                                  000ffacc         4   data ,g         2
   _RAM_INTIT_ISR
-                                  000ffae2         4   data ,g         2
+                                  000ffad0         4   data ,g         2
   _RAM_INTKR_ISR
-                                  000ffae6         4   data ,g         2
+                                  000ffad4         4   data ,g         2
   _RAM_INTTM04_ISR
-                                  000ffaea         4   data ,g         4
+                                  000ffad8         4   data ,g         4
   _RAM_INTTM05_ISR
-                                  000ffaee         4   data ,g         2
+                                  000ffadc         4   data ,g         2
   _RAM_INTTM06_ISR
-                                  000ffaf2         4   data ,g         2
+                                  000ffae0         4   data ,g         2
   _RAM_INTTM07_ISR
-                                  000ffaf6         4   data ,g         2
+                                  000ffae4         4   data ,g         2
   _RAM_INTP6_ISR
-                                  000ffafa         4   data ,g         0
+                                  000ffae8         4   data ,g         0
   _RAM_INTP7_ISR
-                                  000ffafe         4   data ,g         0
+                                  000ffaec         4   data ,g         0
   _RAM_INTP8_ISR
-                                  000ffb02         4   data ,g         0
+                                  000ffaf0         4   data ,g         0
   _RAM_INTP9_ISR
-                                  000ffb06         4   data ,g         0
+                                  000ffaf4         4   data ,g         0
   _RAM_INTP10_ISR
-                                  000ffb0a         4   data ,g         0
+                                  000ffaf8         4   data ,g         0
   _RAM_INTP11_ISR
-                                  000ffb0e         4   data ,g         0
+                                  000ffafc         4   data ,g         0
   _RAM_INTFL_ISR
-                                  000ffb12         4   data ,g         2
+                                  000ffb00         4   data ,g         2
 
 Absolute value symbols
 FILE=rlink_generates_05
   __s.text
-                                  0000023c         0   none ,g         0
+                                  00000229         0   none ,g         0
   __e.text
-                                  00000676         0   none ,g         0
+                                  00000663         0   none ,g         0
   __s.textf
-                                  0000353b         0   none ,g         0
+                                  00003575         0   none ,g         0
   __e.textf
-                                  0000d86d         0   none ,g         0
+                                  0000da00         0   none ,g         0
   __s.const
                                   00002000         0   none ,g         0
   __e.const
-                                  0000353b         0   none ,g         0
+                                  00003575         0   none ,g         0
   __s.constf
                                   00000080         0   none ,g         0
   __e.constf
@@ -2408,7 +2396,7 @@ FILE=rlink_generates_05
   __s.data
                                   000000d8         0   none ,g         0
   __e.data
-                                  0000023c         0   none ,g         0
+                                  00000229         0   none ,g         0
   __s.sdata
                                   00000080         0   none ,g         0
   __e.sdata
@@ -2424,27 +2412,27 @@ FILE=rlink_generates_05
   __s.dataR
                                   000ff91e         0   none ,g         0
   __e.dataR
-                                  000ffa82         0   none ,g         0
+                                  000ffa6f         0   none ,g         0
   __s.sdataR
                                   000ffe20         0   none ,g         0
   __e.sdataR
                                   000ffe20         0   none ,g         0
   __s.RLIB
-                                  00000704         0   none ,g         0
+                                  000006f2         0   none ,g         0
   __e.RLIB
-                                  00000ae0         0   none ,g         0
+                                  00000ace         0   none ,g         0
   __s.SLIB
                                   000000c4         0   none ,g         0
   __e.SLIB
                                   000000c4         0   none ,g         0
   __sRAM_VECT_n
-                                  000ffa82         0   none ,g         0
+                                  000ffa70         0   none ,g         0
   __eRAM_VECT_n
-                                  000ffb16         0   none ,g         0
+                                  000ffb04         0   none ,g         0
   __sPFDL_COD
-                                  00000676         0   none ,g         0
+                                  00000664         0   none ,g         0
   __ePFDL_COD
-                                  00000704         0   none ,g         0
+                                  000006f2         0   none ,g         0
   __s.option_byte
                                   000000c0         0   none ,g         0
   __e.option_byte
@@ -2472,7 +2460,7 @@ FILE=rlink_generates_05
   __STACK_ADDR_START
                                   000ffe20         0   none ,g         1
   __STACK_ADDR_END
-                                  000ffb16         0   none ,g         1
+                                  000ffb04         0   none ,g         1
 
 *** Unfilled Areas ***
 
