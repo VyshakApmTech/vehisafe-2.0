@@ -6,7 +6,7 @@
 #define  EEPROM  0xA0
 #define  ADDRESS 0X20 
 
-
+extern char TIME[10];
 void i2c_writen(unsigned char id, unsigned char add,unsigned char add1, unsigned char dat);
 unsigned char i2c_readn(unsigned char id,unsigned char add,unsigned char add1);
 void GPS_DATA_EEPROM_WRITE(void);

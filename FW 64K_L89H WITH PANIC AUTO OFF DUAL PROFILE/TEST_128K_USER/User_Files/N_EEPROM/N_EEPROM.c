@@ -5,7 +5,8 @@ extern char LOG_DM[10],LAT_DM[10];
 extern char HOURS_MSB,HOURS_LSB,MIN_MSB,MIN_LSB,LON_DIRECTION,LAT_DIRECTION,MAIN_BAT_STATUS;
 extern char GSM_STRENGTH,IGNITION,PANIC_ALERT,LOW_BATTERY_ALERT,SPEED_DATA_RX[10];
 //char Array_1[10]={'0','1','2','3','4','5','6','7','8','9'};
-char TIME[10],FIRM_DATA[150];
+char FIRM_DATA[150];
+char TIME[10];  // Use global TIME from N_GPS.c (with modem time)
 extern _Bool EEPROM_WORKING;
 _Bool STOP_WRITING;
 unsigned int BYTE,EEPROM_ADDRESS;

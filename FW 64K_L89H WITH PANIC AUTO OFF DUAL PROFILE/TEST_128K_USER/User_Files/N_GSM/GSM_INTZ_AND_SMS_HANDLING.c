@@ -34,28 +34,26 @@ extern char LOW_BAT_LEVEL_RX,LOW_BAT_LEVEL_CMD;
 extern unsigned long int HEALTH_FRAME_NUMBER;
 extern _Bool PRIMARY_IP,SECONDARY_IP,GET_PPN_CMD,GET_SPN_CMD,PRIMARY_PN,SECONDARY_PN;
 #define    SIMMAKE_IDEMIA_3P
+#define    SIMMAKE_GND
 
-
-void QSTK(void)
-{
-	if(QST_CMD_FLAG==SET)
-	{
-			
-	R_UART2_SEND("AT+QSTK=1\r\n");
-	MS_TIMER(500);
-	QST_CMD_FLAG=CLR;
-	//R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-    //MS_TIMER(500);
-	//R_WDT_Restart();
-	//WATCHDOG_ON();
-	WATCH_DOG=NONE;
-	//GPRS_PS_EN=OFF1;
-	//MS_TIMER(1000);
-	//GPRS_PS_EN=ON1;
-	
-}
-	NOP();
-}
+// void QSTK(void)
+// {
+// 	if(QST_CMD_FLAG==SET)
+// 	{	
+//         R_UART2_SEND("AT+QSTK=1\r\n");
+//         MS_TIMER(500);
+//         QST_CMD_FLAG=CLR;
+//         //R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+//         //MS_TIMER(500);
+//         //R_WDT_Restart();
+//         //WATCHDOG_ON();
+//         WATCH_DOG=NONE;
+//         //GPRS_PS_EN=OFF1;
+//         //MS_TIMER(1000);
+//         //GPRS_PS_EN=ON1;
+//     }
+// 	NOP();
+// }
 
 
 void MANUAL_NET(unsigned int N)
@@ -113,8 +111,47 @@ void MANUAL_NET(unsigned int N)
                 //R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n");
                 MS_TIMER(500);
             }
+        #elif defined(SIMMAKE_GND)
+            R_UART2_SEND("AT+CIMI\r\n ");
+            MS_TIMER(500);
+            R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+            MS_TIMER(500);
+            R_UART2_SEND("AT+STKENV=\"D30782020181900101\"\r\n"); // Open Menu items
+            MS_TIMER(500);
 
-
+            if(N==1)
+            {
+                R_UART2_SEND("AT+STKTR=\"810301240082028281830100100101\"\r\n");  // Vodafone P
+                MS_TIMER(500);
+                MS_TIMER(1000);   // Auto Network SELECT
+                GPRS_PS_EN=OFF1;
+                MS_TIMER(500);
+                GPRS_PS_EN=ON1;
+                MS_TIMER(500);
+                MS_TIMER(500);
+            }
+            if(N==2)
+            {
+                R_UART2_SEND("AT+STKTR=\"810301240082028281830100100102\"\r\n");  // BSNL F
+                MS_TIMER(500);
+                MS_TIMER(1000);   // Auto Network SELECT
+                GPRS_PS_EN=OFF1;
+                MS_TIMER(500);
+                GPRS_PS_EN=ON1;
+                MS_TIMER(500);
+                MS_TIMER(500);
+            }
+            if(N==3)
+            {
+                R_UART2_SEND("AT+STKTR=\"810301240082028281830100100103\"\r\n");  // Airtel
+                MS_TIMER(500);
+                MS_TIMER(1000);   // Auto Network SELECT
+                GPRS_PS_EN=OFF1;
+                MS_TIMER(500);
+                GPRS_PS_EN=ON1;
+                MS_TIMER(500);
+                MS_TIMER(500);
+            }
         #else
             R_UART2_SEND("AT+CIMI\r\n ");
             MS_TIMER(500);
@@ -182,18 +219,7 @@ void NEW_SMS_READ(void)
 		VERSION_CMD_SET = 0;
 		GET_VLT_IMEI_PH_CMD = 0;
 		GET_SMS_CMD = 0;
-		// NEW_SMS_RX_FRAME_RX = 0;
-		// // Add other command flags as needed
-		
-		// // Reset parsing indices
-		// I[55] = 0;  // GET SMS command
-		// I[56] = 0;  // Version command
-		// I[81] = 0;  // VLT IMEI PH command
-		// I[82] = 0;  // HACL command
-		// I[83] = 0;  // HBRK command
-		// // Add other indices as needed
-		
-		// VV = 0;  // Reset value collection counter
+
 		restart5:
 		R_UART2_SEND("AT+CMGF=1\r\n");
 		ACK_RX(20,2,100,3);
@@ -373,6 +399,7 @@ if(DEVICE_RESET_CMD==SET)
 	DEVICE_RESET_CMD=CLR;
 	WATCHDOG_ON();
 	WATCH_DOG=NONE;
+	WATCH_DOG_FORCE_KILL=ON;  // Force watchdog to trigger even if ignition OFF code tries to cancel it
 	MS_TIMER(900);
 }
 
@@ -865,69 +892,69 @@ void InitM95(void)   ///TESTING
     R_UART2_SEND("AT+QSTK?\r\n");
     MS_TIMER(500);
     //R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
-    MS_TIMER(500);
+    //MS_TIMER(500);
 }
 
-void SwitchNetwork(void)
-{
-    // #ifdef SIMMAKE_IDEMIA_3P
-    //     if(NWP_CMD_SET==SET)
-    //     {
-    //         VI_CONNECT=1;
-    //     }
-    //     if(NWS_CMD_SET==SET)
-    //     {
-    //         BSNL_CONNECT=1;
-    //     }
-    //     if(NWT_CMD_SET==SET)
-    //     {
-    //         ATL_CONNECT=1;
-    //     }
-    // #else
-        //if(BSNL_CONNECT==1 || NWP_CMD_SET==1)
-        //{
-        R_UART2_SEND("AT+QSPN?\r\n ");
-        MS_TIMER(500);
-        R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-        MS_TIMER(1000);
-        R_UART2_SEND("AT+STKENV=\"D30782020181900180\"\r\n"); // Open Menu items
-        MS_TIMER(1000);
-        R_UART2_SEND("AT+STKTR=\"810301240402028281830100900102\"\r\n"); // Select Network
-        MS_TIMER(1000);
-        if(NWP_CMD_SET==SET)
-        {
-            R_UART2_SEND("AT+STKTR=\"810301240402028281830100900116\"\r\n"); ////NetworkCode=2;  // BSNL F
-            MS_TIMER(500);
-            NWP_CMD_SET=CLR;
-        }
-        if(NWS_CMD_SET==SET)
-        {
-            R_UART2_SEND("AT+STKTR=\"810301240402028281830100900115\"\r\n"); ////NetworkCode=2;  // BSNL F
-            MS_TIMER(500);
-            //NWP_CMD_SET=CLR;
-            NWS_CMD_SET=CLR;
-        }
+// void SwitchNetwork(void)
+// {
+//     // #ifdef SIMMAKE_IDEMIA_3P
+//     //     if(NWP_CMD_SET==SET)
+//     //     {
+//     //         VI_CONNECT=1;
+//     //     }
+//     //     if(NWS_CMD_SET==SET)
+//     //     {
+//     //         BSNL_CONNECT=1;
+//     //     }
+//     //     if(NWT_CMD_SET==SET)
+//     //     {
+//     //         ATL_CONNECT=1;
+//     //     }
+//     // #else
+//         //if(BSNL_CONNECT==1 || NWP_CMD_SET==1)
+//         //{
+//         R_UART2_SEND("AT+QSPN?\r\n ");
+//         MS_TIMER(500);
+//         R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+//         MS_TIMER(1000);
+//         R_UART2_SEND("AT+STKENV=\"D30782020181900180\"\r\n"); // Open Menu items
+//         MS_TIMER(1000);
+//         R_UART2_SEND("AT+STKTR=\"810301240402028281830100900102\"\r\n"); // Select Network
+//         MS_TIMER(1000);
+//         if(NWP_CMD_SET==SET)
+//         {
+//             R_UART2_SEND("AT+STKTR=\"810301240402028281830100900116\"\r\n"); ////NetworkCode=2;  // BSNL F
+//             MS_TIMER(500);
+//             NWP_CMD_SET=CLR;
+//         }
+//         if(NWS_CMD_SET==SET)
+//         {
+//             R_UART2_SEND("AT+STKTR=\"810301240402028281830100900115\"\r\n"); ////NetworkCode=2;  // BSNL F
+//             MS_TIMER(500);
+//             //NWP_CMD_SET=CLR;
+//             NWS_CMD_SET=CLR;
+//         }
 
-        //MS_TIMER(2000);// Auto Network Select
-        R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n");//NetworkCode=1;  // Vodafone P
-        MS_TIMER(500);
-        GPRS_PS_EN=OFF;
-        MS_TIMER(20000);
-        GPRS_PS_EN=ON;
-        MS_TIMER(500);
-        R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-        MS_TIMER(500);
-        R_UART2_SEND("AT+QSTK?\r\n");
-        MS_TIMER(500);
-        //QSTK();
-        R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
-        MS_TIMER(500);
+//         //MS_TIMER(2000);// Auto Network Select
+//         R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n");//NetworkCode=1;  // Vodafone P
+//         MS_TIMER(500);
+//         GPRS_PS_EN=OFF;
+//         MS_TIMER(20000);
+//         GPRS_PS_EN=ON;
+//         MS_TIMER(500);
+//         R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
+//         MS_TIMER(500);
+//         R_UART2_SEND("AT+QSTK?\r\n");
+//         MS_TIMER(500);
+//         //QSTK();
+//         R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
+//         MS_TIMER(500);
 
-        BSNL_CONNECT=0;
-        BSNL_CONNECT_FLAG=1;
-            //}
-    // #endif
-}
+//         BSNL_CONNECT=0;
+//         BSNL_CONNECT_FLAG=1;
+//             //}
+//     // #endif
+// }
 
 
 
@@ -954,7 +981,7 @@ void GSM_INTZ(char MODE)
 
     if (MODE == SMS_MODE)
     {
-        MS_TIMER(500);
+        MS_TIMER(100);
     }
 
 restart0:
@@ -1028,8 +1055,8 @@ restart6:
         // Query SMS storage status to check if storage is full or misconfigured
         ACK = ERROR_OCCURED = RESTART = 0;
 
-        R_UART2_SEND("AT+CPMS?\r\n");
-        ACK_RX(20, 2, 100, 3);
+        // R_UART2_SEND("AT+CPMS?\r\n");
+        // ACK_RX(20, 2, 100, 3);
 
         if (SMS_FAIL >= 2)
         {
@@ -1094,34 +1121,35 @@ restart8:
         SMS_FAIL = 0;
     }
 
-    if (INITIAL_MESSAGE != 0X01 && MODE == SMS_MODE)
-    {
-        /*//i2c_writen(0xA0,0XFF,0X05,0X01);*/
-        MS_TIMER(1);
-        MS_TIMER(500);
-        INITIAL_MESSAGE = 'A';
+    // if (INITIAL_MESSAGE != 0X01 && MODE == SMS_MODE)
+    // {
+    //     /*//i2c_writen(0xA0,0XFF,0X05,0X01);*/
+    //     MS_TIMER(1);
+    //     MS_TIMER(500);
+    //     INITIAL_MESSAGE = 'A';
 
-        R_UART2_SEND("AT+CMGS=\"9159991774\"\r\n");
-        MS_TIMER(5);
+    //     R_UART2_SEND("AT+CMGS=\"9159991774\"\r\n");
+    //     MS_TIMER(5);
 
-        R_UART2_SEND("DEVICE ACTIVATED ");
-        MS_TIMER(5);
+    //     R_UART2_SEND("DEVICE ACTIVATED ");
+    //     MS_TIMER(5);
 
-        for (FOR_1 = 1; FOR_1 <= 15; FOR_1++)
-        {
-            R_UART2_SEND_User(IMEI[FOR_1]);
-            MS_TIMER(1);
-        }
+    //     for (FOR_1 = 1; FOR_1 <= 15; FOR_1++)
+    //     {
+    //         R_UART2_SEND_User(IMEI[FOR_1]);
+    //         MS_TIMER(1);
+    //     }
 
-        MS_TIMER(50);
-        R_UART2_SEND_User(CTRL_Z);
-        MS_TIMER(900);
-    }
+    //     MS_TIMER(50);
+    //     R_UART2_SEND_User(CTRL_Z);
+    //     MS_TIMER(900);
+    // }
+
     //else if(INITIAL_MESSAGE==0X01 && SYSTEM_READY==ON && PANIC_CONTROL_STATE==ON){
-    else if (SYSTEM_READY == ON && PANIC_CONTROL_STATE == ON || PANIC_ALERT == ON || POWER_SOURCE_PACKET == ON || LOW_BATTERY_ALERT_PACKET == ON || IGNITION_ON_PACKET == ON || IGNITION_OFF_PACKET == ON || POWER_SOURCE_RECONNECT_PACKET == ON || LOW_BATTERY_ALERT_PACKET == ON)
+    if (SYSTEM_READY == ON && PANIC_CONTROL_STATE == ON || PANIC_ALERT == ON || POWER_SOURCE_PACKET == ON || LOW_BATTERY_ALERT_PACKET == ON || IGNITION_ON_PACKET == ON || IGNITION_OFF_PACKET == ON || POWER_SOURCE_RECONNECT_PACKET == ON || LOW_BATTERY_ALERT_PACKET == ON)
     {
         GET_DEGREES();
-        GET_TIME();
+        //GET_TIME();
         GET_SPEED_DATA();
 
         if (MODE == SMS_MODE)
@@ -1134,8 +1162,8 @@ restart8:
         /****** Initialize DATA_MODE TCP Send ******/
         if (MODE == DATA_MODE)
         {
-            R_UART2_SEND("AT+QISEND\r\n");
-            ACK_RX(100, 2, 100, 200);  /* FIXED: Wait for '>' prompt before sending data */
+            R_UART2_SEND("AT+QISEND=0\r\n");
+            ACK_RX(10, 2, 100, 10);  /* FIXED: Wait for '>' prompt before sending data */
         }
 
         for (SMS = 0; SMS <= 4; SMS++)

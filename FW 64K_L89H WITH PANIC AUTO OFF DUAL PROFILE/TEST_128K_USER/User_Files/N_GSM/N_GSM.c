@@ -74,7 +74,7 @@ NW_NAME_ACK[5]={'C','O','P','S',':'};
 
 
 char
-VEICHLE_NUMBER[15]={'0','0','0','0','0','0','0','0','0','0','0','0','0','0'},
+VEICHLE_NUMBER[15]={'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'},
 IMEI[16]={'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'},//={'8','6','8','3','2','4','0','2','6','3','7','0','8','7','6','8'},
 Array_0[10]={'0','1','2','3','4','5','6','7','8','9'},
 NETWORK_NAME[8]={'0','0','0','0','0','0','0','0'},
@@ -85,23 +85,25 @@ REPLY_NUMBER[10]={'0','0','0','0','0','0','0','0','0','0'};
 
 //NGSM.C 
 // IP Address - 78.46.190.117
-char TEMP_PIP[16]  = {'7','8','.','4','6','.','1','9','0','.','1','1','7'};
-char TEMP_PIP2[16] = {'7','8','.','4','6','.','1','9','0','.','1','1','7'};
-char TEMP_SIP[16]  = {'7','8','.','4','6','.','1','9','0','.','1','1','7'};
-char TEMP_SIP2[16] = {'7','8','.','4','6','.','1','9','0','.','1','1','7'};
+// char TEMP_PIP[16]  = {'7','8','.','4','6','.','1','9','0','.','1','1','7'};
+// char TEMP_PPN[6]  = {'5','0','0','2','2','\0'};
 
-// Port - 50002 (5 digits)
-// Port - 50020 (5 digits)
-char TEMP_PPN[6]  = {'5','0','0','2','2','\0'};
-char TEMP_PPN2[6] = {'5','0','0','2','2','\0'};
-char TEMP_SPN[6]  = {'5','0','0','2','2','\0'};
-char TEMP_SPN2[6] = {'5','0','0','2','2','\0'};
+char TEMP_PIP[20]  = "stavltsgw.tn.gov.in";     // Server 1
+char TEMP_PIP2[20] = "NA";                       // Server 2
+char TEMP_SIP[24]  = "tracking.vlvprotect.com"; // Server 3
+char TEMP_SIP2[20] = "13.234.160.106";          // Server 4
+
+char TEMP_PPN[6]  = "8080";  // Server 1 Port
+char TEMP_PPN2[6] = "NA";    // Server 2 Port
+char TEMP_SPN[6]  = "8080";  // Server 3 Port
+char TEMP_SPN2[6] = "8224";  // Server 4 Port
+
 
 char HEALTH_CMD_FRAME_RX, SET_SETTINGS_FRAME_RX, HEALTH_ON_DURATON_RX, PANIC_ON_DURATON_RX, PANIC_ON_DURATON_S_RX, HEALTH_ON_DURATON_S_RX, APN_S_RX, TEMP_APN2[255], GET_SMS_RX,GET_PIP_S_RX, GET_SIP_S_RX, SET_PIP_PN_RX, SET_SIP_PN_RX, SET_SLEEP_ON_RX, SET_SLEEP_OF_RX, SET_OVERSPEED_RX, GET_OVER_SPEED_RX, GET_SLEEP_TIME_RX, GET_SLEEP_OFF_TIME_RX;
 
 _Bool DECIMAL_POINT_CAME_STOP_TX, POWER_SOURCE_RECONNECT_PACKET, GET_MCC_MNC_LAC_CELL_ID_RX, ADD_ZERO_TO_SPEED, SMS_PIN_WRONG, NEW_SMS_RX_FRAME_RX, PHONE_NUMBER_OF_SENDER_RX, DEVICE_RESET_CMD_FRAME_RX, DEVICE_RESET_CMD, SERVER_UPDATE_TIME_CMD_FRAME_RX, SET_EMERGENCY_NUMBER_FRAME_CMD, SET_REGN_NUMBER_FRAME_CMD, UPDATE_EMERGENCY_NUMBER, UPDATE_IP, SET_IP_FRAME_CMD, URL_PRINT, MESSAGE_READ, SET_SLEEP_OFF_CMD, SET_SLEEP_ON_CMD, OVER_SPEED_CMD, GET_EMGT_TIME_CMD, ACTIVATION_CMD, HEALTH_AND_ACTIVATION_CMD;
 
-_Bool PANIC_CONTROL_STATE_1, GSM_NW_REG_CHECK, GPRS_REG_CHECK, GET_SIGNAL_STRENGTH_CHECK, CPIN_READY_CHECK, DECIMAL_POINT, UPDATE_RP_NO, VLT_STARTUP, NORMAL_PACKET, DEVICE_CLEAR_CMD_FRAME_RX, DEVICE_CLEAR_CMD, HARSH_BRAKE_CMD_RX, HARSH_TURN_CMD_RX, HARSH_ACCEL_CMD_RX, HEALTH_ON_DURATON_CMD, PANIC_ON_DURATON_CMD, PANIC_TIME_START, PANIC_SERVER_COUNT, HEALTH_PACKET_TO_SERVER, GET_SMS_CMD, GET_PIP_CMD, GET_SIP_CMD, GET_PPT_S_CMD, GET_SPT_S_CMD;
+_Bool PANIC_CONTROL_STATE_1, GSM_NW_REG_CHECK, GPRS_REG_CHECK, GET_SIGNAL_STRENGTH_CHECK, CPIN_READY_CHECK, DECIMAL_POINT, UPDATE_RP_NO, VLT_STARTUP, NORMAL_PACKET, DEVICE_CLEAR_CMD_FRAME_RX, DEVICE_CLEAR_CMD, HARSH_BRAKE_CMD_RX, HARSH_TURN_CMD_RX, HARSH_ACCEL_CMD_RX, HEALTH_ON_DURATON_CMD, PANIC_ON_DURATON_CMD, PANIC_TIME_START, PANIC_SERVER_COUNT, HEALTH_PACKET_TO_SERVER, GET_SMS_CMD, GET_PIP_CMD, GET_SIP_CMD, GET_PPT_S_CMD, GET_SPT_S_CMD, QIMUX_SET = OFF;
 
 extern _Bool VLT_STARTUP_INITIAL, BOOT_FLAG, FIRMWARE_UPDATE, IGNITION_CONTROL_STATE, POWER_SOURCE, SYSTEM_READY, WELCOME_STRING_FRAME, SET_SLEEP_ON_CMD, SET_SLEEP_OFF_CMD;
 
@@ -159,6 +161,8 @@ restart5:
     ACK=0;ERROR_OCCURED=0;
     ACK_RX(4000,2,100,10);
     TCP_CONNECTION_OPEN = OFF;
+    GPRS_REG = OFF;  // Reset GPRS flag when disconnecting
+    QIMUX_SET = OFF;  // Reset QIMUX flag so it can be set again on next session
     if(RESTART==ON)
     {
         RESTART=OFF;
@@ -167,33 +171,28 @@ restart5:
 }
 
 
-void UPDATE_SETTING(void)
-{
+// void UPDATE_SETTING(void)
+// {
 	
-		if(SETTING_CMD==1)
-		{
-			SETTING_CMD=CLR;
+// 		if(SETTING_CMD==1)
+// 		{
+// 			SETTING_CMD=CLR;
 			
 			
-		}
-		else if(SET_APN==1)
+// 		}
+// 		else if(SET_APN==1)
 		
-		{
-			SET_APN=CLR;
+// 		{
+// 			SET_APN=CLR;
 			
-		}
+// 		}
 		
-		else if(SET_TCP==1)
-		{
-			SET_TCP=CLR;
+// 		else if(SET_TCP==1)
+// 		{
+// 			SET_TCP=CLR;
 			
-		}
-		
-		
-			
-	
-	
-}
+// 		}
+// }
 
 void GET_SIGNAL_STRENGTH(void)
 {
@@ -621,7 +620,7 @@ else if(REPLY==8)
 //REPLY==3 DEVICE RESTART
 else if(REPLY==3)
 {
-	R_UART2_SEND("Device Restarting� ");
+	R_UART2_SEND("Device Restarting: ");
 	for(FOR_1=1;FOR_1<=15;FOR_1++)
 	{
 		R_UART2_SEND_User(IMEI_EEPROM[FOR_1]);
@@ -685,7 +684,7 @@ else if(REPLY == 28)
         ACK_RX(2500, 2, 500, 100);
 
         // Refresh network name after profile switch
-        MS_TIMER(500);  // Wait for network to update
+        //MS_TIMER(500);  // Wait for network to update
         NETWORK_NAME_RX = ON;
         R_UART2_SEND("AT+COPS?\r\n");
         ACK_RX(40, 2, 50, 0);
@@ -2432,10 +2431,10 @@ restart100:
 
     IMEI_RX = ON;
 
-    R_UART2_SEND("AT\r\n");
-    ACK_RX(20, 2, 10, 1);
+    //R_UART2_SEND("AT\r\n");
+    //ACK_RX(20, 2, 10, 1);
 
-    MS_TIMER(300);
+    //MS_TIMER(100);
 
     R_UART2_SEND("AT+GSN\r\n");
     ACK_RX(40, 2, 50, 0);
@@ -2455,7 +2454,6 @@ restart100:
         for(K = 0; K < 16; K++)
         {
             IMEI_EEPROM[K] = i2c_readn(0xA0, 0XFA, K);
-
             MS_TIMER(5);
         }
     }
@@ -2707,7 +2705,7 @@ void WELCOME_STRING(void)
 
     for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
     {
-        if(VEICHLE_NUMBER[FOR_1] != ' ')
+        if(VEICHLE_NUMBER[FOR_1] != ' ' && VEICHLE_NUMBER[FOR_1] != '\0')
         {
             R_UART2_SEND_User(VEICHLE_NUMBER[FOR_1]);
 
@@ -3082,7 +3080,7 @@ void DATA_PRINT(char FORMAT)
         // VEHICLE NUMBER
         for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
         {
-            if(VEICHLE_NUMBER[FOR_1] != ' ')
+            if(VEICHLE_NUMBER[FOR_1] != ' ' && VEICHLE_NUMBER[FOR_1] != '\0')
             {
                 R_UART2_SEND_User(VEICHLE_NUMBER[FOR_1]);
                 MS_TIMER(1);
@@ -3136,15 +3134,22 @@ void DATA_PRINT(char FORMAT)
     /* Testing R_UART2_SEND("12.582621,N,077.384200,E,");*/
 
     /* Testing */
-    for(FOR_1 = 0; FOR_1 <= 7; FOR_1++)
+    if(GPS_DIRECTION_DATA_VALID == ON)
     {
-        NOP();     //LATITUDE AND DIRECTION
-        /* Testing */ R_UART2_SEND_User(LAT_DM[FOR_1]);
-
-        if(FOR_1 == 1)
+        for(FOR_1 = 0; FOR_1 <= 7; FOR_1++)
         {
-            R_UART2_SEND(".");
+            NOP();     //LATITUDE AND DIRECTION
+            /* Testing */ R_UART2_SEND_User(LAT_DM[FOR_1]);
+
+            if(FOR_1 == 1)
+            {
+                R_UART2_SEND(".");
+            }
         }
+    }
+    else
+    {
+        R_UART2_SEND("00.000000");
     }
 
     /* Testing*/
@@ -3160,15 +3165,22 @@ void DATA_PRINT(char FORMAT)
 /************************************************************************************************************************************************************/
 
     /* Testing*/
-    for(FOR_1 = 0; FOR_1 <= 8; FOR_1++)
+    if(GPS_DIRECTION_DATA_VALID == ON)
     {
-        NOP();     //LONGITUDE AND DIRECTION
-        /* Testing*/ R_UART2_SEND_User(LOG_DM[FOR_1]);
-
-        if(FOR_1 == 2)
+        for(FOR_1 = 0; FOR_1 <= 8; FOR_1++)
         {
-            R_UART2_SEND(".");
+            NOP();     //LONGITUDE AND DIRECTION
+            /* Testing*/ R_UART2_SEND_User(LOG_DM[FOR_1]);
+
+            if(FOR_1 == 2)
+            {
+                R_UART2_SEND(".");
+            }
         }
+    }
+    else
+    {
+        R_UART2_SEND("000.000000");
     }
 
     /* Testing*/
@@ -3732,9 +3744,9 @@ void UPDATE_ONLINE_DATA_FRAME(void)
         MS_TIMER(200);
         GPRS_PS_EN = ON1;
         MS_TIMER(500);
-        MS_TIMER(500);
+        //MS_TIMER(500);
         BLUE_LED = OFF;
-        MS_TIMER(1000);
+        //MS_TIMER(1000);
     }
 
 restart000:
@@ -3755,7 +3767,7 @@ restart_CMEE:
         }
 
         R_UART2_SEND("AT+QSPN?\r\n");
-        MS_TIMER(300);
+        // Removed: MS_TIMER(300); - unsolicited response, no delay needed
 
         /************************************************************************************************************************************************************/
 restart_CPIN:
@@ -3777,7 +3789,7 @@ restart_CPIN:
                 INTERNET_CONNECTED = NONE;
                 /* Close TCP on network failure */
                 R_UART2_SEND("AT+QICLOSE\r\n");
-                MS_TIMER(500);
+                MS_TIMER(100);// changed to 100 from 500
                 TCP_CONNECTION_OPEN = OFF;
                 goto restart09;
             }
@@ -3787,7 +3799,7 @@ restart_CPIN:
             MS_TIMER(100);
             GPRS_PS_EN = ON1;
             MS_TIMER(500);
-            MS_TIMER(500);
+            //MS_TIMER(500);
             BLUE_LED = OFF;
             MS_TIMER(300);
             NW_REGN_COUNT = 0;
@@ -3821,7 +3833,7 @@ restart00:
                 INTERNET_CONNECTED = NONE;
                 /* Close TCP on network failure */
                 R_UART2_SEND("AT+QICLOSE\r\n");
-                MS_TIMER(500);
+                MS_TIMER(100);
                 TCP_CONNECTION_OPEN = OFF;
                 goto restart09;
             }
@@ -3830,10 +3842,10 @@ restart00:
             GPRS_PS_EN = OFF1;
             MS_TIMER(200);
             GPRS_PS_EN = ON1;
-            MS_TIMER(5000);
+            MS_TIMER(500);  // Reduced from 5000ms - faster error recovery
             MS_TIMER(500);
             BLUE_LED = OFF;
-            MS_TIMER(1000);
+            MS_TIMER(500);
             NW_REGN_COUNT = 0;
             goto restart000;
         }
@@ -3846,7 +3858,7 @@ restart00:
 
         GSM_NW_REG_CHECK = CLR;
 
-        MS_TIMER(300);
+        MS_TIMER(50);  // Reduced from 300ms - ACK_RX already waited
 
         /************************************************************************************************************************************************************/
 restart01:
@@ -3855,11 +3867,10 @@ restart01:
 
         R_UART2_SEND("AT+CGREG?\r\n");
         ACK_RX(100, 1, 100, 100);
-
-        MS_TIMER(300);
+        // Removed: MS_TIMER(300); - redundant, ACK_RX already waited
 
         R_UART2_SEND("AT+QSSLSTATE?\r\n");
-        MS_TIMER(300);
+        // Removed: MS_TIMER(300); - unsolicited response, no delay needed
 
         if (NW_REGN_COUNT > 10)
         {
@@ -3872,7 +3883,7 @@ restart01:
                 INTERNET_CONNECTED = NONE;
                 /* Close TCP on network failure */
                 R_UART2_SEND("AT+QICLOSE\r\n");
-                MS_TIMER(500);
+                MS_TIMER(100);
                 TCP_CONNECTION_OPEN = OFF;
                 goto restart09;
             }
@@ -3881,7 +3892,7 @@ restart01:
             GPRS_PS_EN = OFF1;
             MS_TIMER(100);
             GPRS_PS_EN = ON1;
-            MS_TIMER(5000);
+            MS_TIMER(500);  // Reduced from 5000ms - faster error recovery
             MS_TIMER(500);
             BLUE_LED = OFF;
             MS_TIMER(1000);
@@ -3908,7 +3919,7 @@ restart01:
             BSNL_CONNECT_FLAG = 0;
             /* Close TCP before network restart */
             R_UART2_SEND("AT+QICLOSE\r\n");
-            MS_TIMER(500);
+            MS_TIMER(200);
             TCP_CONNECTION_OPEN = OFF;
             goto restart000;
         }
@@ -3918,7 +3929,7 @@ restart01:
             DISCONNECT = OFF;
             /* Close TCP connection on manual disconnect */
             R_UART2_SEND("AT+QICLOSE\r\n");
-            MS_TIMER(500);
+            MS_TIMER(200);
             TCP_CONNECTION_OPEN = OFF;
             GPRS_DISCONNECT();
         }
@@ -3979,6 +3990,21 @@ restart4:
 
         /************************************************************************************************************************************************************/
 
+        /* Set multiplex mode ONLY ONCE at boot (not on reconnection retries) */
+        if (QIMUX_SET == OFF)
+        {
+            R_UART2_SEND("AT+QIMUX=1\r\n");
+            ACK_RX(100, 2, 100, 200);
+            QIMUX_SET = ON;  /* Mark QIMUX as set - don't call again */
+        }
+
+        if (RESTART == ON)
+        {
+            RESTART = OFF;
+            GPRS_REG_COUNT++;
+            goto restart4;
+        }
+
         INTERNET_CONNECTED = ON;
         NW_REGN_COUNT = 0;
 
@@ -3996,6 +4022,7 @@ restart4:
 
         R_UART2_SEND("AT+CGATT=1\r\n");
         ACK_RX(100, 2, 100, 200);
+        //MS_TIMER(2000);  // Wait 2 seconds for GPRS attachment to complete
 
         if (RESTART == ON)
         {
@@ -4020,8 +4047,11 @@ restart4:
         /************************************************************************************************************************************************************/
 
         R_UART2_SEND("AT+CGPADDR=1\r\n");
-        MS_TIMER(500);
+        MS_TIMER(100);  // Reduced from 1000ms - modem responds in <500ms
 
+        // Set GPRS_REG flag to indicate GPRS is active
+        GPRS_REG = ON;
+        
         INTERNET_CONNECTED = ON;
         NW_REGN_COUNT = 0;
 
@@ -4053,9 +4083,17 @@ restart_tracking:
         /* TCP Connection Pooling - Only open if not already connected */
         if (TCP_CONNECTION_OPEN == OFF)
         {
-            /* Open TCP connection to tracking server */
-            R_UART2_SEND("AT+QIOPEN=\"TCP\",\"78.46.190.117\",\"50022\"\r\n");
+            /* Connection 0 → Server 1 */
+            R_UART2_SEND("AT+QIOPEN=0,\"TCP\",\"stavltsgw.tn.gov.in\",\"8080\"\r\n");
             ACK_RX(100, 3, 100, 10);
+
+            /* Connection 1 → Server 3 */
+            R_UART2_SEND("AT+QIOPEN=1,\"TCP\",\"13.234.160.106\",\"8224\"\r\n");
+            ACK_RX(100, 3, 100, 10);
+
+            /* Connection 2 → Server 4 */
+            //R_UART2_SEND("AT+QIOPEN=2,\"TCP\",\"13.234.160.106\",\"8224\"\r\n");
+            //ACK_RX(100, 3, 100, 10);
 
             if (DISCONNECT == ON)
             {
@@ -4072,13 +4110,23 @@ restart_tracking:
             TCP_CONNECTION_OPEN = ON;
             
             /* Send LGN packet only once per boot (on first successful TCP connection) */
+            /* Send LGN packet only once per boot (on first successful TCP connection) */
             if (WELCOME_STRING_FRAME_BOOT == OFF)
             {
-                R_UART2_SEND("AT+QISEND\r\n");
-                MS_TIMER(500);
+                /* Send to Connection 0 (Server 1) */
+                R_UART2_SEND("AT+QISEND=0\r\n");
+                ACK_RX(10, 2, 100, 10);  
                 WELCOME_STRING();
                 R_UART2_SEND_User(CTRL_Z);
-                MS_TIMER(500);
+                MS_TIMER(100);
+
+                /* Send to Connection 1 (Server 3) */
+                R_UART2_SEND("AT+QISEND=1\r\n");
+                ACK_RX(10, 2, 100, 10);
+                WELCOME_STRING();
+                R_UART2_SEND_User(CTRL_Z);
+                MS_TIMER(100);
+                
                 WELCOME_STRING_FRAME_BOOT = ON;  /* Mark LGN as sent after boot */
             }
         }
@@ -4095,27 +4143,46 @@ restart_tracking:
         { 
             GET_MCC_MNC_LAC_CELL_ID(); 
         }
-        GET_TIME();
+        
+        //GET_TIME();
         GET_SPEED_DATA();
         GET_DEGREES();
 
-        /* Send tracking data to the TCP server */
-        R_UART2_SEND("AT+QISEND\r\n");
-        ACK_RX(100, 2, 100, 200);  /* FIXED: Wait for '>' prompt before sending data */
+        /* Send tracking data to Connection 0 (Server 1) */
+        R_UART2_SEND("AT+QISEND=0\r\n");
+        ACK_RX(10, 2, 100, 10);  
         NORMAL_PACKET=ON;
 
         /* Send the actual tracking data frame */
         DATA_PRINT(0);
-        R_UART2_SEND_User(CTRL_Z);  /* Ctrl+Z to end send */
-        MS_TIMER(500);  /* Wait for SEND OK */
+        R_UART2_SEND_User(CTRL_Z);
+        MS_TIMER(100);
+
+        /* Send tracking data to Connection 1 (Server 3) */
+        R_UART2_SEND("AT+QISEND=1\r\n");
+        ACK_RX(10, 2, 100, 10);    
+
+        /* Send the actual tracking data frame */
+        DATA_PRINT(0);
+        R_UART2_SEND_User(CTRL_Z);
+        MS_TIMER(100);
 
         /* Send HEL packet if health check requested (every 5 minutes) */
         if(HEALTH_PACKET_TO_SERVER == ON) {
-            R_UART2_SEND("AT+QISEND\r\n");
-            ACK_RX(100, 2, 100, 200);  /* FIXED: Wait for '>' prompt before sending data */
+            /* Send to Connection 0 (Server 1) */
+            R_UART2_SEND("AT+QISEND=0\r\n");
+            ACK_RX(10, 2, 100, 10);  
             HEL_STRING();
             R_UART2_SEND_User(CTRL_Z);
-            MS_TIMER(500);
+            MS_TIMER(100);
+
+            /* Send to Connection 1 (Server 3) */
+            R_UART2_SEND("AT+QISEND=1\r\n");
+            ACK_RX(10, 2, 100, 10);  
+            HEL_STRING();
+            R_UART2_SEND_User(CTRL_Z);
+            MS_TIMER(100);
+            
             HEALTH_PACKET_TO_SERVER = OFF;
         }
 
@@ -4151,8 +4218,8 @@ restart_tcp:
         /************************************************************************************************************************************************************/
 
         /* Open TCP connection to custom server 78.46.190.117 port 50022 */
-        R_UART2_SEND("AT+QIOPEN=\"TCP\",\"78.46.190.117\",\"50022\"\r\n");
-        ACK_RX(100, 3, 100, 10);
+        //R_UART2_SEND("AT+QIOPEN=2,\"TCP\",\"13.234.160.106\",\"8224\"\r\n");
+        //ACK_RX(100, 3, 100, 10);
 
         if (DISCONNECT == ON)
         {
@@ -4171,7 +4238,7 @@ restart_tcp:
 
         /* Send firmware request data to the TCP server */
         R_UART2_SEND("AT+QISEND\r\n");
-        ACK_RX(100, 2, 100, 200);  /* Wait for '>' prompt */
+       ACK_RX(10, 2, 100, 10);    /* Wait for '>' prompt */
 
         if (RESTART == ON)
         {
@@ -4231,23 +4298,32 @@ restart09:
         NW_REGN_COUNT = 0;
         NETWORK_FAILURE = 0;
         RESTART = OFF;
-
         MS_TIMER(1);
         WATCH_DOG_KILL = OFF;
-
-        DATA_TO_ARRAY();
-        FLASH_WRITE();
-
+        //DATA_TO_ARRAY();
+        //FLASH_WRITE();
         BLUE_LED = ON;
         GPRS_PS_EN = OFF1;
         MS_TIMER(200);
         GPRS_PS_EN = ON1;
         MS_TIMER(500);
-        //MS_TIMER(500);
         BLUE_LED = OFF;
         MS_TIMER(500);
-
-        SwitchNetwork();
+        //SwitchNetwork(); // COMMENTED THIS USELESS CALL AND DEFINITION
+        // ADDED THIS 
+        // Calculate next profile: 0x01→0x02, 0x02→0x03, 0x03→0x01 (cycling)
+        current_profile = i2c_readn(0xA0, 0xFE, 60);
+        MS_TIMER(50);
+        if (current_profile == 0x01) {
+            TEMP_PROF = '2';
+        } else if (current_profile == 0x02) {
+            TEMP_PROF = '3';
+        } else {  // Default to 0x03 or fallback to 0x01
+            TEMP_PROF = '1';
+        }
+        // Write new profile back to EEPROM offset 60
+        i2c_writen(0xA0, 0xFE, 60, TEMP_PROF);
+        MS_TIMER(100);
     }
 }
 
@@ -4398,638 +4474,634 @@ void HEL_STRING(void)
     NOP();
 }
 
-void DATA_TO_ARRAY(void)
-{
-    GET_TIME();
-    GET_SPEED_DATA();
-    GET_SIGNAL_STRENGTH();
-    GET_MCC_MNC_LAC_CELL_ID();
+// void DATA_TO_ARRAY(void)
+// {
+//     GET_TIME();
+//     GET_SPEED_DATA();
+//     GET_SIGNAL_STRENGTH();
+//     GET_MCC_MNC_LAC_CELL_ID();
+//     //if(IGNITION_SW==OPEN && T_SPEED>=5 || IGNITION_SW==OPEN && P_LAT_DM_RX!=LAT_DM[3]){GET_DEGREES();}
+//     //else if(IGNITION_SW==CLOSE){GET_DEGREES();}
+//     GET_DEGREES();
+// /************************************************************************************************************************************************************/
+//     //START CHARACTER , HEADER , VENDOR ID, FIRMWARE VERSION
+//            if(PANIC_ALERT_PACKET==ON){SEND_TO_ARRAY("EA,02,");}
+//       else if(IGNITION_ON_PACKET==ON){SEND_TO_ARRAY("IN,05,");}
+//       else if(IGNITION_OFF_PACKET==ON){SEND_TO_ARRAY("IF,06,");}
+//       else if(POWER_SOURCE_PACKET==ON){SEND_TO_ARRAY("BD,07,");}
+//       else if(POWER_SOURCE_RECONNECT_PACKET==ON){SEND_TO_ARRAY("BR,08,");}
+//       else if(LOW_BATTERY_ALERT_PACKET==ON){SEND_TO_ARRAY("BL,09,");}
+//       else{SEND_TO_ARRAY("NR,02,");}                         //NR-NORMAL , EA-EMERGENCY ALERT
+
+// /************************************************************************************************************************************************************/
 
-    //if(IGNITION_SW==OPEN && T_SPEED>=5 || IGNITION_SW==OPEN && P_LAT_DM_RX!=LAT_DM[3]){GET_DEGREES();}
-    //else if(IGNITION_SW==CLOSE){GET_DEGREES();}
+//     SEND_TO_ARRAY_Value(Array_0[GPS_DIRECTION_DATA_VALID]);
 
-    GET_DEGREES();
+//     SEND_TO_ARRAY(",");
 
-/************************************************************************************************************************************************************/
+//     NOP();                                                   //GPS VALID OR INVALID
 
-    //START CHARACTER , HEADER , VENDOR ID, FIRMWARE VERSION
+// /************************************************************************************************************************************************************/
 
-           if(PANIC_ALERT_PACKET==ON){SEND_TO_ARRAY("EA,02,");}
-      else if(IGNITION_ON_PACKET==ON){SEND_TO_ARRAY("IN,05,");}
-      else if(IGNITION_OFF_PACKET==ON){SEND_TO_ARRAY("IF,06,");}
-      else if(POWER_SOURCE_PACKET==ON){SEND_TO_ARRAY("BD,07,");}
-      else if(POWER_SOURCE_RECONNECT_PACKET==ON){SEND_TO_ARRAY("BR,08,");}
-      else if(LOW_BATTERY_ALERT_PACKET==ON){SEND_TO_ARRAY("BL,09,");}
-      else{SEND_TO_ARRAY("NR,02,");}                         //NR-NORMAL , EA-EMERGENCY ALERT
+//     for(FOR_1=0; FOR_1<=5; FOR_1++)
+//     {
+//         SEND_TO_ARRAY_Value(((TIME[FOR_1] & 0xF0) >> 4) + 0X30);
+//         SEND_TO_ARRAY_Value((TIME[FOR_1] & 0x0F) + 0X30);
+
+//         if(FOR_1==1)
+//         {
+//             SEND_TO_ARRAY("20");
+//         }
+
+//         if(FOR_1==2 || FOR_1==5)
+//         {
+//             SEND_COMMA_TO_ARRAY();
+//         }
+//     }
 
-/************************************************************************************************************************************************************/
+//     //RTC:- DDMMYYYY,HHMMSS,
+
+// ///************************************************************************************************************************************************************/
+
+//     for(FOR_1=0; FOR_1<=7; FOR_1++)
+//     {
+//         NOP();                                                //LATITUDE AND DIRECTION
 
-    SEND_TO_ARRAY_Value(Array_0[GPS_DIRECTION_DATA_VALID]);
+//         SEND_TO_ARRAY_Value(LAT_DM[FOR_1]);
+
+//         if(FOR_1==1)
+//         {
+//             SEND_TO_ARRAY(".");
+//         }
+//     }
+
+//     if(LAT_DIRECTION=='N')
+//     {
+//         SEND_TO_ARRAY(",N,");
+//     }
+//     else
+//     {
+//         SEND_TO_ARRAY(",S,");
+//     }
 
-    SEND_TO_ARRAY(",");
+// ///************************************************************************************************************************************************************/
 
-    NOP();                                                   //GPS VALID OR INVALID
+//     for(FOR_1=0; FOR_1<=8; FOR_1++)
+//     {
+//         NOP();                                                //LONGITUDE AND DIRECTION
 
-/************************************************************************************************************************************************************/
+//         SEND_TO_ARRAY_Value(LOG_DM[FOR_1]);
 
-    for(FOR_1=0; FOR_1<=5; FOR_1++)
-    {
-        SEND_TO_ARRAY_Value(((TIME[FOR_1] & 0xF0) >> 4) + 0X30);
-        SEND_TO_ARRAY_Value((TIME[FOR_1] & 0x0F) + 0X30);
+//         if(FOR_1==2)
+//         {
+//             SEND_TO_ARRAY(".");
+//         }
+//     }
 
-        if(FOR_1==1)
-        {
-            SEND_TO_ARRAY("20");
-        }
+//     if(LON_DIRECTION=='E')
+//     {
+//         SEND_TO_ARRAY(",E,");
+//     }
+//     else
+//     {
+//         SEND_TO_ARRAY(",W,");
+//     }
 
-        if(FOR_1==2 || FOR_1==5)
-        {
-            SEND_COMMA_TO_ARRAY();
-        }
-    }
+//     NOP();
 
-    //RTC:- DDMMYYYY,HHMMSS,
+// ///************************************************************************************************************************************************************/
 
-///************************************************************************************************************************************************************/
+//     GET_SPEED_DATA();
 
-    for(FOR_1=0; FOR_1<=7; FOR_1++)
-    {
-        NOP();                                                //LATITUDE AND DIRECTION
+//     if(ADD_ZERO_TO_SPEED==SET)
+//     {
+//         SEND_TO_ARRAY("0");
+//     }
 
-        SEND_TO_ARRAY_Value(LAT_DM[FOR_1]);
+//     for(FOR_1=0; FOR_1<=SPEED_DATA_LENGTH_COUNT; FOR_1++)
+//     {
+//         NOP();
 
-        if(FOR_1==1)
-        {
-            SEND_TO_ARRAY(".");
-        }
-    }
+//         SEND_TO_ARRAY_Value(SPEED_DATA[FOR_1]);
+//     }
 
-    if(LAT_DIRECTION=='N')
-    {
-        SEND_TO_ARRAY(",N,");
-    }
-    else
-    {
-        SEND_TO_ARRAY(",S,");
-    }
+//     DECIMAL_POINT_CAME_STOP_TX=OFF;
 
-///************************************************************************************************************************************************************/
+//     NOP();
 
-    for(FOR_1=0; FOR_1<=8; FOR_1++)
-    {
-        NOP();                                                //LONGITUDE AND DIRECTION
+//     SEND_COMMA_TO_ARRAY();
 
-        SEND_TO_ARRAY_Value(LOG_DM[FOR_1]);
+//     NOP();
 
-        if(FOR_1==2)
-        {
-            SEND_TO_ARRAY(".");
-        }
-    }
+// ///************************************************************************************************************************************************************/
 
-    if(LON_DIRECTION=='E')
-    {
-        SEND_TO_ARRAY(",E,");
-    }
-    else
-    {
-        SEND_TO_ARRAY(",W,");
-    }
+//     COG_VALUE_COUNT=CLR;
 
-    NOP();
+//     for(FOR_1=0; FOR_1<=5; FOR_1++)
+//     {
+//         NOP();
 
-///************************************************************************************************************************************************************/
+//         if(COG[FOR_1]!='.')
+//         {
+//             COG_VALUE_COUNT++;
+//         }
+//         else if(COG[FOR_1]=='.')
+//         {
+//             break;
+//         }
+//     }
 
-    GET_SPEED_DATA();
+//          if(COG_VALUE_COUNT==1)
+//     {
+//         SEND_TO_ARRAY("00");
 
-    if(ADD_ZERO_TO_SPEED==SET)
-    {
-        SEND_TO_ARRAY("0");
-    }
+//         COG_VALUE_COUNT=3;
 
-    for(FOR_1=0; FOR_1<=SPEED_DATA_LENGTH_COUNT; FOR_1++)
-    {
-        NOP();
+//         NOP();
+//     }
+//     else if(COG_VALUE_COUNT==2)
+//     {
+//         SEND_TO_ARRAY_Value("0");
 
-        SEND_TO_ARRAY_Value(SPEED_DATA[FOR_1]);
-    }
+//         COG_VALUE_COUNT=4;
 
-    DECIMAL_POINT_CAME_STOP_TX=OFF;
+//         NOP();
+//     }
+//     else
+//     {
+//         COG_VALUE_COUNT=5;
+//     }
 
-    NOP();
+//     for(FOR_1=0; FOR_1<=COG_VALUE_COUNT; FOR_1++)
+//     {
+//         NOP();
 
-    SEND_COMMA_TO_ARRAY();
+//         SEND_TO_ARRAY_Value(COG[FOR_1]);
+//     }
 
-    NOP();
+//     // HEADING :-COURSE OVER GROUND IN DEGREE
 
-///************************************************************************************************************************************************************/
+//     SEND_COMMA_TO_ARRAY();
 
-    COG_VALUE_COUNT=CLR;
+//     SEND_TO_ARRAY_Value((NO_OF_SAT/10)+0x30);
+//     SEND_TO_ARRAY_Value((NO_OF_SAT%10)+0x30);
 
-    for(FOR_1=0; FOR_1<=5; FOR_1++)
-    {
-        NOP();
+//     SEND_TO_ARRAY(",");
 
-        if(COG[FOR_1]!='.')
-        {
-            COG_VALUE_COUNT++;
-        }
-        else if(COG[FOR_1]=='.')
-        {
-            break;
-        }
-    }
+//     NOP();                                                    // NO OF SATELLITE
 
-         if(COG_VALUE_COUNT==1)
-    {
-        SEND_TO_ARRAY("00");
+// ///************************************************************************************************************************************************************/
 
-        COG_VALUE_COUNT=3;
+//     ALTITUDE_VALUE_COUNT=CLR;
 
-        NOP();
-    }
-    else if(COG_VALUE_COUNT==2)
-    {
-        SEND_TO_ARRAY_Value("0");
+//     for(FOR_1=0; FOR_1<=4; FOR_1++)
+//     {
+//         NOP();
 
-        COG_VALUE_COUNT=4;
+//         if(ALTITUDE[FOR_1]!='.')
+//         {
+//             ALTITUDE_VALUE_COUNT++;
+//         }
+//         else if(ALTITUDE[FOR_1]=='.')
+//         {
+//             break;
+//         }
+//     }
 
-        NOP();
-    }
-    else
-    {
-        COG_VALUE_COUNT=5;
-    }
+//          if(ALTITUDE_VALUE_COUNT==1)
+//     {
+//         SEND_TO_ARRAY("00");
 
-    for(FOR_1=0; FOR_1<=COG_VALUE_COUNT; FOR_1++)
-    {
-        NOP();
+//         ALTITUDE_VALUE_COUNT=2;
 
-        SEND_TO_ARRAY_Value(COG[FOR_1]);
-    }
+//         NOP();
+//     }
+//     else if(ALTITUDE_VALUE_COUNT==2)
+//     {
+//         SEND_TO_ARRAY("0");
 
-    // HEADING :-COURSE OVER GROUND IN DEGREE
+//         ALTITUDE_VALUE_COUNT=3;
 
-    SEND_COMMA_TO_ARRAY();
+//         NOP();
+//     }
+//     else
+//     {
+//         ALTITUDE_VALUE_COUNT=4;
+//     }
 
-    SEND_TO_ARRAY_Value((NO_OF_SAT/10)+0x30);
-    SEND_TO_ARRAY_Value((NO_OF_SAT%10)+0x30);
+//     for(FOR_1=0; FOR_1<=ALTITUDE_VALUE_COUNT; FOR_1++)
+//     {
+//         NOP();
 
-    SEND_TO_ARRAY(",");
+//         SEND_TO_ARRAY_Value(ALTITUDE[FOR_1]);
+//     }
 
-    NOP();                                                    // NO OF SATELLITE
+//     //R_UART2_SEND(",0.00,"); NOP();
 
-///************************************************************************************************************************************************************/
+//     SEND_COMMA_TO_ARRAY();
 
-    ALTITUDE_VALUE_COUNT=CLR;
+//     for(FOR_1=0; FOR_1<=4; FOR_1++)
+//     {
+//         NOP();
 
-    for(FOR_1=0; FOR_1<=4; FOR_1++)
-    {
-        NOP();
+//         if(PDOP_DATA_RX[FOR_1]=='1' || PDOP_DATA_RX[FOR_1]=='2' || PDOP_DATA_RX[FOR_1]=='3' || PDOP_DATA_RX[FOR_1]=='4' || PDOP_DATA_RX[FOR_1]=='5' || PDOP_DATA_RX[FOR_1]=='6' || PDOP_DATA_RX[FOR_1]=='7' || PDOP_DATA_RX[FOR_1]=='8' || PDOP_DATA_RX[FOR_1]=='9' || PDOP_DATA_RX[FOR_1]=='0' || PDOP_DATA_RX[FOR_1]=='.')
+//         {
+//             SEND_TO_ARRAY_Value(PDOP_DATA_RX[FOR_1]);
+//         }
+//         else
+//         {
+//             SEND_TO_ARRAY("0");
+//         }
+//     }
 
-        if(ALTITUDE[FOR_1]!='.')
-        {
-            ALTITUDE_VALUE_COUNT++;
-        }
-        else if(ALTITUDE[FOR_1]=='.')
-        {
-            break;
-        }
-    }
+//     SEND_COMMA_TO_ARRAY();
 
-         if(ALTITUDE_VALUE_COUNT==1)
-    {
-        SEND_TO_ARRAY("00");
+// ///************************************************************************************************************************************************************/
 
-        ALTITUDE_VALUE_COUNT=2;
+//     for(FOR_1=0; FOR_1<=4; FOR_1++)
+//     {
+//         NOP();
 
-        NOP();
-    }
-    else if(ALTITUDE_VALUE_COUNT==2)
-    {
-        SEND_TO_ARRAY("0");
+//         if(HDOP[FOR_1]=='1' || HDOP[FOR_1]=='2' || HDOP[FOR_1]=='3' || HDOP[FOR_1]=='4' || HDOP[FOR_1]=='5' || HDOP[FOR_1]=='6' || HDOP[FOR_1]=='7' || HDOP[FOR_1]=='8' || HDOP[FOR_1]=='9' || HDOP[FOR_1]=='0' || HDOP[FOR_1]=='.')
+//         {
+//             SEND_TO_ARRAY_Value(HDOP[FOR_1]);
+//         }
+//         else
+//         {
+//             SEND_TO_ARRAY("0");
+//         }
+//     }
 
-        ALTITUDE_VALUE_COUNT=3;
+//     SEND_COMMA_TO_ARRAY();                                    //HDOP
 
-        NOP();
-    }
-    else
-    {
-        ALTITUDE_VALUE_COUNT=4;
-    }
+// ///************************************************************************************************************************************************************/
 
-    for(FOR_1=0; FOR_1<=ALTITUDE_VALUE_COUNT; FOR_1++)
-    {
-        NOP();
+// //******    for(FOR_1=0;FOR_1<=7;FOR_1++){NOP();R_UART2_SEND_User(NETWORK_NAME[FOR_1]);}R_UART2_SEND(",");NOP();   //NETWORK OPEATOR NAME
 
-        SEND_TO_ARRAY_Value(ALTITUDE[FOR_1]);
-    }
+// ///************************************************************************************************************************************************************/
 
-    //R_UART2_SEND(",0.00,"); NOP();
+//     NOP();
 
-    SEND_COMMA_TO_ARRAY();
+//     SEND_TO_ARRAY_Value(Array_0[IGNITION]);
 
-    for(FOR_1=0; FOR_1<=4; FOR_1++)
-    {
-        NOP();
+//     NOP();
 
-        if(PDOP_DATA_RX[FOR_1]=='1' || PDOP_DATA_RX[FOR_1]=='2' || PDOP_DATA_RX[FOR_1]=='3' || PDOP_DATA_RX[FOR_1]=='4' || PDOP_DATA_RX[FOR_1]=='5' || PDOP_DATA_RX[FOR_1]=='6' || PDOP_DATA_RX[FOR_1]=='7' || PDOP_DATA_RX[FOR_1]=='8' || PDOP_DATA_RX[FOR_1]=='9' || PDOP_DATA_RX[FOR_1]=='0' || PDOP_DATA_RX[FOR_1]=='.')
-        {
-            SEND_TO_ARRAY_Value(PDOP_DATA_RX[FOR_1]);
-        }
-        else
-        {
-            SEND_TO_ARRAY("0");
-        }
-    }
+//     SEND_TO_ARRAY(",");
 
-    SEND_COMMA_TO_ARRAY();
+//     NOP();                                                    // IGNITION
 
-///************************************************************************************************************************************************************/
+// ///************************************************************************************************************************************************************/
 
-    for(FOR_1=0; FOR_1<=4; FOR_1++)
-    {
-        NOP();
+//     //if(MAIN_BATTERY_VOLTAGE<=40){MAIN_BAT_STATUS=OFF;TEMP_MAIN_BATTERY_VOLTAGE=0;SEND_TO_ARRAY("0,");}else{MAIN_BAT_STATUS=ON;SEND_TO_ARRAY("1,");}NOP();      // MAIN BATTERY STATUS
 
-        if(HDOP[FOR_1]=='1' || HDOP[FOR_1]=='2' || HDOP[FOR_1]=='3' || HDOP[FOR_1]=='4' || HDOP[FOR_1]=='5' || HDOP[FOR_1]=='6' || HDOP[FOR_1]=='7' || HDOP[FOR_1]=='8' || HDOP[FOR_1]=='9' || HDOP[FOR_1]=='0' || HDOP[FOR_1]=='.')
-        {
-            SEND_TO_ARRAY_Value(HDOP[FOR_1]);
-        }
-        else
-        {
-            SEND_TO_ARRAY("0");
-        }
-    }
+//     if(MAIN_BAT_STATUS==OFF)
+//     {
+//         SEND_TO_ARRAY("0,");
+//     }
+//     else
+//     {
+//         SEND_TO_ARRAY("1,");
+//     }
 
-    SEND_COMMA_TO_ARRAY();                                    //HDOP
+//     NOP();                                                    // MAIN BATTERY STATUS
 
-///************************************************************************************************************************************************************/
+//     BATTERY_MEASUREMENT=ON;
 
-//******    for(FOR_1=0;FOR_1<=7;FOR_1++){NOP();R_UART2_SEND_User(NETWORK_NAME[FOR_1]);}R_UART2_SEND(",");NOP();   //NETWORK OPEATOR NAME
+//     SEND_TO_ARRAY_Value(((MAIN_BATTERY_VOLTAGE/100)+0x30));
 
-///************************************************************************************************************************************************************/
+//     VOLT=MAIN_BATTERY_VOLTAGE%100;
 
-    NOP();
+//     SEND_TO_ARRAY_Value(((VOLT/10)+0x30));
 
-    SEND_TO_ARRAY_Value(Array_0[IGNITION]);
+//     NOP();
 
-    NOP();
+//     SEND_TO_ARRAY(".");
 
-    SEND_TO_ARRAY(",");
+//     SEND_TO_ARRAY_Value(((VOLT%10)+0x30));
 
-    NOP();                                                    // IGNITION
+//     SEND_TO_ARRAY(",");                                       //MAIN BATTERY VOLTAGE
 
-///************************************************************************************************************************************************************/
+// ///************************************************************************************************************************************************************/
 
-    //if(MAIN_BATTERY_VOLTAGE<=40){MAIN_BAT_STATUS=OFF;TEMP_MAIN_BATTERY_VOLTAGE=0;SEND_TO_ARRAY("0,");}else{MAIN_BAT_STATUS=ON;SEND_TO_ARRAY("1,");}NOP();      // MAIN BATTERY STATUS
+//     VOLT=BACKUP_BATTERY_VOLTAGE%1000;
 
-    if(MAIN_BAT_STATUS==OFF)
-    {
-        SEND_TO_ARRAY("0,");
-    }
-    else
-    {
-        SEND_TO_ARRAY("1,");
-    }
+//     SEND_TO_ARRAY_Value(((VOLT/100)+0x30));
 
-    NOP();                                                    // MAIN BATTERY STATUS
+//     VOLT=VOLT%100;
 
-    BATTERY_MEASUREMENT=ON;
+//     SEND_TO_ARRAY(".");
 
-    SEND_TO_ARRAY_Value(((MAIN_BATTERY_VOLTAGE/100)+0x30));
+//     SEND_TO_ARRAY_Value(((VOLT/10)+0x30));
 
-    VOLT=MAIN_BATTERY_VOLTAGE%100;
+//     //R_UART2_SEND_User(((VOLT%10)+0x30));
 
-    SEND_TO_ARRAY_Value(((VOLT/10)+0x30));
+//     SEND_COMMA_TO_ARRAY();                                    //BACKUP BATTERY VOLTAGE
 
-    NOP();
+//     BATTERY_MEASUREMENT=OFF;
 
-    SEND_TO_ARRAY(".");
+// ///************************************************************************************************************************************************************/
 
-    SEND_TO_ARRAY_Value(((VOLT%10)+0x30));
+//     SEND_TO_ARRAY_Value(Array_0[PANIC_ALERT]);
 
-    SEND_TO_ARRAY(",");                                       //MAIN BATTERY VOLTAGE
+//     NOP();                                                    //PANIC ALERT
 
-///************************************************************************************************************************************************************/
+// ///************************************************************************************************************************************************************/
 
-    VOLT=BACKUP_BATTERY_VOLTAGE%1000;
+// ///************************************************************************************************************************************************************/                              //PANIC ALERT & TAMPER ALERT 'C'
 
-    SEND_TO_ARRAY_Value(((VOLT/100)+0x30));
+//     HEX_CHARACTER_CONVERSION=SET;
 
-    VOLT=VOLT%100;
+//     if(MNC[0]==0x78)
+//     {
+//         SEND_TO_ARRAY("00");
+//     }
+//     else
+//     {
+//         if(MNC_DATA_LENGTH>=2)
+//         {
+//             MNC_DATA_LENGTH=1;
+//         }
 
-    SEND_TO_ARRAY(".");
+//         for(FOR_1=0; FOR_1<=MNC_DATA_LENGTH; FOR_1++)
+//         {
+//             NOP();
 
-    SEND_TO_ARRAY_Value(((VOLT/10)+0x30));
+//             SEND_TO_ARRAY_Value(MNC[FOR_1]);
+//         }
+//     }
 
-    //R_UART2_SEND_User(((VOLT%10)+0x30));
+//     SEND_COMMA_TO_ARRAY();
 
-    SEND_COMMA_TO_ARRAY();                                    //BACKUP BATTERY VOLTAGE
+// ///************************************************************************************************************************************************************/
 
-    BATTERY_MEASUREMENT=OFF;
+//     PRINT_ZEROS_2(LAC_DATA_LENGTH_0);
 
-///************************************************************************************************************************************************************/
+//     for(FOR_1=0; FOR_1<=LAC_DATA_LENGTH_0; FOR_1++)
+//     {
+//         NOP();
 
-    SEND_TO_ARRAY_Value(Array_0[PANIC_ALERT]);
+//         SEND_TO_ARRAY_Value(LAC[FOR_1]);
+//     }
 
-    NOP();                                                    //PANIC ALERT
+//     SEND_COMMA_TO_ARRAY();
 
-///************************************************************************************************************************************************************/
+//     PRINT_ZEROS_2(CELL_ID_DATA_LENGTH_0);
 
-///************************************************************************************************************************************************************/                              //PANIC ALERT & TAMPER ALERT 'C'
+// /************************************************************************************************************************************************************/
 
-    HEX_CHARACTER_CONVERSION=SET;
+//     for(FOR_1=0; FOR_1<=CELL_ID_DATA_LENGTH_0; FOR_1++)
+//     {
+//         NOP();
 
-    if(MNC[0]==0x78)
-    {
-        SEND_TO_ARRAY("00");
-    }
-    else
-    {
-        if(MNC_DATA_LENGTH>=2)
-        {
-            MNC_DATA_LENGTH=1;
-        }
+//         SEND_TO_ARRAY_Value(CELL_ID[FOR_1]);
+//     }
 
-        for(FOR_1=0; FOR_1<=MNC_DATA_LENGTH; FOR_1++)
-        {
-            NOP();
+//     SEND_COMMA_TO_ARRAY();
 
-            SEND_TO_ARRAY_Value(MNC[FOR_1]);
-        }
-    }
+// /************************************************************************************************************************************************************/
 
-    SEND_COMMA_TO_ARRAY();
+//     // CELL ID:-1
 
-///************************************************************************************************************************************************************/
+//     PRINT_ZEROS_2(CELL_ID_DATA_LENGTH[1]);
 
-    PRINT_ZEROS_2(LAC_DATA_LENGTH_0);
+//     for(FOR_1=0; FOR_1<=CELL_ID_DATA_LENGTH[1]; FOR_1++)
+//     {
+//         NOP();
 
-    for(FOR_1=0; FOR_1<=LAC_DATA_LENGTH_0; FOR_1++)
-    {
-        NOP();
+//         SEND_TO_ARRAY_Value(CELL_ID_1[FOR_1]);
+//     }
 
-        SEND_TO_ARRAY_Value(LAC[FOR_1]);
-    }
+//     SEND_COMMA_TO_ARRAY();
 
-    SEND_COMMA_TO_ARRAY();
+//     // LAC:-1
 
-    PRINT_ZEROS_2(CELL_ID_DATA_LENGTH_0);
+//     PRINT_ZEROS_2(LAC_DATA_LENGTH[1]);
 
-/************************************************************************************************************************************************************/
+//     for(FOR_1=0; FOR_1<=LAC_DATA_LENGTH[1]; FOR_1++)
+//     {
+//         NOP();
 
-    for(FOR_1=0; FOR_1<=CELL_ID_DATA_LENGTH_0; FOR_1++)
-    {
-        NOP();
+//         SEND_TO_ARRAY_Value(LAC_1[FOR_1]);
+//     }
 
-        SEND_TO_ARRAY_Value(CELL_ID[FOR_1]);
-    }
+//     SEND_COMMA_TO_ARRAY();
 
-    SEND_COMMA_TO_ARRAY();
+//     // DBM:-1
 
-/************************************************************************************************************************************************************/
+//     for(FOR_1=0; FOR_1<=DBM_DATA_LENGTH[1]; FOR_1++)
+//     {
+//         NOP();
 
-    // CELL ID:-1
+//         SEND_TO_ARRAY_Value(DBM_1[FOR_1]);
 
-    PRINT_ZEROS_2(CELL_ID_DATA_LENGTH[1]);
+//              if(DBM_DATA_LENGTH[1]==2 && FOR_1==0)
+//         {
+//             SEND_TO_ARRAY("0");
 
-    for(FOR_1=0; FOR_1<=CELL_ID_DATA_LENGTH[1]; FOR_1++)
-    {
-        NOP();
+//             NOP();
+//         }
+//         else if(DBM_DATA_LENGTH[1]==1 && FOR_1==0)
+//         {
+//             SEND_TO_ARRAY("00");
 
-        SEND_TO_ARRAY_Value(CELL_ID_1[FOR_1]);
-    }
+//             NOP();
+//         }
+//     }
 
-    SEND_COMMA_TO_ARRAY();
+//     SEND_COMMA_TO_ARRAY();
 
-    // LAC:-1
+// /************************************************************************************************************************************************************/
 
-    PRINT_ZEROS_2(LAC_DATA_LENGTH[1]);
+// /************************************************************************************************************************************************************/
 
-    for(FOR_1=0; FOR_1<=LAC_DATA_LENGTH[1]; FOR_1++)
-    {
-        NOP();
+//     // CELL ID:-2
 
-        SEND_TO_ARRAY_Value(LAC_1[FOR_1]);
-    }
+//     PRINT_ZEROS_2(CELL_ID_DATA_LENGTH[2]);
 
-    SEND_COMMA_TO_ARRAY();
+//     for(FOR_1=0; FOR_1<=CELL_ID_DATA_LENGTH[2]; FOR_1++)
+//     {
+//         NOP();
 
-    // DBM:-1
+//         SEND_TO_ARRAY_Value(CELL_ID_2[FOR_1]);
+//     }
 
-    for(FOR_1=0; FOR_1<=DBM_DATA_LENGTH[1]; FOR_1++)
-    {
-        NOP();
+//     SEND_COMMA_TO_ARRAY();
 
-        SEND_TO_ARRAY_Value(DBM_1[FOR_1]);
+//     // LAC:-2
 
-             if(DBM_DATA_LENGTH[1]==2 && FOR_1==0)
-        {
-            SEND_TO_ARRAY("0");
+//     PRINT_ZEROS_2(LAC_DATA_LENGTH[2]);
 
-            NOP();
-        }
-        else if(DBM_DATA_LENGTH[1]==1 && FOR_1==0)
-        {
-            SEND_TO_ARRAY("00");
+//     for(FOR_1=0; FOR_1<=LAC_DATA_LENGTH[2]; FOR_1++)
+//     {
+//         NOP();
 
-            NOP();
-        }
-    }
+//         SEND_TO_ARRAY_Value(LAC_2[FOR_1]);
+//     }
 
-    SEND_COMMA_TO_ARRAY();
+//     SEND_COMMA_TO_ARRAY();
 
-/************************************************************************************************************************************************************/
+//     // DBM:-2
 
-/************************************************************************************************************************************************************/
+//     for(FOR_1=0; FOR_1<=DBM_DATA_LENGTH[2]; FOR_1++)
+//     {
+//         NOP();
 
-    // CELL ID:-2
+//         SEND_TO_ARRAY_Value(DBM_2[FOR_1]);
 
-    PRINT_ZEROS_2(CELL_ID_DATA_LENGTH[2]);
+//              if(DBM_DATA_LENGTH[2]==2 && FOR_1==0)
+//         {
+//             SEND_TO_ARRAY("0");
 
-    for(FOR_1=0; FOR_1<=CELL_ID_DATA_LENGTH[2]; FOR_1++)
-    {
-        NOP();
+//             NOP();
+//         }
+//         else if(DBM_DATA_LENGTH[2]==1 && FOR_1==0)
+//         {
+//             SEND_TO_ARRAY("00");
 
-        SEND_TO_ARRAY_Value(CELL_ID_2[FOR_1]);
-    }
+//             NOP();
+//         }
+//     }
 
-    SEND_COMMA_TO_ARRAY();
+//     SEND_COMMA_TO_ARRAY();
 
-    // LAC:-2
+// /************************************************************************************************************************************************************/
 
-    PRINT_ZEROS_2(LAC_DATA_LENGTH[2]);
+//     // CELL ID:-3
 
-    for(FOR_1=0; FOR_1<=LAC_DATA_LENGTH[2]; FOR_1++)
-    {
-        NOP();
+//     PRINT_ZEROS_2(CELL_ID_DATA_LENGTH[3]);
 
-        SEND_TO_ARRAY_Value(LAC_2[FOR_1]);
-    }
+//     for(FOR_1=0; FOR_1<=CELL_ID_DATA_LENGTH[3]; FOR_1++)
+//     {
+//         NOP();
 
-    SEND_COMMA_TO_ARRAY();
+//         SEND_TO_ARRAY_Value(CELL_ID_3[FOR_1]);
+//     }
 
-    // DBM:-2
+//     SEND_COMMA_TO_ARRAY();
 
-    for(FOR_1=0; FOR_1<=DBM_DATA_LENGTH[2]; FOR_1++)
-    {
-        NOP();
+//     // LAC:-3
 
-        SEND_TO_ARRAY_Value(DBM_2[FOR_1]);
+//     PRINT_ZEROS_2(LAC_DATA_LENGTH[3]);
 
-             if(DBM_DATA_LENGTH[2]==2 && FOR_1==0)
-        {
-            SEND_TO_ARRAY("0");
+//     for(FOR_1=0; FOR_1<=LAC_DATA_LENGTH[3]; FOR_1++)
+//     {
+//         NOP();
 
-            NOP();
-        }
-        else if(DBM_DATA_LENGTH[2]==1 && FOR_1==0)
-        {
-            SEND_TO_ARRAY("00");
+//         SEND_TO_ARRAY_Value(LAC_3[FOR_1]);
+//     }
 
-            NOP();
-        }
-    }
+//     SEND_COMMA_TO_ARRAY();
 
-    SEND_COMMA_TO_ARRAY();
+//     // DBM:-3
 
-/************************************************************************************************************************************************************/
+//     for(FOR_1=0; FOR_1<=DBM_DATA_LENGTH[3]; FOR_1++)
+//     {
+//         NOP();
 
-    // CELL ID:-3
+//         SEND_TO_ARRAY_Value(DBM_3[FOR_1]);
 
-    PRINT_ZEROS_2(CELL_ID_DATA_LENGTH[3]);
+//              if(DBM_DATA_LENGTH[3]==2 && FOR_1==0)
+//         {
+//             SEND_TO_ARRAY("0");
 
-    for(FOR_1=0; FOR_1<=CELL_ID_DATA_LENGTH[3]; FOR_1++)
-    {
-        NOP();
+//             NOP();
+//         }
+//         else if(DBM_DATA_LENGTH[3]==1 && FOR_1==0)
+//         {
+//             SEND_TO_ARRAY("00");
 
-        SEND_TO_ARRAY_Value(CELL_ID_3[FOR_1]);
-    }
+//             NOP();
+//         }
+//     }
 
-    SEND_COMMA_TO_ARRAY();
+//     SEND_COMMA_TO_ARRAY();
 
-    // LAC:-3
+// /************************************************************************************************************************************************************/
 
-    PRINT_ZEROS_2(LAC_DATA_LENGTH[3]);
+//     //CELL ID:-4
 
-    for(FOR_1=0; FOR_1<=LAC_DATA_LENGTH[3]; FOR_1++)
-    {
-        NOP();
+//     PRINT_ZEROS_2(CELL_ID_DATA_LENGTH[4]);
 
-        SEND_TO_ARRAY_Value(LAC_3[FOR_1]);
-    }
+//     for(FOR_1=0; FOR_1<=CELL_ID_DATA_LENGTH[4]; FOR_1++)
+//     {
+//         NOP();
 
-    SEND_COMMA_TO_ARRAY();
+//         SEND_TO_ARRAY_Value(CELL_ID_4[FOR_1]);
+//     }
 
-    // DBM:-3
+//     SEND_COMMA_TO_ARRAY();
 
-    for(FOR_1=0; FOR_1<=DBM_DATA_LENGTH[3]; FOR_1++)
-    {
-        NOP();
+//     // LAC:-4
 
-        SEND_TO_ARRAY_Value(DBM_3[FOR_1]);
+//     PRINT_ZEROS_2(LAC_DATA_LENGTH[4]);
 
-             if(DBM_DATA_LENGTH[3]==2 && FOR_1==0)
-        {
-            SEND_TO_ARRAY("0");
+//     for(FOR_1=0; FOR_1<=LAC_DATA_LENGTH[4]; FOR_1++)
+//     {
+//         NOP();
 
-            NOP();
-        }
-        else if(DBM_DATA_LENGTH[3]==1 && FOR_1==0)
-        {
-            SEND_TO_ARRAY("00");
+//         SEND_TO_ARRAY_Value(LAC_4[FOR_1]);
+//     }
 
-            NOP();
-        }
-    }
+//     SEND_COMMA_TO_ARRAY();
 
-    SEND_COMMA_TO_ARRAY();
+//     // DBM:-4
 
-/************************************************************************************************************************************************************/
+//     for(FOR_1=0; FOR_1<=DBM_DATA_LENGTH[4]; FOR_1++)
+//     {
+//         NOP();
 
-    //CELL ID:-4
+//         SEND_TO_ARRAY_Value(DBM_4[FOR_1]);
 
-    PRINT_ZEROS_2(CELL_ID_DATA_LENGTH[4]);
+//              if(DBM_DATA_LENGTH[4]==2 && FOR_1==0)
+//         {
+//             SEND_TO_ARRAY("0");
 
-    for(FOR_1=0; FOR_1<=CELL_ID_DATA_LENGTH[4]; FOR_1++)
-    {
-        NOP();
+//             NOP();
+//         }
+//         else if(DBM_DATA_LENGTH[4]==1 && FOR_1==0)
+//         {
+//             SEND_TO_ARRAY("00");
 
-        SEND_TO_ARRAY_Value(CELL_ID_4[FOR_1]);
-    }
+//             NOP();
+//         }
+//     }
 
-    SEND_COMMA_TO_ARRAY();
+//     HEX_CHARACTER_CONVERSION=CLR;
 
-    // LAC:-4
+// ///************************************************************************************************************************************************************/
 
-    PRINT_ZEROS_2(LAC_DATA_LENGTH[4]);
+//     FRAME_NUMBER++;
 
-    for(FOR_1=0; FOR_1<=LAC_DATA_LENGTH[4]; FOR_1++)
-    {
-        NOP();
+//     if(FRAME_NUMBER>=1000000)
+//     {
+//         FRAME_NUMBER=1;
+//     }
 
-        SEND_TO_ARRAY_Value(LAC_4[FOR_1]);
-    }
+//     TEMP_FRAME_NUMBER=FRAME_NUMBER;
 
-    SEND_COMMA_TO_ARRAY();
+//     SEND_TO_ARRAY_Value(((TEMP_FRAME_NUMBER/100000)+0x30));
 
-    // DBM:-4
+//     TEMP_FRAME_NUMBER=TEMP_FRAME_NUMBER%100000;
 
-    for(FOR_1=0; FOR_1<=DBM_DATA_LENGTH[4]; FOR_1++)
-    {
-        NOP();
+//     SEND_TO_ARRAY_Value(((TEMP_FRAME_NUMBER/10000)+0x30));
 
-        SEND_TO_ARRAY_Value(DBM_4[FOR_1]);
+//     TEMP_FRAME_NUMBER=TEMP_FRAME_NUMBER%10000;
 
-             if(DBM_DATA_LENGTH[4]==2 && FOR_1==0)
-        {
-            SEND_TO_ARRAY("0");
+//     SEND_TO_ARRAY_Value(((TEMP_FRAME_NUMBER/1000)+0x30));
 
-            NOP();
-        }
-        else if(DBM_DATA_LENGTH[4]==1 && FOR_1==0)
-        {
-            SEND_TO_ARRAY("00");
+//     TEMP_FRAME_NUMBER=TEMP_FRAME_NUMBER%1000;
 
-            NOP();
-        }
-    }
+//     SEND_TO_ARRAY_Value(((TEMP_FRAME_NUMBER/100)+0x30));
 
-    HEX_CHARACTER_CONVERSION=CLR;
+//     TEMP_FRAME_NUMBER=TEMP_FRAME_NUMBER%100;
 
-///************************************************************************************************************************************************************/
+//     SEND_TO_ARRAY_Value(((TEMP_FRAME_NUMBER/10)+0x30));
 
-    FRAME_NUMBER++;
+//     SEND_TO_ARRAY_Value(((TEMP_FRAME_NUMBER%10)+0x30));
 
-    if(FRAME_NUMBER>=1000000)
-    {
-        FRAME_NUMBER=1;
-    }
+//     RECORD_ARRAY_ADDRESS=1;
+// }
 
-    TEMP_FRAME_NUMBER=FRAME_NUMBER;
-
-    SEND_TO_ARRAY_Value(((TEMP_FRAME_NUMBER/100000)+0x30));
-
-    TEMP_FRAME_NUMBER=TEMP_FRAME_NUMBER%100000;
-
-    SEND_TO_ARRAY_Value(((TEMP_FRAME_NUMBER/10000)+0x30));
-
-    TEMP_FRAME_NUMBER=TEMP_FRAME_NUMBER%10000;
-
-    SEND_TO_ARRAY_Value(((TEMP_FRAME_NUMBER/1000)+0x30));
-
-    TEMP_FRAME_NUMBER=TEMP_FRAME_NUMBER%1000;
-
-    SEND_TO_ARRAY_Value(((TEMP_FRAME_NUMBER/100)+0x30));
-
-    TEMP_FRAME_NUMBER=TEMP_FRAME_NUMBER%100;
-
-    SEND_TO_ARRAY_Value(((TEMP_FRAME_NUMBER/10)+0x30));
-
-    SEND_TO_ARRAY_Value(((TEMP_FRAME_NUMBER%10)+0x30));
-
-    RECORD_ARRAY_ADDRESS=1;
-}
 
 void SEND_WREN_COMMAND(void)
 {
@@ -5135,12 +5207,12 @@ CHECK_AGAIN:
     }
 }
 
-void SEND_COMMA_TO_ARRAY(void)
-{
-    SEND_TO_ARRAY(",");
+// void SEND_COMMA_TO_ARRAY(void)
+// {
+//     SEND_TO_ARRAY(",");
 
-    NOP();
-}
+//     NOP();
+// }
 
 void FLASH_WRITE(void)
 {
@@ -5307,7 +5379,7 @@ void READ_FLASH_MEM(void)
 
     for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
     {
-        if(VEICHLE_NUMBER[FOR_1] != ' ')
+        if(VEICHLE_NUMBER[FOR_1] != ' ' && VEICHLE_NUMBER[FOR_1] != '\0')
         {
             R_UART2_SEND_User(VEICHLE_NUMBER[FOR_1]);
 

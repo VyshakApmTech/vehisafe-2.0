@@ -28,7 +28,11 @@ const unsigned char SET_HBRK_FRAME[] = {"SET HBRK "}; //9 chars
 const unsigned char SET_HTRN_FRAME[] = {"SET HTRN "}; //9 chars
 const unsigned char SET_LBAT_FRAME[] = {"SET LBAT "}; //9 chars
 const unsigned char SET_APN_FRAME2[] = {"SET APN "}; //8 chars
+const unsigned char MODEM_TIME_FRAME[8] = {"+CCLK: \""}; // 8 chars: +CCLK: "  (includes opening quote)
 
+// Store complete AT+CCLK response
+char cclk_response[24];  // 22 chars + null + 1 extra for safety
+char MODEM_TIME_RX = CLR;  // Multi-state flag: 0=idle, 2=capturing data (changed from _Bool to char to support state values > 1)
 // const unsigned char SET_ENO_FRAME[] = {"SET ENO IMEI 2202="};  // 18 characters (same as APN)
 char TEMP_HACL_VALUE[3];  // For storing the HACL value (e.g., "30")
 //char PRIM_IP[16];
@@ -165,37 +169,51 @@ void ACK_RX(unsigned int ct,unsigned int ack,unsigned int REDIAL,unsigned int WA
 /************************************************************************************************************************************************************/
 	if(ack==0)              ///GSM REGISTRATION (CREG: 0,1)
 	{
-	while(GSM_REG==0 && t_count<=ct){NOP();}
-	if(GSM_REG==2 || t_count>=ct)
-	{
-	GSM_REG=0;
-	t_count=0;
-	MS_TIMER(REDIAL);
-	RESTART=ON;
-	}
-	GSM_REG=0;
+		while(GSM_REG==0 && t_count<=ct)
+		{
+			NOP();
+		}
+		if(GSM_REG==2 || t_count>=ct)
+		{
+			GSM_REG=0;
+			t_count=0;
+			MS_TIMER(REDIAL);
+			RESTART=ON;
+		}
+		GSM_REG=0;
 	}
 /************************************************************************************************************************************************************/
 	else if(ack==1)		///GPRS REGISTRATION (CGREG: 0,1)
 	{
-	while(GPRS_REG==0 && t_count<=ct){NOP();}
-	if(GPRS_REG==2 || t_count>=ct){GPRS_REG=0;t_count=0;RESTART=ON;
-	MS_TIMER(REDIAL);
-	}
-	GPRS_REG=0;
+		while(GPRS_REG==0 && t_count<=ct)
+		{
+			NOP();
+		}
+		if(GPRS_REG==2 || t_count>=ct)
+		{
+			GPRS_REG=0;t_count=0;
+			RESTART=ON;
+		    MS_TIMER(REDIAL);
+		}
+		GPRS_REG=0;
 	}
 /************************************************************************************************************************************************************/	
 	else if (ack==2)	/// OK
 	{
-	while(ACK==0 && ERROR_OCCURED==0 && t_count<=ct){NOP();}
-	if(ERROR_OCCURED==1 || t_count>=ct)
-	{
-	t_count=0;ACK=0;ERROR_OCCURED=0;
-	RESTART=ON;
-	NOP();
-	MS_TIMER(REDIAL);
-	}
-	ACK=0;
+		while(ACK==0 && ERROR_OCCURED==0 && t_count<=ct)
+		{
+			NOP();
+		}
+		if(ERROR_OCCURED==1 || t_count>=ct)
+		{
+			t_count=0;
+			ACK=0;
+			ERROR_OCCURED=0;
+			RESTART=ON;
+			NOP();
+			MS_TIMER(REDIAL);
+		}
+		ACK=0;
 	}
 /************************************************************************************************************************************************************/	
 	else if (ack==3)	/// HTTP CONNECT
@@ -289,6 +307,7 @@ void CMD_DATA_READ_IN_EEPROM(void)
 	unsigned int A,B,C;
 	unsigned char ADDR46, ADDR47, ADDR48, EEPROM_VERSION;
 
+	MS_TIMER(100);  // I2C bus stabilization before first EEPROM read
 	
 	IGNITION_ON_UPDATE_TIME=((i2c_readn(0xA0,0XFE,20))*10);MS_TIMER(2);
 	
@@ -1023,7 +1042,7 @@ if(GET_NMR_RX==SET)
 else{I[26]=0;}		
 }	
 
-	
+
 //***********************************************************************************************************************************************************
 //  				 GSM REGISTRAION IN NETWORK
 //************************************************************************************************************************************************************
@@ -1735,7 +1754,52 @@ else
     I[31] = 0;
     DEVICE_RESET_CMD_FRAME_RX = CLR;
 }
-
+//************************************************************************************************************************************************************
+//  				 MODEM TIME - Parse +CCLK: "YY/MM/DD,HH:MM:SS±TZ"
+//************************************************************************************************************************************************************
+  // First priority: if we're already capturing, look for closing quote
+  if(MODEM_TIME_RX==2)
+  {
+	if(UART0_BUFFER=='"')  // End quote found
+	{
+		cclk_response[I[32]]=0;  // Null terminate
+		
+		// Parse captured data (minimum 17 chars: YY/MM/DD,HH:MM:SS)
+		//        positions: 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16
+		//        example:   2  6  /  0  8  /  0  7  ,  0  5  :  5  4  :  2  5
+		if(I[32]>=17)  // Ensure full timestamp captured
+		{
+			TIME[2]=((cclk_response[0]-'0')<<4) | (cclk_response[1]-'0');   // YY (BCD)
+			TIME[1]=((cclk_response[3]-'0')<<4) | (cclk_response[4]-'0');   // MM (BCD)
+			TIME[0]=((cclk_response[6]-'0')<<4) | (cclk_response[7]-'0');   // DD (BCD)
+			TIME[3]=((cclk_response[9]-'0')<<4) | (cclk_response[10]-'0');  // HH (BCD)
+			TIME[4]=((cclk_response[12]-'0')<<4) | (cclk_response[13]-'0'); // Minutes (BCD)
+			TIME[5]=((cclk_response[15]-'0')<<4) | (cclk_response[16]-'0'); // SS (BCD)
+		}
+		MODEM_TIME_RX=0;  // Reset for next response
+		I[32]=0;
+	}
+	else
+	{
+		// Still capturing data
+		cclk_response[I[32]]=UART0_BUFFER;
+		if(I[32]<23) I[32]++;  // Prevent buffer overflow
+	}
+  }
+  // Second priority: match pattern header "+CCLK: \""
+  else if(MODEM_TIME_RX==0 && UART0_BUFFER==MODEM_TIME_FRAME[I[32]])
+  {
+	I[32]++;
+	if(I[32]>=8)  // Full 8-char pattern matched: +CCLK: "
+	{
+		MODEM_TIME_RX=2;  // Switch to capturing state
+		I[32]=0;         // Reset data buffer index
+	}
+  }
+  else if(MODEM_TIME_RX==0)
+  {
+	I[32]=0;  // Reset pattern match index if no match
+  }
 
 ///************************************************************************************************************************************************************
 //GET SETTINGS FROM SMS
@@ -2883,7 +2947,7 @@ if(UART0_BUFFER == SET_VEHREG_FRAME[I[92]] || VN_ACK_RX >= 1)
             VN_ACK_RX = 1;
             I[92] = 0;
             i = 0;
-            for(t = 0; t < 14; t++)
+            for(t = 0; t < 15; t++)  /* Clear all 15 positions to prevent garbage */
             {
                 VEICHLE_NUMBER[t] = ' ';
             }

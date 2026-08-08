@@ -66,7 +66,7 @@
 	void CMD_DATA_READ_IN_EEPROM(void);
 	void GSM_SMS_DIAG(void);
 	extern void MANUAL_NET(unsigned int N);
-	
+	void GET_TIME_MODEM(void);
 	
 	
 	void convert(unsigned long int i)
@@ -103,19 +103,30 @@
 	    R_MAIN_UserInit();
 	    /* Start user code. Do not edit comment generated here */
 	    while (1U)
-	    {
+	    {	
 			if(TEMP_PROF != 0)
 			{
-            	MANUAL_NET(TEMP_PROF - '0');
+            			MANUAL_NET(TEMP_PROF - '0');
 				TEMP_PROF = 0;
 				
 			}
 				
-			/////if(GPS_STANDBY==OFF){WATCHDOG_ON();GET_GPS_DATA();WATCHDOG_OFF();}
+			/////if(GPS_STANDBY==OFF){WATCHDOG_ON();
+			//GET_GPS_DATA();
+			//WATCHDOG_OFF();}
 			if(GPS_DIRECTION_DATA_VALID==ON && GPS_STANDBY==OFF)
 			{
-				WATCHDOG_ON();RTC_SET();WATCHDOG_OFF();
+				WATCHDOG_ON();
+				RTC_SET();
+				WATCHDOG_OFF();
 			}
+			else
+			{
+				GET_TIME_MODEM();
+				RTC_SET();
+				WATCHDOG_OFF();
+			}
+
 			NEW_SMS_READ();
 			SYSTEM_STATUS();          // ← ADD THIS LINE!
 			VLT_RUNNING_MODE();
@@ -140,14 +151,13 @@
 	    /* Start user code. Do not edit comment generated here */
 	    EI();
 	    WATCHDOG_OFF();
-	    
 	    GPRS_PS_EN=OFF1;
 	    P0_bit.no0=P0_bit.no1=OFF;
 	    GPS_PWR_EN=ON;
 	    RED_LED=ON;
 	    HOOTER=ON;
 	  //  //i2c_writen(0xA0,0XFE,0X01,0X00);MS_TIMER(100);
-	    //BLUE_LED=ON;
+	    BLUE_LED=ON;
 	    SMS_CMD_REPLY=CLR;
 	    IGNITION_CONTROL=ON;
 	    R_TAU0_Channel2_Start();
@@ -162,7 +172,10 @@
 	    R_CSI00_Start();
 	    R_RTC_Start();
 	    R_TAU0_Channel0_Start();
-	    R_ADC_Create();R_ADC_Start();R_ADC_Set_OperationOn();R_ADC_Start();
+	    R_ADC_Create();
+	    R_ADC_Start();
+	    R_ADC_Set_OperationOn();
+	    R_ADC_Start();
 	    PM3_bit.no1=1;
 	    PM5_bit.no0=1;
 	     WATCHDOG_ON();
@@ -171,7 +184,8 @@
 	    R_INTC4_Start();
 	   // ACC_GRY_INTZ();
 	   // ACC_GYRO_READ();
-	   R_UART1_SEND("$PSTMSRR\r\n");MS_TIMER(500);
+	   R_UART1_SEND("$PSTMSRR\r\n");
+	   MS_TIMER(500);
 	    GPS_RST=ON;//HAVE TO CHANGE NEW CIRCUIT PIN PORT
 	    //GPS_RST_FLAG=CLR;
 	    GPS_RST_FLAG=OFF;
@@ -197,12 +211,12 @@
 	    GPRS_PS_EN=ON1;
 	    MS_TIMER(1500);
 	   // R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");
-	    MS_TIMER(500);
+	    //MS_TIMER(500);
 	    //R_UART2_SEND("AT+QSTK?\r\n");
-	MS_TIMER(500);
+	//MS_TIMER(500);
 	//QSTK();
 	    //R_UART2_SEND("AT+CRSM=214,28539,0,0,12,\"FFFFFFFFFFFFFFFFFFFFFFFF\"\r\n");
-	     MS_TIMER(300);
+	     //MS_TIMER(300);
 	    POWER_SOURCE=ON;
 	    VLT_STARTUP=SET;
 	    VLT_STARTUP_INITIAL=SET;
@@ -211,37 +225,39 @@
 	    VLT_STARTUP=ON;
 	    //ACC_GRY_INTZ();
 	    //ACC_GYRO_READ();
-	        R_UART2_SEND("AT\r\n");ACK_RX(20,2,10,1);
-	    MS_TIMER(300);
-	     R_UART2_SEND("AT+CBC\r\n");ACK_RX(20,2,10,1);
-	    MS_TIMER(300);
-	         R_UART2_SEND("AT+CFUN=1\r\n");
-	    MS_TIMER(300);
+
+
+
+		R_UART2_SEND("AT\r\n");ACK_RX(20,2,10,1);
+	    MS_TIMER(200);
+		R_UART2_SEND("AT+CBC\r\n");ACK_RX(20,2,10,1);
+	    MS_TIMER(200);
+		R_UART2_SEND("AT+CFUN=1\r\n");
+	    MS_TIMER(200);
 	    R_UART2_SEND("AT+CREG=0\r\n");
-	    MS_TIMER(300);
-	     R_UART2_SEND("AT+QSPN?\r\n");
-	    MS_TIMER(300);
+	    MS_TIMER(200);
+		R_UART2_SEND("AT+QSPN?\r\n");
+	    MS_TIMER(200);
 	   //SwitchNetwork();
 	    R_UART2_SEND("AT+QCCID\r\n");
-	    MS_TIMER(300);
+	    MS_TIMER(200);
 	    R_UART2_SEND("AT+COPS=?\r\n");
-	     
 	    MS_TIMER(2000);
 	      R_UART2_SEND("AT+CREG?\r\n");
-	    MS_TIMER(300);
-	    GET_IMEI();
+	    MS_TIMER(200);
+	    // GET_IMEI();  // REDUNDANT - Commented (1st call)
 	   
 	   // R_UART2_SEND("AT+GSN\r\n");
 	   //  MS_TIMER(300);
 	   GSM_INTZ(SMS_MODE);
 	   GSM_SMS_DIAG();
-	    GET_IMEI();
-	     R_UART2_SEND("AT\r\n");ACK_RX(20,2,10,1);
-	    MS_TIMER(300);
-	     R_UART2_SEND("AT\r\n");ACK_RX(20,2,10,1);
-	    MS_TIMER(300);
-	         GET_IMEI();
-		  GET_IMEI();
+	    // GET_IMEI();  // REDUNDANT - Commented (2nd call)
+	     //R_UART2_SEND("AT\r\n");ACK_RX(20,2,10,1);
+	    //MS_TIMER(300);
+	     //R_UART2_SEND("AT\r\n");ACK_RX(20,2,10,1);
+	    //MS_TIMER(300);
+	         // GET_IMEI();  // REDUNDANT - Commented (3rd call)
+		  GET_IMEI();  // KEPT - Final IMEI read before EEPROM
 	   CMD_DATA_READ_IN_EEPROM();
 	//    
 	    //R_UART1_Start();
@@ -264,15 +280,24 @@
 
 	/* Start user code for adding. Do not edit comment generated here */
 
+	void GET_TIME_MODEM(void)
+	{  
+	    R_UART2_SEND("AT+CCLK?\r\n");
+		//ACK_RX(20,2,100,10);
+		MS_TIMER(5);
+	}
+
 	void READ_DEVICE_ID(void)
 	{
-	MS_TIMER(5);FLASH_CE=0;
-	R_CSI00_SEND(0x90);//R_CSI00_SEND(0x00);R_CSI00_SEND(0x00);R_CSI00_SEND(0x00);						// READ COMMAND
-	R_CSI00_SEND(0x00);					// READ-ADDRESS-1
-	R_CSI00_SEND(0x00);			// READ-ADDRESS-2
-	R_CSI00_SEND(0x00);					// READ-ADDRESS-3
-	R_CSI00_Send_Receive(FLASH_STATUS,1,FLASH_STATUS);
-	//R_CSI00_Send_Receive(0x90,6,Flash_Status);
-	MS_TIMER(100);FLASH_CE=1;		
+		MS_TIMER(5);
+		FLASH_CE=0;
+		R_CSI00_SEND(0x90);//R_CSI00_SEND(0x00);R_CSI00_SEND(0x00);R_CSI00_SEND(0x00);						// READ COMMAND
+		R_CSI00_SEND(0x00);					// READ-ADDRESS-1
+		R_CSI00_SEND(0x00);			// READ-ADDRESS-2
+		R_CSI00_SEND(0x00);					// READ-ADDRESS-3
+		R_CSI00_Send_Receive(FLASH_STATUS,1,FLASH_STATUS);
+		//R_CSI00_Send_Receive(0x90,6,Flash_Status);
+		MS_TIMER(100);
+		FLASH_CE=1;		
 	}
 	/* End user code. Do not edit comment generated here */

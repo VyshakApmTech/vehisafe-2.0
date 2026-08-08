@@ -11,6 +11,6 @@ void InitM95(void);
 void SwitchNetwork(void);
 //void SMS_CMD_DATA_UPL(unsigned int MSET);
 void MANUAL_NET(unsigned int N);
-void QSTK(void);
+//void QSTK(void);
 //void CHECK_IP(unsigned int T);
 #endif

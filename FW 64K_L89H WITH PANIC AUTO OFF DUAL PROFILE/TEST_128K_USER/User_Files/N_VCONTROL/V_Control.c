@@ -184,10 +184,10 @@ void VLT_RUNNING_MODE(void)
                 HEALTH_PACKET_TO_SERVER = ON;  /* Trigger health packet */
             }
 
-            R_TAU0_Channel0_Stop();
-            MINUTE=I_HOURS=CLR;//INTERNET_CONNECTED=2;
+            // Keep timer running continuously - don't stop/start (causes 20s startup delay)
+            // Just reset MINUTE counter while timer keeps incrementing
+            MINUTE=I_HOURS=CLR;
             UPDATE_ONLINE_DATA_FRAME();
-            R_TAU0_Channel0_Start();
             VLT_STARTUP_INITIAL=SET;
             WATCHDOG_OFF();
         }
@@ -213,7 +213,7 @@ void VLT_RUNNING_MODE(void)
             GPRS_DISCONNECT();
         }
         
-        if(MINUTE>=600)
+        if(MINUTE>=180) //3 minutes 
         {
             WATCHDOG_ON();
             GPRS_PS_EN=ON1;
@@ -235,7 +235,12 @@ void VLT_RUNNING_MODE(void)
             INTERNET_CONNECTED=OFF;
             GPRS_PS_EN=OFF1;
             R_TAU0_Channel0_Start();
-            WATCHDOG_OFF();
+            
+            // Only turn off watchdog if NOT forcing a device reset via SMS
+            if(WATCH_DOG_FORCE_KILL==OFF)
+            {
+                WATCHDOG_OFF();
+            }
         }
     }
 
