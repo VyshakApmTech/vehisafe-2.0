@@ -149,7 +149,10 @@ static void r_uart1_callback_receiveend(void)
 static void r_uart1_callback_softwareoverrun(uint16_t rx_data)
 {
     /* Start user code. Do not edit comment generated here */
-      if(NAVIGATION_RX==ON){GPS_UART_RX_4(rx_data);}
+    if(NAVIGATION_RX==ON)
+    {
+        GPS_UART_RX_4(rx_data);
+    }
     /*if(GPS_RX==1){*/
     
     GPS_UART_RX_1(rx_data);

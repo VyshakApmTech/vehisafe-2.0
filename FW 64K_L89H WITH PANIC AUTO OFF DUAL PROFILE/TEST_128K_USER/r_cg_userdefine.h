@@ -56,7 +56,8 @@ User definitions
 #include "V_Control.h"
 #include "N_IEEPROM.h"
 //#include "V_Control.h"
-
+//#define    SIMMAKE_IDEMIA_3P
+#define    SIMMAKE_GND
 #define MAIN_PS_EN P12_bit.no0
 #define GPS_RST P1_bit.no6
 #define IGNITION_CONTROL P7_bit.no3

@@ -1,7 +1,15 @@
 #include "r_cg_userdefine.h"
+
 void UPDATE_ONLINE_DATA_FRAME(void);
-void SEND_AIS140_PVT(void);
 void HEL_STRING(void);
+#define DATA_BUFFER_SIZE 256
+char DATA_BUFFER[DATA_BUFFER_SIZE];
+unsigned int DATA_BUFFER_INDEX;
+void BUFFER_APPEND_CHAR(char c);
+void BUFFER_APPEND_STR(const char *s);
+char apn_is_default = 1;
+char default_apn[25] ={'n','a','v','s','p','i','r','e','i','o','t','.','c','o','m','\0'};
+char APN_INDEX = 0;  // Dedicated index for APN reception (prevents VV collision)
 unsigned char CGATT_POLL_COUNT = 0;   /* already have this - no other new variables needed */
 char V_NO_LEN,VN_ACK_RX,PANIC_NUMBER_RX,TEMP_SET[255],TEMP_TCP[255],SET_TCP_FRAME_RX,SETTING_CMD_FRAME_RX,RX_ACK_Frame,ACK,ERROR_OCCURED,RX_SMS_CMD,t,SMS_FAIL_COUNT,SMS_FAIL,NETWORK_NAME_RX,BATTERY_MEASUREMENT,IGNITION_CTRL_RX,INITIAL_MESSAGE,P_LAT_DM_RX,FILE_CLOSE_ATTEMPT,GSM_REG,GPRS_REG/*,SS_DATA_RX*/,GET_SS,dBm,GPRS_CONNECTED,GSM_STRENGTH='5',INTERNET_CONNECTED,DISCONNECT,LOW_BATTERY_ALERT,HTTP_CONNECT_COUNT,NW_NAME_RX,TCP_CONNECTION_OPEN=OFF;
 char i,SMS,NETWORK_FAILURE,HTTP_PRINT,SPEED_DATA[10],SS_DATA_RX,CPIN,P_TIME[10],P_SEND_TIME[10],P_SEND_LOG_DM[10],P_SEND_LAT_DM[10],FTP_ADDRESS[8],FTP_CONNECT_COUNT,FILE_ADDR,FIRMWARE_VERSION_RX,I[100];
@@ -49,7 +57,6 @@ NEW_SMS_FRAME[11]={'C','M','T','I',':',' ','"','S','M','"',','},
 PHONE_NUMBER_OF_SENDER_FRAME[23]={'C','M','G','R',':',' ','"','R','E','C',' ','U','N','R','E','A','D','"',',','"','+','9','1'},
 GET_IMEI_SMS_CMD[13]={'G','E','T',' ','V','L','T',' ','I','M','E','I',' '},
 DEVICE_RESET_CMD_FRAME[14]={'S','E','T',' ','V','L','T',' ','R','E','S','E','T',' '},
-SET_APN_FRAME[8]={'S','E','T',' ','A','P','N',' '},
 //SET_TCP_FRAME[8]={'S','E','T',' ','T','C','P',' '},
 //APN_S_FRAME[6]={'A','C','C','P','N',':'},
 GET_SMS_FRAME[12]={'G','E','T',' ','S','E','T','T','I','N','G','S'},
@@ -83,23 +90,17 @@ NETWORK_NAME[8]={'0','0','0','0','0','0','0','0'},
 SMS_MOBILE_NO[52]={'9','9','9','9','9','9','9','9','9','9','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',},
 REPLY_NUMBER[10]={'0','0','0','0','0','0','0','0','0','0'};
 
-//NGSM.C 
-// IP Address - 78.46.190.117
-// char TEMP_PIP[16]  = {'7','8','.','4','6','.','1','9','0','.','1','1','7'};
-// char TEMP_PPN[6]  = {'5','0','0','2','2','\0'};
-
-char TEMP_PIP[20]  = "stavltsgw.tn.gov.in";     // Server 1
-char TEMP_PIP2[20] = "NA";                       // Server 2
-char TEMP_SIP[24]  = "tracking.vlvprotect.com"; // Server 3
-char TEMP_SIP2[20] = "13.234.160.106";          // Server 4
-
-char TEMP_PPN[6]  = "8080";  // Server 1 Port
-char TEMP_PPN2[6] = "NA";    // Server 2 Port
-char TEMP_SPN[6]  = "8080";  // Server 3 Port
-char TEMP_SPN2[6] = "8224";  // Server 4 Port
+char TEMP_PIP[30]  = "stavltsgw.tn.gov.in";       // Server 1
+char TEMP_PPN[6]   = "8080";                      // Server 1 Port
+char TEMP_PIP2[30] = "NA";                        // Server 2
+char TEMP_PPN2[6]  = "NA";                        // Server 2 Port
+char TEMP_SIP[30]  = "tracking.vlvprotect.com";   // Server 3
+char TEMP_SPN[6]   = "8080";                      // Server 3 Port
+char TEMP_SIP2[30] = "13.234.160.106";            // Server 4
+char TEMP_SPN2[6]  = "8224";                      // Server 4 Port
 
 
-char HEALTH_CMD_FRAME_RX, SET_SETTINGS_FRAME_RX, HEALTH_ON_DURATON_RX, PANIC_ON_DURATON_RX, PANIC_ON_DURATON_S_RX, HEALTH_ON_DURATON_S_RX, APN_S_RX, TEMP_APN2[255], GET_SMS_RX,GET_PIP_S_RX, GET_SIP_S_RX, SET_PIP_PN_RX, SET_SIP_PN_RX, SET_SLEEP_ON_RX, SET_SLEEP_OF_RX, SET_OVERSPEED_RX, GET_OVER_SPEED_RX, GET_SLEEP_TIME_RX, GET_SLEEP_OFF_TIME_RX;
+char HEALTH_CMD_FRAME_RX, SET_SETTINGS_FRAME_RX, HEALTH_ON_DURATON_RX, PANIC_ON_DURATON_RX, PANIC_ON_DURATON_S_RX, HEALTH_ON_DURATON_S_RX, APN_S_RX, TEMP_APN2[20], GET_SMS_RX,GET_PIP_S_RX, GET_SIP_S_RX, SET_PIP_PN_RX, SET_SIP_PN_RX, SET_SLEEP_ON_RX, SET_SLEEP_OF_RX, SET_OVERSPEED_RX, GET_OVER_SPEED_RX, GET_SLEEP_TIME_RX, GET_SLEEP_OFF_TIME_RX;
 
 _Bool DECIMAL_POINT_CAME_STOP_TX, POWER_SOURCE_RECONNECT_PACKET, GET_MCC_MNC_LAC_CELL_ID_RX, ADD_ZERO_TO_SPEED, SMS_PIN_WRONG, NEW_SMS_RX_FRAME_RX, PHONE_NUMBER_OF_SENDER_RX, DEVICE_RESET_CMD_FRAME_RX, DEVICE_RESET_CMD, SERVER_UPDATE_TIME_CMD_FRAME_RX, SET_EMERGENCY_NUMBER_FRAME_CMD, SET_REGN_NUMBER_FRAME_CMD, UPDATE_EMERGENCY_NUMBER, UPDATE_IP, SET_IP_FRAME_CMD, URL_PRINT, MESSAGE_READ, SET_SLEEP_OFF_CMD, SET_SLEEP_ON_CMD, OVER_SPEED_CMD, GET_EMGT_TIME_CMD, ACTIVATION_CMD, HEALTH_AND_ACTIVATION_CMD;
 
@@ -111,7 +112,7 @@ _Bool GPS_STANDBY, WATCH_DOG_FORCE_KILL, HTTP_DOWNLOAD_ACK, FTP_ACK, FTP_DOWNLOA
 
 int AD, resend;
 
-char p1, p2, p3, p4, MCC_MNC_LAC_CELL_ID_LENGTH, FOR_7, ALTITUDE_VALUE_COUNT, NEW_SMS_INBOX_ADDRESS[20], NEW_SMS, PHONE_NUMBER_OF_SENDER[12], TEMP_REGN_NUMBER[15], TEMP_APN[15] = {'s','e','n','s','e','m','2','m'}, SET_APN_FRAME_RX, IGNITION_ON_TIME_RX, IGNITION_OFF_TIME_RX;
+char p1, p2, p3, p4, MCC_MNC_LAC_CELL_ID_LENGTH, FOR_7, ALTITUDE_VALUE_COUNT, NEW_SMS_INBOX_ADDRESS[20], NEW_SMS, PHONE_NUMBER_OF_SENDER[12], TEMP_REGN_NUMBER[15], TEMP_APN[25] = {'n','a','v','s','p','i','r','e','i','o','t','.','c','o','m','\0'}, SET_APN_FRAME_RX, IGNITION_ON_TIME_RX, IGNITION_OFF_TIME_RX;
 
 unsigned int URL_COUNT, VEICHLE_REG_COUNT, IGNITION_ON_UPDATE_TIME, IGNITION_OFF_UPDATE_TIME, UPDATE_TIME_ON_TIME, UPDATE_TIME_OFF_TIME, HEALTH_ON_DURATON_LEVEL, P_DL, PANIC_ALERT_TIME, PANIC_TIME, HEALTH_ALERT_TIME, APN_TEMP, HARSH_BRAKE_LEVEL, HARSH_TURN_LEVEL, HARSH_ACCEL_LEVEL, HT_LEVEL, HB_LEVEL, P_D_L, SLEEP_ON_LEVEL, SLEEP_OF_LEVEL, SLEEP_ON_LEVEL, SLEEP_OFF_LEVEL, OVER_SPEED, TEMP_OVS_LEVEL, SLEEP_OFF_TIME, TEMP_SLEEP_OFF_TIME, EMGT_TIME;
 
@@ -209,103 +210,82 @@ void GET_NETWORK_NAME(void)
 	restart100:
 	NETWORK_NAME_RX=ON;
 	ACK=CLR;
-	R_UART2_SEND("AT+COPS?\r\n");ACK_RX(40,2,50,0);
+	R_UART2_SEND("AT+COPS?\r\n");
+    ACK_RX(40,2,50,0);
 	//SwitchNetwork();
-	if(RESTART==ON){RESTART=OFF;goto restart100;}
+	if(RESTART==ON)
+    {
+        RESTART=OFF;
+        goto restart100;
+    }
 	
 	NETWORK_NAME_RX=OFF;
 }
-/*void LATITUDE_CONVERSION(void)
+void LATITUDE_CONVERSION(void)
+{
+     unsigned long int TEMP_LC1,TEMP_LC2,LATITUDE_MINUTES;
+     unsigned int FOR_2;
 
-{
-     unsigned long int TEMP_LC1,TEMP_LC2,LATITUDE_MINUTES,Array[10];
-     
-unsigned int TEMP_LC3,FOR_2;
-     
-MS_TIMER(1);
-     
-LATITUDE_MINUTES=0X0F & LAT_DM_RX[2];
-     
-for(FOR_2=3;FOR_2<=7;FOR_2++){
-     
-LATITUDE_MINUTES=LATITUDE_MINUTES*10;
-     
-LATITUDE_MINUTES=(LATITUDE_MINUTES + (0X0F & LAT_DM_RX[FOR_2]));
-     
-}
- 
-TEMP_LC1=((((LAT_DM_RX[0]&0X0F)*10))+(LAT_DM_RX[1]&0X0F));
-  
-LATITUDE_MINUTES=((((LATITUDE_MINUTES/10000)/60)+TEMP_LC1)*1000000);
- 
-TEMP_LC1=(double)LATITUDE_MINUTES;
-    
- TEMP_LC2=TEMP_LC1/10000000;
-  
-   LAT_DM[0]=Array[TEMP_LC2];
-    
- TEMP_LC2=10000000;
-     
-for(FOR_2=1;FOR_2<=7;FOR_2++)
-{
-     TEMP_LC1=TEMP_LC1%TEMP_LC2;
-  
-   TEMP_LC2=TEMP_LC2/10;
-    
- LAT_DM[FOR_2]=TEMP_LC1/TEMP_LC2;
-  
-   LAT_DM[FOR_2]=Array[LAT_DM[FOR_2]];
- 
-    }	    
- 
+     MS_TIMER(1);
+
+     LATITUDE_MINUTES=0X0F & LAT_DM_RX[2];
+     for(FOR_2=3;FOR_2<=7;FOR_2++)
+     {
+         LATITUDE_MINUTES=LATITUDE_MINUTES*10;
+         LATITUDE_MINUTES=(LATITUDE_MINUTES + (0X0F & LAT_DM_RX[FOR_2]));
+     }
+
+     TEMP_LC1=((((LAT_DM_RX[0]&0X0F)*10))+(LAT_DM_RX[1]&0X0F));
+
+     /* FIX: convert minutes/60 to degrees BEFORE the fraction gets truncated away */
+     LATITUDE_MINUTES = (TEMP_LC1*1000000) + ((LATITUDE_MINUTES*100)/60);
+
+     TEMP_LC1=LATITUDE_MINUTES;
+
+     TEMP_LC2=TEMP_LC1/10000000;
+     LAT_DM[0]=TEMP_LC2+'0';           /* FIX: '+'0'' instead of garbage Array[] lookup */
+
+     TEMP_LC2=10000000;
+     for(FOR_2=1;FOR_2<=7;FOR_2++)
+     {
+         TEMP_LC1=TEMP_LC1%TEMP_LC2;
+         TEMP_LC2=TEMP_LC2/10;
+         LAT_DM[FOR_2]=(TEMP_LC1/TEMP_LC2)+'0';   /* FIX: same */
+     }
 }
 
 void LONGITUDE_CONVERSION(void)
+{
+     unsigned long int TEMP_LO1,TEMP_LO2,LONGITUDE_MINUTES;
+     unsigned int FOR_2;
 
-{
-     unsigned long int TEMP_LO1,TEMP_LO2,LONGITUDE_MINUTES,Array[10];
-   
-  unsigned int TEMP_LO3,FOR_2;
      MS_TIMER(1);
-  
-   LONGITUDE_MINUTES=0X0F & LOG_DM_RX[3];
-   
-  for(FOR_2=4;FOR_2<=8;FOR_2++)
-{
-     LONGITUDE_MINUTES=LONGITUDE_MINUTES*10;
- 
-    LONGITUDE_MINUTES=(LONGITUDE_MINUTES + (0X0F & LOG_DM_RX[FOR_2]));
-  
-   }
-     
-     
-TEMP_LO1=((((LOG_DM_RX[1]&0X0F)*10))+(LOG_DM_RX[2]&0X0F));
-   
-  LONGITUDE_MINUTES=((((LONGITUDE_MINUTES/10000)/60)+TEMP_LO1)*1000000);
-   
-  TEMP_LO1=(double)LONGITUDE_MINUTES;
-  
-   TEMP_LO2=TEMP_LO1/10000000;
-   
-  LOG_DM[0]=Array[TEMP_LO2];
-   
-  TEMP_LO2=10000000;
-   
-  for(FOR_2=1;FOR_2<=7;FOR_2++)
-{
-     
-TEMP_LO1=TEMP_LO1%TEMP_LO2;
-   
-  TEMP_LO2=TEMP_LO2/10;
-    
- LOG_DM[FOR_2]=TEMP_LO1/TEMP_LO2;
-  
-   LOG_DM[FOR_2]=Array[LOG_DM[FOR_2]];
-  
-   }
-   
-  
-}*/
+
+     LONGITUDE_MINUTES=0X0F & LOG_DM_RX[3];  /* Position 3 = tens of minutes for DDD format */
+     for(FOR_2=4;FOR_2<=8;FOR_2++)           /* Loop 4-8 for ones of minutes + fractional digits */
+     {
+         LONGITUDE_MINUTES=LONGITUDE_MINUTES*10;
+         LONGITUDE_MINUTES=(LONGITUDE_MINUTES + (0X0F & LOG_DM_RX[FOR_2]));
+     }
+
+     /* FIX: Extract 3-digit degrees from positions 0,1,2 (DDD format), not 1,2 (2-digit) */
+     TEMP_LO1=((((LOG_DM_RX[0]&0X0F)*100)+((LOG_DM_RX[1]&0X0F)*10))+(LOG_DM_RX[2]&0X0F));
+
+     LONGITUDE_MINUTES = (TEMP_LO1*1000000) + ((LONGITUDE_MINUTES*100)/60);
+
+     TEMP_LO1=LONGITUDE_MINUTES;
+
+     TEMP_LO2=TEMP_LO1/10000000;
+     LOG_DM[0]=TEMP_LO2+'0';
+
+     TEMP_LO2=10000000;
+     for(FOR_2=1;FOR_2<=7;FOR_2++)
+     {
+         TEMP_LO1=TEMP_LO1%TEMP_LO2;
+         TEMP_LO2=TEMP_LO2/10;
+         LOG_DM[FOR_2]=(TEMP_LO1/TEMP_LO2)+'0';
+     }
+}
 
 void DEVICE_REPLY_IN_SMS(unsigned char REPLY)
 {
@@ -445,7 +425,7 @@ else if(REPLY==12)
 {
 	unsigned int temp_value;
 
-	REPL_9:
+	//REPL_9:
 
 	O=CLR;
 
@@ -576,19 +556,46 @@ else if(REPLY==16)
 //REPLY==7 UPDATE APN
 else if(REPLY==7)
 {
-	REPL_5:
-	R_UART2_SEND("AT+CMGF=1\r\n");
-	APN_TEMP=200+APN_LENGTH;
-	R_UART2_SEND("APN:-");
-	J=CLR;
-	for(FOR_1=200;FOR_1<=APN_TEMP;FOR_1++)
-	{
-	T=i2c_readn(0xA0,0XFE,FOR_1);MS_TIMER(2);
-	R_UART2_SEND_User(T);NOP();
-	TEMP_APN[J]=T;
-	J++;
-	}
-	if(REPLY==17){R_UART2_SEND(",");goto REPL_7;}
+    REPL_5:
+    R_UART2_SEND("AT+CMGF=1\r\n");
+    MS_TIMER(100);
+    
+    // ✅ ADD: SMS destination setup
+    R_UART2_SEND("AT+CMGS=\"");
+    for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
+    {
+        if(PHONE_NUMBER_OF_SENDER[FOR_1] != 0x00)
+        {
+            R_UART2_SEND_User(PHONE_NUMBER_OF_SENDER[FOR_1]);
+        }
+        MS_TIMER(1);
+    }
+    R_UART2_SEND("\"\r\n");
+    MS_TIMER(100);
+    
+    // Send APN data
+    R_UART2_SEND("APN:");
+    APN_TEMP=200+APN_LENGTH;
+    J=CLR;
+    for(FOR_1=200; FOR_1 < APN_TEMP; FOR_1++)  // Changed <= to <
+    {
+        TEMP_APN[J] = i2c_readn(0xA0, 0XFE, FOR_1);
+        MS_TIMER(2);
+        R_UART2_SEND_User(TEMP_APN[J]);
+        NOP();
+        J++;
+    }
+    
+    // ✅ ADD: CTRL_Z to send SMS
+    R_UART2_SEND_User(CTRL_Z);
+    ACK_RX(2500, 2, 500, 100);
+    
+    if(REPLY==17)
+    {
+        R_UART2_SEND(",");
+        goto REPL_7;
+    }
+    goto restart11;
 }
 
 /*****************************************************************************************************/
@@ -1268,7 +1275,7 @@ else if(REPLY == 40)
 }
 
 /*****************************************************************************************************/
-// REPLY==41  GET SERVER DETAILS
+// REPLY==41  GET SERVER DETAILS - Send all 4 servers
 /*****************************************************************************************************/
 else if(REPLY == 41)
 {
@@ -1289,44 +1296,77 @@ else if(REPLY == 41)
     R_UART2_SEND("\"\r\n");
     MS_TIMER(200);  // Wait for '>' prompt
     
-    // Step 3: Content - IP1 (Tracking Server IP)
+    // Step 3: Content - IP1 (Primary Server)
     R_UART2_SEND("IP1 : ");
-    // TEMP_PIP2 contains primary IP (from SETSERVER1)
-    for(FOR_0 = 0; FOR_0 <= 15 && TEMP_PIP2[FOR_0] != '\0' && TEMP_PIP2[FOR_0] != ' '; FOR_0++)
+    for(FOR_0 = 0; FOR_0 <= 29 && TEMP_PIP[FOR_0] != '\0'; FOR_0++)
+    {
+        R_UART2_SEND_User(TEMP_PIP[FOR_0]);
+        NOP();
+    }
+    R_UART2_SEND("\n");
+    
+    // Port1 (Primary Server Port)
+    R_UART2_SEND("Port1 : ");
+    for(FOR_0 = 0; FOR_0 <= 5 && TEMP_PPN[FOR_0] != '\0'; FOR_0++)
+    {
+        R_UART2_SEND_User(TEMP_PPN[FOR_0]);
+        NOP();
+    }
+    R_UART2_SEND("\n");
+    
+    // IP2 (Secondary Server)
+    R_UART2_SEND("IP2 : ");
+    for(FOR_0 = 0; FOR_0 <= 29 && TEMP_PIP2[FOR_0] != '\0'; FOR_0++)
     {
         R_UART2_SEND_User(TEMP_PIP2[FOR_0]);
         NOP();
     }
     R_UART2_SEND("\n");
     
-    // Port1 (Tracking Server Port)
-    R_UART2_SEND("Port1 : ");
-    // TEMP_PPN2 contains primary port
-    for(FOR_0 = 0; FOR_0 <= 4 && TEMP_PPN2[FOR_0] != '\0' && TEMP_PPN2[FOR_0] != ' '; FOR_0++)
+    // Port2 (Secondary Server Port)
+    R_UART2_SEND("Port2 : ");
+    for(FOR_0 = 0; FOR_0 <= 5 && TEMP_PPN2[FOR_0] != '\0'; FOR_0++)
     {
         R_UART2_SEND_User(TEMP_PPN2[FOR_0]);
         NOP();
     }
     R_UART2_SEND("\n");
     
-    // IP2 (Emergency Server IP)
-    R_UART2_SEND("IP2 : ");
-    // TEMP_SIP2 contains secondary IP (from SETSERVER2)
-    for(FOR_0 = 0; FOR_0 <= 15 && TEMP_SIP2[FOR_0] != '\0' && TEMP_SIP2[FOR_0] != ' '; FOR_0++)
+    // IP3 (Tertiary Server)
+    R_UART2_SEND("IP3 : ");
+    for(FOR_0 = 0; FOR_0 <= 29 && TEMP_SIP[FOR_0] != '\0'; FOR_0++)
+    {
+        R_UART2_SEND_User(TEMP_SIP[FOR_0]);
+        NOP();
+    }
+    R_UART2_SEND("\n");
+    
+    // Port3 (Tertiary Server Port)
+    R_UART2_SEND("Port3 : ");
+    for(FOR_0 = 0; FOR_0 <= 5 && TEMP_SPN[FOR_0] != '\0'; FOR_0++)
+    {
+        R_UART2_SEND_User(TEMP_SPN[FOR_0]);
+        NOP();
+    }
+    R_UART2_SEND("\n");
+    
+    // IP4 (Quaternary Server)
+    R_UART2_SEND("IP4 : ");
+    for(FOR_0 = 0; FOR_0 <= 29 && TEMP_SIP2[FOR_0] != '\0'; FOR_0++)
     {
         R_UART2_SEND_User(TEMP_SIP2[FOR_0]);
         NOP();
     }
     R_UART2_SEND("\n");
     
-    // Port2 (Emergency Server Port)
-    R_UART2_SEND("Port2 : ");
-    // TEMP_SPN2 contains secondary port
-    for(FOR_0 = 0; FOR_0 <= 4 && TEMP_SPN2[FOR_0] != '\0' && TEMP_SPN2[FOR_0] != ' '; FOR_0++)
+    // Port4 (Quaternary Server Port)
+    R_UART2_SEND("Port4 : ");
+    for(FOR_0 = 0; FOR_0 <= 5 && TEMP_SPN2[FOR_0] != '\0'; FOR_0++)
     {
         R_UART2_SEND_User(TEMP_SPN2[FOR_0]);
         NOP();
     }
+    R_UART2_SEND("\n");
     
     // Step 4: Send SMS
     MS_TIMER(10);
@@ -1357,7 +1397,7 @@ else if(REPLY == 42)
     MS_TIMER(200);  // Wait for '>' prompt
     
     // Step 3: Content - Latitude
-    R_UART2_SEND("Latitude: ");
+    R_UART2_SEND("Lat: ");
     // LAT_DM format: DDMM.MMMM in your system
     // Convert to DD.DDDDDD format for output
     for(FOR_0 = 0; FOR_0 <= 7; FOR_0++)
@@ -1371,12 +1411,12 @@ else if(REPLY == 42)
     R_UART2_SEND("\n");
     
     // Longitude
-    R_UART2_SEND("Longitude: ");
+    R_UART2_SEND("Lon: ");
     // LOG_DM format: DDDMM.MMMM in your system
     for(FOR_0 = 0; FOR_0 <= 8; FOR_0++)
     {
         R_UART2_SEND_User(LOG_DM[FOR_0]);
-        if(FOR_0 == 2)  // After DDD, add decimal point
+        if(FOR_0 == 1)  // After DDD, add decimal point
         {
             R_UART2_SEND(".");
         }
@@ -1384,7 +1424,7 @@ else if(REPLY == 42)
     R_UART2_SEND("\n");
     
     // Altitude
-    R_UART2_SEND("Altitude: ");
+    R_UART2_SEND("Alt: ");
     // ALTITUDE array contains altitude string
     for(FOR_0 = 0; FOR_0 <= 4 && ALTITUDE[FOR_0] != 0x00 && ALTITUDE[FOR_0] != ' '; FOR_0++)
     {
@@ -1455,16 +1495,24 @@ else if(REPLY == 44)
 {
     unsigned int T_VAL;
     unsigned int sos_idx;
-    
+    unsigned int i;
     ICCID_RX = 0;  // Set flag to capture ICCID response in UART RX handler
     R_UART2_SEND("AT+QCCID\r\n");
     //ACK_RX(40, 2, 50, 0);  // Wait for modem response, not blind timer
     MS_TIMER(300);           // give modem time to send ICCID line after OK
 
-    // Step 2: Fetch fresh network name
+    // Step 2: Fetch fresh network name - clear buffer and parser state first
+    
+    for(i = 0; i < 8; i++)
+    {
+        NETWORK_NAME[i] = ' ';  /* Clear with spaces, not garbage */
+    }
+    MS_TIMER(50);  /* Let any pending UART data settle */
+    
     NETWORK_NAME_RX = ON;
     R_UART2_SEND("AT+COPS?\r\n");
     ACK_RX(40, 2, 50, 0);
+    MS_TIMER(100);  /* Wait for parser to finish capturing network name */
     NETWORK_NAME_RX = OFF;
 
     // Step 3: Setup SMS
@@ -1485,7 +1533,7 @@ else if(REPLY == 44)
     MS_TIMER(200);
 
     // ---- MFG ----
-    R_UART2_SEND("MFG : GOBELL\n");
+    R_UART2_SEND("MFG : LKSI\n");
 
     // ---- IMEI ----
     R_UART2_SEND("IMEI : ");
@@ -1536,38 +1584,39 @@ else if(REPLY == 44)
         else { break; }
     }
     R_UART2_SEND("\n");
-
     // ---- APN MODE ----
     // Compare current APN against default "sensem2m"
-    // If APN was manually set it differs from default ? MANUAL, else AUTO
+    // If APN was manually set and differs from default -> MANUAL
+    // Otherwise -> AUTO
+    for(FOR_1 = 0; FOR_1 < 15; FOR_1++)
     {
-        unsigned char apn_is_default = 1;
-        unsigned char default_apn[8] = {'s','e','n','s','e','m','2','m'};
-        for(FOR_1 = 0; FOR_1 <= 7; FOR_1++)
+        if(TEMP_APN[FOR_1] != default_apn[FOR_1])
         {
-            if(TEMP_APN[FOR_1] != default_apn[FOR_1])
-            {
-                apn_is_default = 0;
-                break;
-            }
-        }
-        if(apn_is_default)
-        {
-            R_UART2_SEND("APNMODE : AUTO\n");
-        }
-        else
-        {
-            R_UART2_SEND("APNMODE : MANUAL\n");
+            apn_is_default = 0;
+            break;
         }
     }
 
+    if(apn_is_default)
+    {
+        R_UART2_SEND("APNMODE : AUTO\n");
+    }
+    else
+    {
+        R_UART2_SEND("APNMODE : MANUAL\n");
+    }
+
+
     // ---- Current APN ----
+
     R_UART2_SEND("APN : ");
+
     for(FOR_1 = 0; FOR_1 < APN_LENGTH; FOR_1++)
     {
         R_UART2_SEND_User(TEMP_APN[FOR_1]);
         MS_TIMER(1);
     }
+
     R_UART2_SEND("\n");
 
     // ---- Batt Threshold ----
@@ -1602,28 +1651,71 @@ else if(REPLY == 44)
         R_UART2_SEND_User(T_VAL);
         NOP();
     }
-    R_UART2_SEND("\n");
+    // R_UART2_SEND("\n");
 
     // ---- Latitude ----
-    R_UART2_SEND("Lat : ");
-    for(FOR_1 = 0; FOR_1 <= 7; FOR_1++)
-    {
-        R_UART2_SEND_User(LAT_DM[FOR_1]);
-        if(FOR_1 == 1) { R_UART2_SEND("."); }
-    }
-    if(LAT_DIRECTION == 'N') { R_UART2_SEND("N"); }
-    else                     { R_UART2_SEND("S"); }
-    R_UART2_SEND("\n");
+    // R_UART2_SEND("Lat : ");
+    // if(GPS_DIRECTION_DATA_VALID == ON)
+    // {
+    //     for(FOR_1 = 0; FOR_1 <= 7; FOR_1++)
+    //     {
+    //         R_UART2_SEND_User(LAT_DM[FOR_1]);
+    //         if(FOR_1 == 1) 
+    //         { 
+    //             R_UART2_SEND(".");
+    //         }
+    //     }
+    //     if(LAT_DIRECTION == 'N') 
+    //     { 
+    //         R_UART2_SEND("N"); 
+    //     }
+    //     else
+    //     { 
+    //         R_UART2_SEND("S"); 
+    //     }
+    //     R_UART2_SEND("\n");
+    //     // ---- Longitude ----
+    //     R_UART2_SEND("Lon : ");
+    //     for(FOR_1 = 0; FOR_1 <= 7; FOR_1++)
+    //     {
+    //         R_UART2_SEND_User(LOG_DM[FOR_1]);
 
-    // ---- Longitude ----
-    R_UART2_SEND("Long : ");
-    for(FOR_1 = 0; FOR_1 <= 8; FOR_1++)
-    {
-        R_UART2_SEND_User(LOG_DM[FOR_1]);
-        if(FOR_1 == 2) { R_UART2_SEND("."); }
-    }
-    if(LON_DIRECTION == 'E') { R_UART2_SEND("E"); }
-    else                     { R_UART2_SEND("W"); }
+    //         if(FOR_1 == 1) 
+    //         { 
+    //             R_UART2_SEND("."); 
+    //         }
+    //     }
+    //     if(LON_DIRECTION == 'E') 
+    //     { 
+    //         R_UART2_SEND("E"); 
+    //     }
+    //     else                     
+    //     { 
+    //         R_UART2_SEND("W"); 
+    //     }
+    // }
+    // else
+    // {
+    //     R_UART2_SEND("00.000000");
+    //     if(LAT_DIRECTION == 'N') 
+    //     { 
+    //         R_UART2_SEND("N"); 
+    //     }
+    //     else
+    //     { 
+    //         R_UART2_SEND("S"); 
+    //     }
+    //     R_UART2_SEND("\n");
+    //     R_UART2_SEND("00.000000");
+    //     if(LON_DIRECTION == 'E') 
+    //     { 
+    //         R_UART2_SEND("E"); 
+    //     }
+    //     else                     
+    //     { 
+    //         R_UART2_SEND("W"); 
+    //     }
+    // }
 
     // Step 5: Send
     MS_TIMER(10);
@@ -2073,7 +2165,7 @@ R_UART2_SEND("CLR COMMAND Running...");
 
 else if(REPLY==13)
 {
-REPL_10:
+//REPL_10:
 O=CLR;
 R_UART2_SEND("H-BRAKE LEV:");
 //T=i2c_readn(0xA0,0XFE,39);MS_TIMER(2);
@@ -2134,7 +2226,7 @@ goto REPL_1;
 else if(REPLY==18)
 {
 	R_UART2_SEND("PRIMARY IP:");
-	for(FOR_0=0;FOR_0<=13;FOR_0++)
+	for(FOR_0=0; FOR_0 <= 29 && TEMP_PIP2[FOR_0] != '\0'; FOR_0++)
 	{
 		R_UART2_SEND_User(TEMP_PIP2[FOR_0]);
 		NOP();
@@ -2144,7 +2236,7 @@ else if(REPLY==18)
 else if(REPLY==19)
 {
 R_UART2_SEND("SECONDARY IP:");
-for(FOR_0=0;FOR_0<=13;FOR_0++)
+for(FOR_0=0; FOR_0 <= 29 && TEMP_SIP2[FOR_0] != '\0'; FOR_0++)
 {
 R_UART2_SEND_User(TEMP_SIP2[FOR_0]);NOP();
 }
@@ -2152,22 +2244,22 @@ R_UART2_SEND_User(TEMP_SIP2[FOR_0]);NOP();
 /*****************************************************************************************************/
 else if(REPLY==20)
 {
-	REPL_14:
+	//REPL_14:
 	R_UART2_SEND("PRIMARY IP:");
 	
-	for(FOR_0 = 0; FOR_0 <= 13 && TEMP_PIP2[FOR_0] != '\0'; FOR_0++)
-	{
-	    R_UART2_SEND_User(TEMP_PIP2[FOR_0]);
-	    NOP();
-	}
+	for(FOR_0 = 0; FOR_0 <= 30 && TEMP_PIP[FOR_0] != '\0'; FOR_0++)
+    {
+        R_UART2_SEND_User(TEMP_PIP[FOR_0]);
+        NOP();
+    }
 	
 	R_UART2_SEND(" PORT NUM:");
-	
-	for(FOR_0 = 0; FOR_0 <= 4 && TEMP_PPN2[FOR_0] != '\0'; FOR_0++)
-	{
-	    R_UART2_SEND_User(TEMP_PPN2[FOR_0]);
-	    NOP();
-	}
+
+	for(FOR_0 = 0; FOR_0 <= 6 && TEMP_PPN[FOR_0] != '\0'; FOR_0++)
+    {
+        R_UART2_SEND_User(TEMP_PPN[FOR_0]);
+        NOP();
+    }
 	
 	if(REPLY==17)
 	{
@@ -2179,19 +2271,19 @@ else if(REPLY==20)
 else if(REPLY == 21)
 {
     REPL_15:
-    R_UART2_SEND("SEC-IP:");
+    R_UART2_SEND("SECONDARY IP:");
 
-    for(FOR_0 = 0; FOR_0 <= 13 && TEMP_SIP2[FOR_0] != '\0'; FOR_0++)
+    for(FOR_0 = 0; FOR_0 <= 30 && TEMP_SIP[FOR_0] != '\0'; FOR_0++)
     {
-        R_UART2_SEND_User(TEMP_SIP2[FOR_0]);
+        R_UART2_SEND_User(TEMP_SIP[FOR_0]);
         NOP();
     }
 
     R_UART2_SEND(" PORT NUM:");
 
-    for(FOR_0 = 0; FOR_0 <= 4 && TEMP_SPN2[FOR_0] != '\0'; FOR_0++)
+    for(FOR_0 = 0; FOR_0 <= 6 && TEMP_SPN[FOR_0] != '\0'; FOR_0++)
     {
-        R_UART2_SEND_User(TEMP_SPN2[FOR_0]);
+        R_UART2_SEND_User(TEMP_SPN[FOR_0]);
         NOP();
     }
 
@@ -2693,6 +2785,110 @@ restart5:
 
 void WELCOME_STRING(void)
 {
+    DATA_BUFFER_INDEX = 0;   /* start a fresh packet in the buffer */
+    CHECKSUM_BYTE = 0;
+
+    BUFFER_APPEND_STR("$LGN,");
+
+    CHECKSUM_BYTE ^= 0x24;
+    CHECKSUM_BYTE ^= 0x4C;
+    CHECKSUM_BYTE ^= 0x47;
+    CHECKSUM_BYTE ^= 0x4E;
+    CHECKSUM_BYTE ^= 0x2C;
+
+    for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
+    {
+        if(VEICHLE_NUMBER[FOR_1] != ' ' && VEICHLE_NUMBER[FOR_1] != '\0')
+        {
+            BUFFER_APPEND_CHAR(VEICHLE_NUMBER[FOR_1]);
+
+            CHECKSUM_BYTE ^= VEICHLE_NUMBER[FOR_1];
+
+            MS_TIMER(1);
+        }
+    } // VR NUMBER
+
+    BUFFER_APPEND_STR(",");
+    CHECKSUM_BYTE ^= 0x2C;
+
+    for(FOR_1 = 1; FOR_1 <= 15; FOR_1++)
+    {
+        BUFFER_APPEND_CHAR(IMEI_EEPROM[FOR_1]);
+
+        CHECKSUM_BYTE ^= IMEI_EEPROM[FOR_1];
+
+        NOP();
+        NOP();
+    } //IMEI NUMBER
+
+    BUFFER_APPEND_STR(",");
+    CHECKSUM_BYTE ^= 0x2C;
+
+    BUFFER_APPEND_CHAR(((CURRENT_FRM_VERSION / 100) + 0x30));
+    CHECKSUM_BYTE ^= ((CURRENT_FRM_VERSION / 100) + 0x30);
+
+    BUFFER_APPEND_STR(".");
+    CHECKSUM_BYTE ^= 0x2E;
+
+    NOP();
+
+    TEMP_FRM_VERSION = CURRENT_FRM_VERSION % 100;
+
+    BUFFER_APPEND_CHAR(((TEMP_FRM_VERSION / 10) + 0x30));
+    CHECKSUM_BYTE ^= ((TEMP_FRM_VERSION / 10) + 0x30);
+
+    BUFFER_APPEND_STR(".");
+    CHECKSUM_BYTE ^= 0x2E;
+
+    NOP();
+
+    BUFFER_APPEND_CHAR(((TEMP_FRM_VERSION % 10) + 0x30));
+    CHECKSUM_BYTE ^= ((TEMP_FRM_VERSION % 10) + 0x30);                        // FRM VERSION
+
+    BUFFER_APPEND_STR(",");
+    CHECKSUM_BYTE ^= 0x2C;
+
+    BUFFER_APPEND_STR("1.0.1");
+
+    CHECKSUM_BYTE ^= 0x31;
+    CHECKSUM_BYTE ^= 0x2E;
+    CHECKSUM_BYTE ^= 0x30;
+    CHECKSUM_BYTE ^= 0x2E;
+    CHECKSUM_BYTE ^= 0x31;                                                    // Protocol Version
+
+    BUFFER_APPEND_STR(",");
+    CHECKSUM_BYTE ^= 0x2C;
+
+    READ_LAST_LOCATION();   /* now appends into the same DATA_BUFFER, does not reset index */
+
+    BUFFER_APPEND_STR(",");
+
+    if(CHECKSUM_BYTE >= 16)
+    {
+        BUFFER_APPEND_CHAR(
+            (CHECKSUM_BYTE / 16) +
+            (CHECKSUM_BYTE / 16 < 10 ? 0x30 : 0x37)
+        );
+
+        BUFFER_APPEND_CHAR(
+            (CHECKSUM_BYTE % 16) +
+            (CHECKSUM_BYTE % 16 < 10 ? 0x30 : 0x37)
+        );
+    }
+    else
+    {
+        BUFFER_APPEND_STR("0");
+        BUFFER_APPEND_CHAR(CHECKSUM_BYTE + 0x30);
+    }
+
+    BUFFER_APPEND_STR("*");
+
+    DATA_BUFFER[DATA_BUFFER_INDEX] = '\0';   /* null-terminate the completed packet */
+}
+
+#if 0
+void WELCOME_STRING(void)
+{
     CHECKSUM_BYTE = 0;
 
     R_UART2_SEND("$LGN,");
@@ -2790,22 +2986,22 @@ void WELCOME_STRING(void)
 
     R_UART2_SEND("*");
 }
+#endif
+// void BOOT_STRING(void)
+// {
+//     R_UART2_SEND("$,BOOT,");
 
-void BOOT_STRING(void)
-{
-    R_UART2_SEND("$,BOOT,");
+//     //for(FOR_1=0;FOR_1<=9;FOR_1++){if(VEICHLE_NUMBER[FOR_1]!=' '){R_UART2_SEND_User(VEICHLE_NUMBER[FOR_1]);MS_TIMER(1);}} // VR NUMBER
+//     //R_UART2_SEND("$");
 
-    //for(FOR_1=0;FOR_1<=9;FOR_1++){if(VEICHLE_NUMBER[FOR_1]!=' '){R_UART2_SEND_User(VEICHLE_NUMBER[FOR_1]);MS_TIMER(1);}} // VR NUMBER
-    //R_UART2_SEND("$");
+//     for(FOR_1 = 1; FOR_1 <= 15; FOR_1++)
+//     {
+//         R_UART2_SEND_User(IMEI_EEPROM[FOR_1]);
 
-    for(FOR_1 = 1; FOR_1 <= 15; FOR_1++)
-    {
-        R_UART2_SEND_User(IMEI_EEPROM[FOR_1]);
-
-        NOP();
-        NOP();
-    } //IMEI NUMBER
-}
+//         NOP();
+//         NOP();
+//     } //IMEI NUMBER
+// }
 
 
 void STORE_LAST_LOCATION(void)
@@ -2867,6 +3063,7 @@ void STORE_LAST_LOCATION(void)
     MS_TIMER(1);
 }
 
+
 void READ_LAST_LOCATION(void)
 {
     RLL = i2c_readn(0xA0, 0XFD, 18);
@@ -2891,7 +3088,96 @@ void READ_LAST_LOCATION(void)
                 RLL = i2c_readn(0xA0, 0XFD, FOR_1);
                 NOP();
 
+                if(RLL < '0' || RLL > '9')
+                {
+                    RLL = '0';
+                }
+
                 if(FOR_1 == 2)
+                {
+                    BUFFER_APPEND_STR(".");
+                }
+
+                BUFFER_APPEND_CHAR(RLL);
+            }
+
+            BUFFER_APPEND_STR(",");
+
+            NOP();
+
+            RLL = i2c_readn(0xA0, 0XFD, 18);
+            NOP();     // READ LAT DIRECTION
+
+            BUFFER_APPEND_CHAR(RLL);
+
+            BUFFER_APPEND_STR(",");
+
+            /* FIX: longitude is 2-digit-degree + 6-decimal = 8 digits total,
+               matching DATA_PRINT's LOG_DM[0..7] format. Was reading 9 digits
+               (address 8..16) with decimal after the 3rd digit — now reads
+               8 digits (address 8..15) with decimal after the 2nd digit. */
+            for(FOR_1 = 8; FOR_1 <= 15; FOR_1++)            // READ LOG (8 digits)
+            {
+                NOP();
+
+                RLL = i2c_readn(0xA0, 0XFD, FOR_1);
+                NOP();
+
+                if(RLL < '0' || RLL > '9')
+                {
+                    RLL = '0';
+                }
+
+                BUFFER_APPEND_CHAR(RLL);
+
+                if(FOR_1 == 9)                              /* FIX: decimal after 2 digits, not 3 */
+                {
+                    BUFFER_APPEND_STR(".");
+                }
+            }
+
+            BUFFER_APPEND_STR(",");
+
+            NOP();
+
+            RLL = i2c_readn(0xA0, 0XFD, 19);
+            NOP();     // READ LOG DIRECTION
+
+            BUFFER_APPEND_CHAR(RLL);
+        }
+    }
+    else
+    {
+        BUFFER_APPEND_STR("00.000000,N,00.000000,E");
+    }
+}
+
+#if 0
+void READ_LAST_LOCATION(void)
+{
+    RLL = i2c_readn(0xA0, 0XFD, 18);
+    NOP();
+
+    if(RLL == 'N' || RLL == 'S')
+    {
+        RLL = i2c_readn(0xA0, 0XFD, 19);
+        NOP();
+
+        if(RLL == 'E' || RLL == 'W')
+        {
+            NOP();
+
+            RLL = i2c_readn(0xA0, 0XFD, 19);
+            NOP();
+
+            for(FOR_1 = 0; FOR_1 <= 7; FOR_1++)            // READ LAT
+            {
+                NOP();
+
+                RLL = i2c_readn(0xA0, 0XFD, FOR_1);
+                NOP();
+
+                if(FOR_1 == 1)
                 {
                     R_UART2_SEND(".");
                 }
@@ -2937,11 +3223,12 @@ void READ_LAST_LOCATION(void)
     }
     else
     {
-        R_UART2_SEND("00.000000,N,000.000000,E");
+        R_UART2_SEND("00.000000,N,00.0000000,E");
     }
 }
+#endif
 
-
+#if 0
 void DATA_PRINT(char FORMAT)
 {
     URL_PRINT = ON;
@@ -3167,12 +3454,12 @@ void DATA_PRINT(char FORMAT)
     /* Testing*/
     if(GPS_DIRECTION_DATA_VALID == ON)
     {
-        for(FOR_1 = 0; FOR_1 <= 8; FOR_1++)
+        for(FOR_1 = 0; FOR_1 <= 7; FOR_1++)
         {
             NOP();     //LONGITUDE AND DIRECTION
             /* Testing*/ R_UART2_SEND_User(LOG_DM[FOR_1]);
 
-            if(FOR_1 == 2)
+            if(FOR_1 == 1)
             {
                 R_UART2_SEND(".");
             }
@@ -3366,7 +3653,7 @@ void DATA_PRINT(char FORMAT)
 
 /************************************************************************************************************************************************************/
 
-    for(FOR_1 = 0; FOR_1 <= 7; FOR_1++)
+    for(FOR_1 = 0; FOR_1 < 8 && NETWORK_NAME[FOR_1] != '\0'; FOR_1++)
     {
         NOP();
         R_UART2_SEND_User(NETWORK_NAME[FOR_1]);
@@ -3731,6 +4018,907 @@ void DATA_PRINT(char FORMAT)
 //R_UART2_SEND("$");
 
 //}
+#endif
+void BUFFER_APPEND_CHAR(char c)
+{
+    if(DATA_BUFFER_INDEX < (DATA_BUFFER_SIZE - 1))   /* keep 1 byte reserved for null terminator */
+    {
+        DATA_BUFFER[DATA_BUFFER_INDEX] = c;
+        DATA_BUFFER_INDEX++;
+    }
+}
+
+void BUFFER_APPEND_STR(const char *s)
+{
+    while(*s != '\0')
+    {
+        BUFFER_APPEND_CHAR(*s);
+        s++;
+    }
+}
+
+void HEL_STRING(void)
+{
+    DATA_BUFFER_INDEX = 0;       /* Start a fresh HEL packet */
+    URL_PRINT = ON;
+
+    BUFFER_APPEND_STR("$HEL,VID,");
+
+    NOP();
+
+    // Firmware Version
+
+    BUFFER_APPEND_CHAR((CURRENT_FRM_VERSION / 100) + 0x30);
+
+    BUFFER_APPEND_STR(".");
+
+    NOP();
+
+    TEMP_FRM_VERSION = CURRENT_FRM_VERSION % 100;
+
+    BUFFER_APPEND_CHAR((TEMP_FRM_VERSION / 10) + 0x30);
+
+    BUFFER_APPEND_STR(".");
+
+    NOP();
+
+    BUFFER_APPEND_CHAR((TEMP_FRM_VERSION % 10) + 0x30);
+
+    BUFFER_APPEND_STR(",");
+
+    NOP();
+
+    // IMEI NUMBER
+
+    for(FOR_1 = 1; FOR_1 <= 15; FOR_1++)
+    {
+        BUFFER_APPEND_CHAR(IMEI_EEPROM[FOR_1]);
+
+        NOP();
+
+        NOP();
+    }
+
+    BUFFER_APPEND_STR(",");
+
+    NOP();
+
+    // Battery Percentage - Use BACKUP_BATTERY_VOLTAGE directly
+
+    VOLT = BACKUP_BATTERY_VOLTAGE;
+
+    if(VOLT > 100)
+    {
+        VOLT = 100;
+    }
+
+    BUFFER_APPEND_CHAR((VOLT / 100) + 0x30);
+
+    BUFFER_APPEND_CHAR(((VOLT % 100) / 10) + 0x30);
+
+    BUFFER_APPEND_CHAR((VOLT % 10) + 0x30);
+
+    BUFFER_APPEND_STR(",");
+
+    NOP();
+
+    // Low Battery Threshold
+
+    VOLT = LOW_BAT_LEVEL;
+
+    if(VOLT > 100)
+    {
+        VOLT = 100;
+    }
+
+    BUFFER_APPEND_CHAR((VOLT / 100) + 0x30);
+
+    BUFFER_APPEND_CHAR(((VOLT % 100) / 10) + 0x30);
+
+    BUFFER_APPEND_CHAR((VOLT % 10) + 0x30);
+
+    BUFFER_APPEND_STR(",");
+
+    NOP();
+
+    // Memory Percentage
+
+    VOLT = (FLASH_MEMORY * 100) / 128;
+
+    if(VOLT > 100)
+    {
+        VOLT = 100;
+    }
+
+    BUFFER_APPEND_CHAR((VOLT / 100) + 0x30);
+
+    BUFFER_APPEND_CHAR(((VOLT % 100) / 10) + 0x30);
+
+    BUFFER_APPEND_CHAR((VOLT % 10) + 0x30);
+
+    BUFFER_APPEND_STR(",");
+
+    NOP();
+
+    // Update Rate Ignition ON
+
+    VOLT = UPDATE_TIME_ON_TIME;
+
+    BUFFER_APPEND_CHAR((VOLT / 100) + 0x30);
+
+    BUFFER_APPEND_CHAR(((VOLT % 100) / 10) + 0x30);
+
+    BUFFER_APPEND_CHAR((VOLT % 10) + 0x30);
+
+    BUFFER_APPEND_STR(",");
+
+    NOP();
+
+    // Update Rate Ignition OFF
+
+    VOLT = UPDATE_TIME_OFF_TIME;
+
+    BUFFER_APPEND_CHAR((VOLT / 100) + 0x30);
+
+    BUFFER_APPEND_CHAR(((VOLT % 100) / 10) + 0x30);
+
+    BUFFER_APPEND_CHAR((VOLT % 10) + 0x30);
+
+    BUFFER_APPEND_STR(",");
+
+    NOP();
+
+    // Digital I/O Status
+
+    BUFFER_APPEND_STR("0001,");
+
+    NOP();
+
+    // Analog I/O Status
+
+    BUFFER_APPEND_STR("00,");
+
+    NOP();
+
+    // End character
+
+    BUFFER_APPEND_STR("*");
+
+    NOP();
+
+    DATA_BUFFER[DATA_BUFFER_INDEX] = '\0';    /* Null terminate HEL packet */
+
+    URL_PRINT = OFF;
+}
+
+void DATA_PRINT(char FORMAT)
+{
+    DATA_BUFFER_INDEX = 0;   /* start a fresh packet in the buffer each call */
+    URL_PRINT = ON;
+
+    if(FORMAT == 0)
+    {
+        if(PANIC_ALERT == ON)
+        {
+            BUFFER_APPEND_STR("$PVT,LKSI,");
+        }
+        else
+        {
+            BUFFER_APPEND_STR("$PVT,LKSI,");
+        }
+
+/************************************************************************************************************************************************************/
+
+        BUFFER_APPEND_CHAR(((CURRENT_FRM_VERSION / 100) + 0x30));
+        BUFFER_APPEND_STR(".");
+        NOP();
+
+        TEMP_FRM_VERSION = CURRENT_FRM_VERSION % 100;
+
+        BUFFER_APPEND_CHAR(((TEMP_FRM_VERSION / 10) + 0x30));
+        BUFFER_APPEND_STR(".");
+        NOP();
+
+        BUFFER_APPEND_CHAR(((TEMP_FRM_VERSION % 10) + 0x30));
+
+        BUFFER_APPEND_STR(",");
+        NOP();
+
+        VOLT = BACKUP_BATTERY_VOLTAGE % 1000;
+
+/************************************************************************************************************************************************************/
+        // START CHARACTER, HEADER, VENDOR ID, FIRMWARE VERSION
+
+        if(POWER_SOURCE_PACKET == ON)
+        {
+            BUFFER_APPEND_STR("BD,03,");
+        }
+        else if(POWER_SOURCE_RECONNECT_PACKET == ON)
+        {
+            BUFFER_APPEND_STR("BR,06,");
+        }
+        else if(LOW_BATTERY_ALERT_PACKET == ON)
+        {
+            BUFFER_APPEND_STR("BL,04,");
+        }
+        else if(BATTERY_CHARGED_PACKET == ON)
+        {
+            BUFFER_APPEND_STR("BH,05,");
+        }
+        else if(OTA_PACKET == ON)
+        {
+            OTA_PACKET = OFF;
+            BUFFER_APPEND_STR("PC,12,");
+        }
+        else if(HARSH_BRAKE_PACKET == ON)
+        {
+            HARSH_BRAKE_PACKET = OFF;
+            BUFFER_APPEND_STR("HB,13,");
+            R_INTC1_Start();
+        }
+        else if(HARSH_ACC_PACKET == ON)
+        {
+            HARSH_ACC_PACKET = OFF;
+            BUFFER_APPEND_STR("HA,14,");
+            R_INTC1_Start();
+        }
+        else if(HARSH_TURN_PACKET == ON)
+        {
+            HARSH_TURN_PACKET = OFF;
+            BUFFER_APPEND_STR("RT,15,");
+            R_INTC1_Start();
+        }
+        else if(PANIC_CONTROL_STATE_1 == ON)
+        {
+            PANIC_TIME_STOP = CLR;
+            PANIC_TIME_START = CLR;
+            PANIC_ALERT = 0;
+            PANIC_ALERT_PACKET = OFF;
+            PANIC_CONTROL_STATE_1 = OFF;
+            HOOTER = ON;
+            BUFFER_APPEND_STR("EA,11,");
+        }
+        else if(PANIC_ALERT == ON && P3_bit.no0 == HIGH)
+        {
+            BUFFER_APPEND_STR("EA,10,");
+        }
+        else if(IGNITION_ON_PACKET == ON && IGNITION_ON_PACKET_SENT == OFF)
+        {
+            BUFFER_APPEND_STR("IN,07,");
+            IGNITION_ON_PACKET_SENT = ON;
+        }
+        else if(IGNITION_OFF_PACKET == ON && IGNITION_OFF_PACKET_SENT == OFF)
+        {
+            BUFFER_APPEND_STR("IF,08,");
+            IGNITION_OFF_PACKET_SENT = ON;
+        }
+        else if(NORMAL_PACKET == ON)
+        {
+            BUFFER_APPEND_STR("NR,01,");
+        }
+
+        NOP();
+        BUFFER_APPEND_STR("L,");
+        NOP();   // H- HISTORY , L-LIVE
+
+/************************************************************************************************************************************************************/
+
+        // IMEI NUMBER
+        for(FOR_1 = 1; FOR_1 <= 15; FOR_1++)
+        {
+            BUFFER_APPEND_CHAR(IMEI_EEPROM[FOR_1]);
+            NOP();
+            NOP();
+        }
+
+        BUFFER_APPEND_STR(",");
+        NOP();
+
+        // VEHICLE NUMBER
+        for(FOR_1 = 0; FOR_1 <= 9; FOR_1++)
+        {
+            if(VEICHLE_NUMBER[FOR_1] != ' ' && VEICHLE_NUMBER[FOR_1] != '\0')
+            {
+                BUFFER_APPEND_CHAR(VEICHLE_NUMBER[FOR_1]);
+                MS_TIMER(1);
+            }
+        }
+
+        BUFFER_APPEND_STR(",");
+        NOP();   // VEHICLE NUMBER
+
+/************************************************************************************************************************************************************/
+
+        BUFFER_APPEND_CHAR(Array_0[GPS_DIRECTION_DATA_VALID]);
+        BUFFER_APPEND_STR(",");
+        NOP();   // GPS VALID OR INVALID
+    }
+
+/************************************************************************************************************************************************************/
+
+    for(FOR_1 = 0; FOR_1 <= 5; FOR_1++)
+    {
+        BUFFER_APPEND_CHAR(((TIME[FOR_1] & 0xF0) >> 4) + 0X30);
+        BUFFER_APPEND_CHAR((TIME[FOR_1] & 0x0F) + 0X30);
+
+        if(FOR_1 == 1)
+        {
+            BUFFER_APPEND_STR("20");
+        }
+
+        if(FOR_1 == 2 || FOR_1 == 5)
+        {
+            BUFFER_APPEND_STR(",");
+        }
+    }
+
+    //RTC:- DDMMYYYY,HHMMSS,
+
+    if(FORMAT == 1)
+    {
+        if(GPS_DIRECTION_DATA_VALID == ON)
+        {
+            BUFFER_APPEND_STR("A");
+        }
+        else
+        {
+            BUFFER_APPEND_STR("V");
+        }
+    }
+
+/************************************************************************************************************************************************************/
+
+    if(GPS_DIRECTION_DATA_VALID == ON)
+    {
+        for(FOR_1 = 0; FOR_1 <= 7; FOR_1++)
+        {
+            NOP();     //LATITUDE AND DIRECTION
+            BUFFER_APPEND_CHAR(LAT_DM[FOR_1]);
+
+            if(FOR_1 == 1)
+            {
+                BUFFER_APPEND_STR(".");
+            }
+        }
+    }
+    else
+    {
+        BUFFER_APPEND_STR("00.000000");
+    }
+
+    if(LAT_DIRECTION == 'N')
+    {
+        BUFFER_APPEND_STR(",N,");
+    }
+    else
+    {
+        BUFFER_APPEND_STR(",S,");
+    }
+
+/************************************************************************************************************************************************************/
+
+    if(GPS_DIRECTION_DATA_VALID == ON)
+    {
+        for(FOR_1 = 0; FOR_1 <= 7; FOR_1++)
+        {
+            NOP();     //LONGITUDE AND DIRECTION
+            BUFFER_APPEND_CHAR(LOG_DM[FOR_1]);
+
+            if(FOR_1 == 1)
+            {
+                BUFFER_APPEND_STR(".");
+            }
+        }
+    }
+    else
+    {
+        BUFFER_APPEND_STR("00.0000000");
+    }
+
+    if(LON_DIRECTION == 'E')
+    {
+        BUFFER_APPEND_STR(",E,");
+    }
+    else
+    {
+        BUFFER_APPEND_STR(",W,");
+    }
+
+    NOP();
+
+/************************************************************************************************************************************************************/
+
+    if(ADD_ZERO_TO_SPEED == SET)
+    {
+        BUFFER_APPEND_STR("0");
+    }
+
+    for(FOR_1 = 0; FOR_1 <= SPEED_DATA_LENGTH_COUNT; FOR_1++)
+    {
+        NOP();
+        BUFFER_APPEND_CHAR(SPEED_DATA[FOR_1]);
+    }
+
+    DECIMAL_POINT_CAME_STOP_TX = OFF;
+
+    NOP();
+    BUFFER_APPEND_STR(",");
+    NOP();
+
+/************************************************************************************************************************************************************/
+
+    COG_VALUE_COUNT = CLR;
+
+    for(FOR_1 = 0; FOR_1 <= 5; FOR_1++)
+    {
+        NOP();
+
+        if(COG[FOR_1] != '.')
+        {
+            COG_VALUE_COUNT++;
+        }
+        else if(COG[FOR_1] == '.')
+        {
+            break;
+        }
+    }
+
+    if(COG_VALUE_COUNT == 1)
+    {
+        BUFFER_APPEND_STR("00");
+        COG_VALUE_COUNT = 3;
+        NOP();
+    }
+    else if(COG_VALUE_COUNT == 2)
+    {
+        BUFFER_APPEND_STR("0");
+        COG_VALUE_COUNT = 4;
+        NOP();
+    }
+    else
+    {
+        COG_VALUE_COUNT = 5;
+    }
+
+    DECIMAL_POINT = OFF;
+
+    for(FOR_1 = 0; FOR_1 <= COG_VALUE_COUNT; FOR_1++)
+    {
+        NOP();
+
+        if(COG[FOR_1] == '.' && DECIMAL_POINT == ON)
+        {
+            DECIMAL_POINT = OFF;
+            COG[FOR_1] = '0';
+        }
+        else if(COG[FOR_1] == '.')
+        {
+            DECIMAL_POINT = ON;
+        }
+
+        BUFFER_APPEND_CHAR(COG[FOR_1]);
+    }
+
+    // HEADING :-COURSE OVER GROUND IN DEGREE
+    BUFFER_APPEND_STR(",");
+    NOP();
+
+    BUFFER_APPEND_CHAR((NO_OF_SAT / 10) + 0x30);
+    BUFFER_APPEND_CHAR((NO_OF_SAT % 10) + 0x30);
+    BUFFER_APPEND_STR(",");
+    NOP();      // NO OF SATELLITE
+
+/************************************************************************************************************************************************************/
+
+    ALTITUDE_VALUE_COUNT = CLR;
+
+    for(FOR_1 = 0; FOR_1 <= 4; FOR_1++)
+    {
+        NOP();
+
+        if(ALTITUDE[FOR_1] != '.')
+        {
+            ALTITUDE_VALUE_COUNT++;
+        }
+        else if(ALTITUDE[FOR_1] == '.')
+        {
+            break;
+        }
+    }
+
+    if(ALTITUDE_VALUE_COUNT == 1)
+    {
+        BUFFER_APPEND_STR("00");
+        ALTITUDE_VALUE_COUNT = 2;
+        NOP();
+    }
+    else if(ALTITUDE_VALUE_COUNT == 2)
+    {
+        BUFFER_APPEND_STR("0");
+        ALTITUDE_VALUE_COUNT = 3;
+        NOP();
+    }
+    else
+    {
+        ALTITUDE_VALUE_COUNT = 4;
+    }
+
+    for(FOR_1 = 0; FOR_1 <= ALTITUDE_VALUE_COUNT; FOR_1++)
+    {
+        NOP();
+        BUFFER_APPEND_CHAR(ALTITUDE[FOR_1]);
+    }
+
+    BUFFER_APPEND_STR(",");
+    NOP();
+
+    for(FOR_1 = 0; FOR_1 <= 4; FOR_1++)
+    {
+        NOP();
+
+        if(PDOP_DATA_RX[FOR_1] == '1' || PDOP_DATA_RX[FOR_1] == '2' || PDOP_DATA_RX[FOR_1] == '3' || PDOP_DATA_RX[FOR_1] == '4' || PDOP_DATA_RX[FOR_1] == '5' || PDOP_DATA_RX[FOR_1] == '6' || PDOP_DATA_RX[FOR_1] == '7' || PDOP_DATA_RX[FOR_1] == '8' || PDOP_DATA_RX[FOR_1] == '9' || PDOP_DATA_RX[FOR_1] == '0' || PDOP_DATA_RX[FOR_1] == '.')
+        {
+            BUFFER_APPEND_CHAR(PDOP_DATA_RX[FOR_1]);
+        }
+        else
+        {
+            BUFFER_APPEND_STR("0");
+        }
+    }
+
+    BUFFER_APPEND_STR(",");
+    NOP();
+
+/************************************************************************************************************************************************************/
+
+    for(FOR_1 = 0; FOR_1 <= 4; FOR_1++)
+    {
+        NOP();
+
+        if(HDOP[FOR_1] == '1' || HDOP[FOR_1] == '2' || HDOP[FOR_1] == '3' || HDOP[FOR_1] == '4' || HDOP[FOR_1] == '5' || HDOP[FOR_1] == '6' || HDOP[FOR_1] == '7' || HDOP[FOR_1] == '8' || HDOP[FOR_1] == '9' || HDOP[FOR_1] == '0' || HDOP[FOR_1] == '.')
+        {
+            BUFFER_APPEND_CHAR(HDOP[FOR_1]);
+        }
+        else
+        {
+            BUFFER_APPEND_STR("0");
+        }
+    }
+
+    BUFFER_APPEND_STR(",");
+    NOP();   //HDOP
+
+/************************************************************************************************************************************************************/
+
+    for(FOR_1 = 0; FOR_1 < 8 && NETWORK_NAME[FOR_1] != '\0' && NETWORK_NAME[FOR_1] != ' ' && NETWORK_NAME[FOR_1] != '\n' && NETWORK_NAME[FOR_1] != '\r'; FOR_1++)
+    {
+        NOP();
+        BUFFER_APPEND_CHAR(NETWORK_NAME[FOR_1]);
+    }
+
+    BUFFER_APPEND_STR(",");
+    NOP();   //NETWORK OPEATOR NAME
+
+/************************************************************************************************************************************************************/
+
+    NOP();
+    BUFFER_APPEND_CHAR(Array_0[IGNITION]);
+    NOP();
+    BUFFER_APPEND_STR(",");
+    NOP();   // IGNITION
+
+/************************************************************************************************************************************************************/
+
+    if(MAIN_BAT_STATUS == OFF)
+    {
+        BUFFER_APPEND_STR("0,");
+    }
+    else
+    {
+        MAIN_BAT_STATUS = ON;
+        BUFFER_APPEND_STR("1,");
+    }
+
+    NOP();     // MAIN BATTERY STATUS
+
+    BATTERY_MEASUREMENT = ON;
+
+    BUFFER_APPEND_CHAR(((MAIN_BATTERY_VOLTAGE / 100) + 0x30));
+
+    VOLT = MAIN_BATTERY_VOLTAGE % 100;
+
+    BUFFER_APPEND_CHAR(((VOLT / 10) + 0x30));
+    NOP();
+    BUFFER_APPEND_STR(".");
+
+    BUFFER_APPEND_CHAR(((VOLT % 10) + 0x30));
+    BUFFER_APPEND_STR(",");     //MAIN BATTERY VOLTAGE
+
+/************************************************************************************************************************************************************/
+
+    VOLT = BACKUP_BATTERY_VOLTAGE % 1000;
+
+    if(VOLT >= 440)
+    {
+        VOLT = 440;
+    }
+
+    BUFFER_APPEND_CHAR(((VOLT / 100) + 0x30));
+
+    VOLT = VOLT % 100;
+
+    BUFFER_APPEND_STR(".");
+    BUFFER_APPEND_CHAR(((VOLT / 10) + 0x30));
+    BUFFER_APPEND_STR(",");                              //BACKUP BATTERY VOLTAGE
+
+    BATTERY_MEASUREMENT = OFF;
+
+/************************************************************************************************************************************************************/
+
+    BUFFER_APPEND_CHAR(Array_0[PANIC_ALERT]);
+    NOP();
+    BUFFER_APPEND_STR(",C,");     //PANIC ALERT & TAMPER ALERT 'C'
+
+/************************************************************************************************************************************************************/
+
+    BUFFER_APPEND_CHAR(Array_0[GSM_STRENGTH / 10]);
+    NOP();
+
+    BUFFER_APPEND_CHAR(Array_0[GSM_STRENGTH % 10]);
+    NOP();     //GSM SIGNAL STRENGTH
+
+/************************************************************************************************************************************************************/
+
+    BUFFER_APPEND_STR(",404,");
+
+    HEX_CHARACTER_CONVERSION = SET;
+
+    if(MNC_DATA_LENGTH == 0 || MNC[0] == 0x78)
+    {
+        BUFFER_APPEND_STR("00");
+    }
+    else
+    {
+        if(MNC_DATA_LENGTH >= 2)
+        {
+            MNC_DATA_LENGTH = 1;
+        }
+
+        for(FOR_1 = 0; FOR_1 <= MNC_DATA_LENGTH; FOR_1++)
+        {
+            NOP();
+            BUFFER_APPEND_CHAR(MNC[FOR_1]);
+        }
+    }
+
+    BUFFER_APPEND_STR(",");
+
+    /* Serving Cell LAC */
+    for(FOR_1 = 0; FOR_1 < 4; FOR_1++)
+    {
+        if(LAC[FOR_1] != '0' || FOR_1 >= 2)
+        {
+            BUFFER_APPEND_CHAR(LAC[FOR_1]);
+        }
+        else
+        {
+            BUFFER_APPEND_CHAR('0');
+        }
+    }
+
+    BUFFER_APPEND_STR(",");
+
+    /* Serving Cell ID */
+    for(FOR_1 = 0; FOR_1 < 4; FOR_1++)
+    {
+        if(CELL_ID[FOR_1] != '0' || FOR_1 >= 2)
+        {
+            BUFFER_APPEND_CHAR(CELL_ID[FOR_1]);
+        }
+        else
+        {
+            BUFFER_APPEND_CHAR('0');
+        }
+    }
+
+    BUFFER_APPEND_STR(",");
+
+    /* Serving Cell Signal Strength (0-31 decimal) */
+    if(SERVING_CELL_DBM >= 10)
+    {
+        BUFFER_APPEND_CHAR(Array_0[SERVING_CELL_DBM / 10]);
+    }
+
+    BUFFER_APPEND_CHAR(Array_0[SERVING_CELL_DBM % 10]);
+    BUFFER_APPEND_STR(",");
+
+    /* Neighbour Cells 1-4: (Cell ID, LAC, Signal) triplets */
+    for(FOR_1 = 0; FOR_1 < 4; FOR_1++)
+    {
+        for(FOR_2 = 0; FOR_2 < 4; FOR_2++)
+        {
+            if(NCELL_CID[FOR_1][FOR_2] != '0' || FOR_2 >= 2)
+            {
+                BUFFER_APPEND_CHAR(NCELL_CID[FOR_1][FOR_2]);
+            }
+            else
+            {
+                BUFFER_APPEND_CHAR('0');
+            }
+        }
+
+        BUFFER_APPEND_STR(",");
+
+        for(FOR_2 = 0; FOR_2 < 4; FOR_2++)
+        {
+            if(NCELL_LAC[FOR_1][FOR_2] != '0' || FOR_2 >= 2)
+            {
+                BUFFER_APPEND_CHAR(NCELL_LAC[FOR_1][FOR_2]);
+            }
+            else
+            {
+                BUFFER_APPEND_CHAR('0');
+            }
+        }
+
+        BUFFER_APPEND_STR(",");
+
+        if(NCELL_DBM[FOR_1] >= 10)
+        {
+            BUFFER_APPEND_CHAR(Array_0[NCELL_DBM[FOR_1] / 10]);
+        }
+
+        BUFFER_APPEND_CHAR(Array_0[NCELL_DBM[FOR_1] % 10]);
+
+        if(FOR_1 < 3)
+        {
+            BUFFER_APPEND_STR(",");
+        }
+    }
+
+    HEX_CHARACTER_CONVERSION = CLR;
+
+    BUFFER_APPEND_STR(",00");
+
+    if(PANIC_ALERT_PACKET == ON)
+    {
+        BUFFER_APPEND_STR("1");
+    }
+    else
+    {
+        BUFFER_APPEND_STR("0");
+    }
+
+    if(IGNITION_SW == CLOSE)
+    {
+        BUFFER_APPEND_STR("1");
+    }
+    else
+    {
+        BUFFER_APPEND_STR("0");
+    }
+
+    BUFFER_APPEND_STR(",00,");
+    NOP();
+
+/************************************************************************************************************************************************************/
+
+    FRAME_NUMBER++;
+
+    if(FRAME_NUMBER >= 1000000)
+    {
+        FRAME_NUMBER = 1;
+    }
+
+    TEMP_FRAME_NUMBER = FRAME_NUMBER;
+
+    BUFFER_APPEND_CHAR(((TEMP_FRAME_NUMBER / 100000) + 0x30));
+
+    TEMP_FRAME_NUMBER = TEMP_FRAME_NUMBER % 100000;
+
+    BUFFER_APPEND_CHAR(((TEMP_FRAME_NUMBER / 10000) + 0x30));
+
+    TEMP_FRAME_NUMBER = TEMP_FRAME_NUMBER % 10000;
+
+    BUFFER_APPEND_CHAR(((TEMP_FRAME_NUMBER / 1000) + 0x30));
+
+    TEMP_FRAME_NUMBER = TEMP_FRAME_NUMBER % 1000;
+
+    BUFFER_APPEND_CHAR(((TEMP_FRAME_NUMBER / 100) + 0x30));
+
+    TEMP_FRAME_NUMBER = TEMP_FRAME_NUMBER % 100;
+
+    BUFFER_APPEND_CHAR(((TEMP_FRAME_NUMBER / 10) + 0x30));
+    BUFFER_APPEND_CHAR(((TEMP_FRAME_NUMBER % 10) + 0x30));
+
+/************************************************************************************************************************************************************/
+
+    /* Calculate XOR checksum of packet data — unchanged, pure computation, no UART calls */
+
+    VOLT = 0;
+
+    FOR_1 = 0;
+    while(FOR_1 < 3)
+    {
+        if(MCC_1[FOR_1] >= '0')
+        {
+            VOLT ^= MCC_1[FOR_1];
+        }
+        FOR_1++;
+    }
+
+    FOR_1 = 0;
+    while(MCC_DATA_LENGTH >= FOR_1)
+    {
+        VOLT ^= MNC[FOR_1];
+        FOR_1++;
+    }
+
+    FOR_1 = 0;
+    while(LAC_DATA_LENGTH_0 >= FOR_1)
+    {
+        VOLT ^= LAC[FOR_1];
+        FOR_1++;
+    }
+
+    FOR_1 = 0;
+    while(CELL_ID_DATA_LENGTH_0 >= FOR_1)
+    {
+        VOLT ^= CELL_ID[FOR_1];
+        FOR_1++;
+    }
+
+    VOLT ^= (SERVING_CELL_DBM + 0x30);
+
+    FOR_1 = 0;
+    while(FOR_1 < 4)
+    {
+        FOR_2 = 0;
+        while(FOR_2 < 4)
+        {
+            if(NCELL_CID[FOR_1][FOR_2] != '0')
+            {
+                VOLT ^= NCELL_CID[FOR_1][FOR_2];
+            }
+            FOR_2++;
+        }
+
+        FOR_2 = 0;
+        while(FOR_2 < 4)
+        {
+            if(NCELL_LAC[FOR_1][FOR_2] != '0')
+            {
+                VOLT ^= NCELL_LAC[FOR_1][FOR_2];
+            }
+            FOR_2++;
+        }
+
+        VOLT ^= (NCELL_DBM[FOR_1] + 0x30);
+
+        FOR_1++;
+    }
+
+    /* Send checksum as 2-digit hex */
+    BUFFER_APPEND_STR(",");
+
+    BUFFER_APPEND_CHAR((VOLT / 16 < 10) ? (VOLT / 16 + 0x30) : (VOLT / 16 + 0x37));
+
+    BUFFER_APPEND_CHAR(
+        ((VOLT % 16) < 10) ?
+        ((VOLT % 16) + 0x30) :
+        ((VOLT % 16) + 0x37)
+    );
+
+    BUFFER_APPEND_STR("*");
+    NOP();
+    NOP();
+
+/************************************************************************************************************************************************************/
+
+    DATA_BUFFER[DATA_BUFFER_INDEX] = '\0';   /* null-terminate the completed packet */
+
+    URL_PRINT = OFF;
+}
 
 void UPDATE_ONLINE_DATA_FRAME(void)
 {
@@ -3833,7 +5021,7 @@ restart00:
                 INTERNET_CONNECTED = NONE;
                 /* Close TCP on network failure */
                 R_UART2_SEND("AT+QICLOSE\r\n");
-                MS_TIMER(100);
+                MS_TIMER(10);
                 TCP_CONNECTION_OPEN = OFF;
                 goto restart09;
             }
@@ -3957,23 +5145,56 @@ restart4:
 
         // Read current profile from EEPROM offset 60
         current_profile = i2c_readn(0xA0, 0XFE, 60);
-        MS_TIMER(2);
+        if(apn_is_default)
+        {
+            MS_TIMER(2);
 
-        if(current_profile == 0x01)  // Vodafone
-        {
-            R_UART2_SEND("AT+QICSGP=1,\"sensem2m\"\r\n");
-        }
-        else if(current_profile == 0x02)  // BSNL
-        {
-            R_UART2_SEND("AT+QICSGP=1,\"bsnlnet\"\r\n");
-        }
-        else if(current_profile == 0x03)  // Airtel
-        {
-            R_UART2_SEND("AT+QICSGP=1,\"airtelgprs.com\"\r\n");
+        #ifdef SIMMAKE_IDEMIA_3P
+
+            if(current_profile == 0x31)  // Vodafone
+            {
+                R_UART2_SEND("AT+QICSGP=1,\"sensem2m\"\r\n");
+            }
+            else if(current_profile == 0x32)  // BSNL
+            {
+                R_UART2_SEND("AT+QICSGP=1,\"bsnlnet\"\r\n");
+            }
+            else if(current_profile == 0x33)  // Airtel
+            {
+                R_UART2_SEND("AT+QICSGP=1,\"airtelgprs.com\"\r\n");
+            }
+            else
+            {
+                R_UART2_SEND("AT+QICSGP=1,\"sensem2m\"\r\n");
+            }
+
+        #elif defined(SIMMAKE_GND)
+
+            if(current_profile == 0x31)  // BSNL
+            {
+                R_UART2_SEND("AT+QICSGP=1,\"bsnlnet\"\r\n");
+            }
+            else if(current_profile == 0x32)  // AIRTEL
+            {
+                R_UART2_SEND("AT+QICSGP=1,\"navspireiot.m2m\"\r\n");
+            }
+            else if(current_profile == 0x33)  // VI
+            {
+                R_UART2_SEND("AT+QICSGP=1,\"navspireiot.com\"\r\n");
+            }
+            else
+            {
+                INTERNET_CONNECTED = NONE;
+                goto restart09;
+            }
+
+        #endif
         }
         else
         {
-            R_UART2_SEND("AT+QICSGP=1,\"sensem2m\"\r\n");  // Default to Vodafone
+            R_UART2_SEND("AT+QICSGP=1,\"");
+            R_UART2_SEND(TEMP_APN2);
+            R_UART2_SEND("\"\r\n");
         }
 
         ACK_RX(100, 2, 10, 10);
@@ -4084,16 +5305,37 @@ restart_tracking:
         if (TCP_CONNECTION_OPEN == OFF)
         {
             /* Connection 0 → Server 1 */
-            R_UART2_SEND("AT+QIOPEN=0,\"TCP\",\"stavltsgw.tn.gov.in\",\"8080\"\r\n");
+            DATA_BUFFER_INDEX = 0;
+            BUFFER_APPEND_STR("AT+QIOPEN=0,\"TCP\",\"");
+            BUFFER_APPEND_STR(TEMP_PIP);
+            BUFFER_APPEND_STR("\",\"");
+            BUFFER_APPEND_STR(TEMP_PPN);
+            BUFFER_APPEND_STR("\"\r\n");
+            BUFFER_APPEND_CHAR('\0');
+            R_UART2_SEND(DATA_BUFFER);
             ACK_RX(100, 3, 100, 10);
 
             /* Connection 1 → Server 3 */
-            R_UART2_SEND("AT+QIOPEN=1,\"TCP\",\"13.234.160.106\",\"8224\"\r\n");
+            DATA_BUFFER_INDEX = 0;
+            BUFFER_APPEND_STR("AT+QIOPEN=1,\"TCP\",\"");
+            BUFFER_APPEND_STR(TEMP_SIP);
+            BUFFER_APPEND_STR("\",\"");
+            BUFFER_APPEND_STR(TEMP_SPN);
+            BUFFER_APPEND_STR("\"\r\n");
+            BUFFER_APPEND_CHAR('\0');
+            R_UART2_SEND(DATA_BUFFER);
             ACK_RX(100, 3, 100, 10);
 
             /* Connection 2 → Server 4 */
-            //R_UART2_SEND("AT+QIOPEN=2,\"TCP\",\"13.234.160.106\",\"8224\"\r\n");
-            //ACK_RX(100, 3, 100, 10);
+            DATA_BUFFER_INDEX = 0;
+            BUFFER_APPEND_STR("AT+QIOPEN=2,\"TCP\",\"");
+            BUFFER_APPEND_STR(TEMP_SIP2);
+            BUFFER_APPEND_STR("\",\"");
+            BUFFER_APPEND_STR(TEMP_SPN2);
+            BUFFER_APPEND_STR("\"\r\n");
+            BUFFER_APPEND_CHAR('\0');
+            R_UART2_SEND(DATA_BUFFER);
+            ACK_RX(100, 3, 100, 10);
 
             if (DISCONNECT == ON)
             {
@@ -4105,10 +5347,8 @@ restart_tracking:
                 RESTART = OFF;
                 goto restart_tracking;
             }
-            
             /* Connection successful - mark as open */
             TCP_CONNECTION_OPEN = ON;
-            
             /* Send LGN packet only once per boot (on first successful TCP connection) */
             /* Send LGN packet only once per boot (on first successful TCP connection) */
             if (WELCOME_STRING_FRAME_BOOT == OFF)
@@ -4117,16 +5357,23 @@ restart_tracking:
                 R_UART2_SEND("AT+QISEND=0\r\n");
                 ACK_RX(10, 2, 100, 10);  
                 WELCOME_STRING();
+                R_UART2_SEND(DATA_BUFFER);
                 R_UART2_SEND_User(CTRL_Z);
                 MS_TIMER(100);
-
                 /* Send to Connection 1 (Server 3) */
                 R_UART2_SEND("AT+QISEND=1\r\n");
                 ACK_RX(10, 2, 100, 10);
-                WELCOME_STRING();
+                //WELCOME_STRING();
+                R_UART2_SEND(DATA_BUFFER);
                 R_UART2_SEND_User(CTRL_Z);
                 MS_TIMER(100);
-                
+                /* Send to Connection 2 (Server 4) */
+                R_UART2_SEND("AT+QISEND=2\r\n");
+                ACK_RX(10, 2, 100, 10);
+                //WELCOME_STRING();
+                R_UART2_SEND(DATA_BUFFER);
+                R_UART2_SEND_User(CTRL_Z);
+                MS_TIMER(100);
                 WELCOME_STRING_FRAME_BOOT = ON;  /* Mark LGN as sent after boot */
             }
         }
@@ -4144,10 +5391,10 @@ restart_tracking:
             GET_MCC_MNC_LAC_CELL_ID(); 
         }
         
-        //GET_TIME();
+        GET_TIME();
         GET_SPEED_DATA();
-        GET_DEGREES();
-
+        // GET_DEGREES();   /* REMOVED: LAT_DM/LOG_DM already set correctly by LATITUDE_CONVERSION()/LONGITUDE_CONVERSION() in GET_GPS_DATA() */
+        #if 0
         /* Send tracking data to Connection 0 (Server 1) */
         R_UART2_SEND("AT+QISEND=0\r\n");
         ACK_RX(10, 2, 100, 10);  
@@ -4166,23 +5413,52 @@ restart_tracking:
         DATA_PRINT(0);
         R_UART2_SEND_User(CTRL_Z);
         MS_TIMER(100);
+        #endif
+        NORMAL_PACKET = ON;
+
+        /* Build packet ONCE */
+        DATA_PRINT(0);
+        /* =================CON 0 -  SERVER 1 ================= */
+        R_UART2_SEND("AT+QISEND=0\r\n");
+        ACK_RX(10, 2, 100, 10);
+        R_UART2_SEND(DATA_BUFFER);
+        R_UART2_SEND_User(CTRL_Z);
+        MS_TIMER(100);
+        /* =================CON 1 - SERVER 3 ================= */
+        R_UART2_SEND("AT+QISEND=1\r\n");
+        ACK_RX(10, 2, 100, 10);
+        R_UART2_SEND(DATA_BUFFER);
+        R_UART2_SEND_User(CTRL_Z);
+        MS_TIMER(100);
+        /* =================CON 2 - SERVER 4 ================= */
+        R_UART2_SEND("AT+QISEND=2\r\n");
+        ACK_RX(10, 2, 100, 10);
+        R_UART2_SEND(DATA_BUFFER);
+        R_UART2_SEND_User(CTRL_Z);
+        MS_TIMER(100);
 
         /* Send HEL packet if health check requested (every 5 minutes) */
-        if(HEALTH_PACKET_TO_SERVER == ON) {
+        if(HEALTH_PACKET_TO_SERVER == ON) 
+        {
             /* Send to Connection 0 (Server 1) */
             R_UART2_SEND("AT+QISEND=0\r\n");
             ACK_RX(10, 2, 100, 10);  
             HEL_STRING();
+            R_UART2_SEND(DATA_BUFFER);
             R_UART2_SEND_User(CTRL_Z);
-            MS_TIMER(100);
-
+            MS_TIMER(100);  
             /* Send to Connection 1 (Server 3) */
             R_UART2_SEND("AT+QISEND=1\r\n");
-            ACK_RX(10, 2, 100, 10);  
-            HEL_STRING();
+            ACK_RX(10, 2, 100, 10);
+            R_UART2_SEND(DATA_BUFFER);
             R_UART2_SEND_User(CTRL_Z);
             MS_TIMER(100);
-            
+            /* Send to Connection 2 (Server 4) */
+            R_UART2_SEND("AT+QISEND=2\r\n");
+            ACK_RX(10, 2, 100, 10);
+            R_UART2_SEND(DATA_BUFFER);
+            R_UART2_SEND_User(CTRL_Z);
+            MS_TIMER(100);
             HEALTH_PACKET_TO_SERVER = OFF;
         }
 
@@ -4238,7 +5514,7 @@ restart_tcp:
 
         /* Send firmware request data to the TCP server */
         R_UART2_SEND("AT+QISEND\r\n");
-       ACK_RX(10, 2, 100, 10);    /* Wait for '>' prompt */
+        ACK_RX(10, 2, 100, 10);    /* Wait for '>' prompt */
 
         if (RESTART == ON)
         {
@@ -4314,19 +5590,30 @@ restart09:
         // Calculate next profile: 0x01→0x02, 0x02→0x03, 0x03→0x01 (cycling)
         current_profile = i2c_readn(0xA0, 0xFE, 60);
         MS_TIMER(50);
-        if (current_profile == 0x01) {
-            TEMP_PROF = '2';
-        } else if (current_profile == 0x02) {
-            TEMP_PROF = '3';
-        } else {  // Default to 0x03 or fallback to 0x01
-            TEMP_PROF = '1';
+        if (current_profile == 0x31)  // '1'
+        {
+            TEMP_PROF = 0x32;  // Set to '2'
+        } 
+        else if (current_profile == 0x32)  // '2'
+        {
+            TEMP_PROF = 0x33;  // Set to '3'
+        } 
+        else if (current_profile == 0x33)  // '3'
+        {
+            TEMP_PROF = 0x31;  // Set to '1'
+        } 
+        else
+        {  
+            TEMP_PROF = 0x33;  // Default to '3'
         }
+
         // Write new profile back to EEPROM offset 60
         i2c_writen(0xA0, 0xFE, 60, TEMP_PROF);
-        MS_TIMER(100);
+        MS_TIMER(50);
     }
 }
 
+#if 0
 void HEL_STRING(void)
 {
     R_UART2_SEND("$HEL,VID,");
@@ -4473,6 +5760,7 @@ void HEL_STRING(void)
 
     NOP();
 }
+#endif
 
 // void DATA_TO_ARRAY(void)
 // {

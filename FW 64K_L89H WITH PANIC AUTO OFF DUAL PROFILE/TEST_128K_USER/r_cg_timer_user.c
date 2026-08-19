@@ -190,19 +190,31 @@ void r_tau0_channel2_interrupt (void)
     }
     }
 	
-    if(RTC_UPDATE>=36000){RTC_UPDATE=0;RTC_DONE=OFF;}
+    if(RTC_UPDATE>=36000)
+    {
+        RTC_UPDATE=0;
+        RTC_DONE=OFF;
+    }
+
     if(PANIC_TIME_START==ON)
     {
 	    PANIC_COUNT++;
-	    if(PANIC_COUNT>=1200){PANIC_TIME++;PANIC_COUNT=CLR;}
-	   // if(PANIC_TIME>=PANIC_ALERT_TIME)
-	   if(PANIC_TIME>=1)
+	    if(PANIC_COUNT>=600) // for 1 min 4 seconds = 600 - epb& ea packets .
 	    {
-	            PANIC_CONTROL_STATE = ON;
+	            PANIC_TIME++;
+	            PANIC_COUNT=CLR;
+	    }
+	   if(PANIC_TIME>=PANIC_ALERT_TIME)
+	   //if(PANIC_TIME>=1)
+	    {
+	            PANIC_CONTROL_STATE = OFF;
+	            PANIC_CONTROL_STATE_1 = ON;
+	            //PANIC_CONTROL_STATE = ON;
 	            PANIC_TIME=PANIC_TIME_START=CLR;
 	            PANIC_TIME_STOP=ON;
-	            HOOTER=ON;HOOTER_COUNT=CLR;
-	            PANIC_CONTROL_STATE_1=OFF;
+	            HOOTER=ON;
+	            HOOTER_COUNT=CLR;
+	            //PANIC_CONTROL_STATE_1=OFF;
 				
 	    }
     }

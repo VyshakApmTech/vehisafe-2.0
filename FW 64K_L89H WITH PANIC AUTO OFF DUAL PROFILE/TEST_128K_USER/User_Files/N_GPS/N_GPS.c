@@ -7,9 +7,9 @@ char GPS_BUSY,R,COG[6]={'0','0','0','0','0','0'};
 char DATE_MSB,DATE_LSB,MONTH_MSB,MONTH_LSB,YEAR_MSB,YEAR_LSB,L,NAVIGATION_ACK,O,GPS_RESTART;
 int no=0,RR;
 
-char LAT_DM[10]={'1','2','3','4','5','6','7','8'},LOG_DM[10]={'1','2','3','4','5','6','7','8'};
-char LAT_DM_RX[10]={'0','0','0','0','0','0','0','0'},COMMA,COMMA_1,VTG_FRAME_ACK,S;
-char LOG_DM_RX[10]={'0','0','0','0','0','0','0','0','0'};
+char LAT_DM[10]={'1','2','3','4','5','6','7','8'},LOG_DM[10]={'8','7','6','5','4','3','2','1'}; /* Different init values to debug conflicts */
+char LAT_DM_RX[16]={'0','0','0','0','0','0','0','0'},COMMA,COMMA_1,VTG_FRAME_ACK,S;
+char LOG_DM_RX[16]={'0','0','0','0','0','0','0','0','0'};
 char GPGA_FRAME[5]={'G','N','G','G','A'},GPGA_FRAME_ACK,GPGA_DATA[10]={'0','0','.','0','0','0','0','0','.','0'},A,VTG_FRAME[3]={'V','T','G'},B,SPEED_DATA_RX[10]={'0','0','0','0','0','0','0','0','0','0'},GSA_FRAME[3]={'G','S','A'};
 char GPS_GGA_RX,ALTITUDE[8]={'0','0','0','0','0','0','0','0'},HDOP[5],NO_OF_SAT,data_count_2,GGA_DATA,NAVIGATION_FRAME_ACK[6]={'$','P','M','T','K','0'};//NAVIGATION_FRAME_ACK[12]={'$','P','M','T','K','0','0','1',',','8','8','6'};
 extern char NAVIGATION_RX;
@@ -59,8 +59,14 @@ void GPS_STATIONARY_MODE(void)
 	NAVIGATION_RX=ON;
 	//GREEN_LED=
 	BLUE_LED=ON;
-	R_UART1_SEND("$PMTK386,0.6*3B\r\n");MS_TIMER(1);
-	ACK_RX(24,7,50,1);if(RESTART==ON){RESTART=OFF;goto restart102;}
+	R_UART1_SEND("$PMTK386,0.6*3B\r\n");
+	MS_TIMER(1);
+	ACK_RX(24,7,50,1);
+	if(RESTART==ON)
+	{
+		RESTART=OFF;
+		goto restart102;
+	}
 	//GREEN_LED=
 	BLUE_LED=OFF;
 	NAVIGATION_RX=OFF;
@@ -81,8 +87,6 @@ void GPS_STATIONARY_MODE(void)
 ***********************************************************************************************************************/
 void BAUD_RATE_AND_INITIAL_SETTINGS(void)
 {
-
-	
 	//restart102:
 	//R_UART1_Start();
 	//R_UART1_SEND("$PMTK386,0.6*3B\r\n");MS_TIMER(1);
@@ -93,12 +97,12 @@ void BAUD_RATE_AND_INITIAL_SETTINGS(void)
 	//GREEN_LED=BLUE_LED=OFF;
 	//NAVIGATION_RX=OFF;
 	//GPS_NAVIGATION_MODE();
-        //GPS_STATIONARY_MODE();
-	
-//	GPS_FIX_INTERVAL();
-//	GPS_SATELLITE_ENABLE();
-//	GPS_PPS_DISABLE();
+	//GPS_STATIONARY_MODE();
+	//GPS_FIX_INTERVAL();
+	//GPS_SATELLITE_ENABLE();
+	//GPS_PPS_DISABLE();
 }
+
 /***********************************************************************************************************************
 * Function Name: GPS_FIX_INTERVAL
 * Description  : This function is used SET THE GPS FIX INTERVAL MEANS:-AFTER 100m/S MOVEMENT ONLY IT CAPTURES LAT & LOG DATA
@@ -122,8 +126,21 @@ void GPS_NORMAL_MODE(void)
 	R_UART1_SEND("$PMTK225,0*2B\r\n");MS_TIMER(1);
 	//R_UART1_Send("$PMTK\r\n",7);MS_TIMER(1);R_UART1_Send("$PMTK\r\n",7);MS_TIMER(1);R_UART1_Send("$PMTK\r\n",7);MS_TIMER(1);
 	ACK_RX(12,7,50,1);
-	if(GPS_RESTART>=5){GPS_RESTART=CLR;GPS_RST=ON;MS_TIMER(100);GPS_RST=OFF;BAUD_RATE_AND_INITIAL_SETTINGS();goto restart102;}
-	if(RESTART==ON){GPS_RESTART++;RESTART=OFF;goto restart102;}
+	if(GPS_RESTART>=5)
+	{
+		GPS_RESTART=CLR;
+		GPS_RST=ON;
+		MS_TIMER(100);
+		GPS_RST=OFF;
+		BAUD_RATE_AND_INITIAL_SETTINGS();
+		goto restart102;
+	}
+	if(RESTART==ON)
+	{
+		GPS_RESTART++;
+		RESTART=OFF;
+		goto restart102;
+	}
 	GPS_RESTART=CLR;
 	//GREEN_LED=
 	BLUE_LED=OFF;
@@ -135,22 +152,78 @@ void GET_GPS_DATA(void)
 {
     R_UART1_Start();
     t_count=0;
-	    while(GPS_RMC_DATA_RX==OFF && t_count<=60){NOP();}						      if(t_count>=60){t_count=0;BAUD_RATE_AND_INITIAL_SETTINGS();}t_count=0;
-    while(GPS_GGA_DATA_RX==OFF && t_count<=60){NOP();}                if(t_count>=60){t_count=0;BAUD_RATE_AND_INITIAL_SETTINGS();}t_count=0;
+    while(GPS_RMC_DATA_RX==OFF && t_count<=60)
+	{
+		NOP();
+	}
+    if(t_count>=60)
+	{
+		t_count=0;
+		BAUD_RATE_AND_INITIAL_SETTINGS();
+	}
+    t_count=0;
+    while(GPS_GGA_DATA_RX==OFF && t_count<=60)
+	{
+		NOP();
+	}
+    if(t_count>=60)
+	{
+		t_count=0;
+		BAUD_RATE_AND_INITIAL_SETTINGS();
+	}
+    t_count=0;
     //while(GPS_VTG_DATA_RX==OFF && GPS_DIRECTION_DATA_VALID==ON && NO_OF_SAT<=7 && t_count<=60){NOP();}if(t_count>=60){t_count=0;BAUD_RATE_AND_INITIAL_SETTINGS();}t_count=0;
-    
-    while(GPS_VTG_DATA_RX==OFF && GPS_DIRECTION_DATA_VALID==ON && t_count<=60){NOP();}if(t_count>=60){t_count=0;BAUD_RATE_AND_INITIAL_SETTINGS();}t_count=0;
-    
-    while(GPS_VTG_DATA_RX==OFF && GPS_DIRECTION_DATA_VALID==ON && t_count<=60){NOP();}if(t_count>=60){t_count=0;BAUD_RATE_AND_INITIAL_SETTINGS();}t_count=0;
-    while(GPS_GSA_DATA_RX==OFF && GPS_DIRECTION_DATA_VALID==ON && t_count<=60){NOP();}if(t_count>=60){t_count=0;BAUD_RATE_AND_INITIAL_SETTINGS();}t_count=0;
+
+    while(GPS_VTG_DATA_RX==OFF && GPS_DIRECTION_DATA_VALID==ON && t_count<=60)
+	{
+		NOP();
+	}
+    if(t_count>=60)
+	{
+		t_count=0;
+		BAUD_RATE_AND_INITIAL_SETTINGS();
+	}
+    t_count=0;
+
+    while(GPS_VTG_DATA_RX==OFF && GPS_DIRECTION_DATA_VALID==ON && t_count<=60)
+	{
+		NOP();
+	}
+    if(t_count>=60)
+	{
+		t_count=0;
+		BAUD_RATE_AND_INITIAL_SETTINGS();
+	}
+    t_count=0;
+
+    while(GPS_GSA_DATA_RX==OFF && GPS_DIRECTION_DATA_VALID==ON && t_count<=60)
+	{
+		NOP();
+	}
+    if(t_count>=60)
+	{
+		t_count=0;
+		BAUD_RATE_AND_INITIAL_SETTINGS();
+	}
+    t_count=0;
+
+    /* ✅ FIX: Convert GPS coordinates from DDMM.MMMM format to decimal degrees */
+    /* Call conversion functions after all GPS frames (RMC, GGA, VTG, GSA) are received */
+    if(GPS_DIRECTION_DATA_VALID == ON)
+    {
+        LATITUDE_CONVERSION();   /* Convert LAT_DM_RX[] to decimal in LAT_DM[] */
+        MS_TIMER(5);             /* Brief delay to allow conversion to complete */
+        LONGITUDE_CONVERSION();  /* Convert LOG_DM_RX[] to decimal in LOG_DM[] */
+        MS_TIMER(5);
+    }
+
     GPS_RMC_DATA_RX=GPS_GGA_DATA_RX=GPS_VTG_DATA_RX=GPS_GSA_DATA_RX=OFF;
     R_UART1_Stop();
 }
-
 void GPS_UART_RX_1(unsigned int UART1_BUFFER)
 {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //				 GPS DATA RECIEVE 
+//				 GPS DATA RECIEVE 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
     if(UART1_BUFFER=='R' && GPS_RMC_RX==0)
@@ -207,12 +280,12 @@ void GPS_UART_RX_1(unsigned int UART1_BUFFER)
 		    }
 		    case 2:
 		    {
-		    if(GPS_DIRECTION_DATA_VALID==ON)
+		    if(GPS_DIRECTION_DATA_VALID==ON && data_count<sizeof(LAT_DM_RX))
 	            {
 			    LAT_DM_RX[data_count]=UART1_BUFFER;
 	  	     data_count++;
-	            break;
 		    }
+	            break;
 		    }
 		    case 3:
 		    {
@@ -221,12 +294,12 @@ void GPS_UART_RX_1(unsigned int UART1_BUFFER)
 		    }
 		    case 4:
 		    {
-		    if(GPS_DIRECTION_DATA_VALID==ON)
+		    if(GPS_DIRECTION_DATA_VALID==ON && data_count<sizeof(LOG_DM_RX))
 	            {
 			    LOG_DM_RX[data_count]=UART1_BUFFER;
 		    data_count++;
-	            break;
 		    }
+	            break;
 		    }
 		    case 5:
 		    {
@@ -248,23 +321,39 @@ void GPS_UART_RX_1(unsigned int UART1_BUFFER)
 		    }
                     case 8:
 		    {
-	            if(data_count==0){DATE_MSB=UART1_BUFFER;}
-	       else if(data_count==1){DATE_LSB=UART1_BUFFER;}
-	       else if(data_count==2){MONTH_MSB=UART1_BUFFER;}
-	       else if(data_count==3){MONTH_LSB=UART1_BUFFER;}
-	       else if(data_count==4){YEAR_MSB=UART1_BUFFER;}
-	       else if(data_count==5){YEAR_LSB=UART1_BUFFER;GPS_RMC_DATA_RX=ON;}
+	            if(data_count==0)
+				{
+					DATE_MSB=UART1_BUFFER;
+				}
+	       		else if(data_count==1)
+				{
+					DATE_LSB=UART1_BUFFER;
+				}
+	       		else if(data_count==2)
+				{
+					MONTH_MSB=UART1_BUFFER;
+				}
+	       		else if(data_count==3)
+				{
+					MONTH_LSB=UART1_BUFFER;
+				}
+	       		else if(data_count==4)
+				{
+					YEAR_MSB=UART1_BUFFER;
+				}
+	       		else if(data_count==5)
+				{
+					YEAR_LSB=UART1_BUFFER;
+					GPS_RMC_DATA_RX=ON;
+				}
 	            data_count++;
-		    
 	            break;
-		    }
-		    
-		    
-	    }
-		    
+		    }  
+	    }    
     }
+
 	GPS_BUSY=OFF;    
-    }
+}
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -453,9 +542,16 @@ void GPS_UART_RX_4(unsigned int UART1_BUFFER_4)
 	if(NAVIGATION_FRAME_ACK[O]==UART1_BUFFER_4)
 	{
 		O++;
-		if(O>=6){NAVIGATION_ACK=1;O=0;}
+		if(O>=6)
+		{
+			NAVIGATION_ACK=1;
+			O=0;
+		}
 	}
-	else{O=0;}
+	else
+	{
+		O=0;
+	}
 }
 
 

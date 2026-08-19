@@ -61,6 +61,7 @@
 	unsigned int a,b,c,d,z,l,a0,p;
 	extern unsigned int Ax,Ay,Az,Gx,Gy,Gz;
 	extern uint8_t FLASH_STATUS[10];
+	void R_MAIN_UserInit(void);
 	void READ_DEVICE_ID(void);
 	void CMD_DATA_WRITE_IN_EEROM(char D);
 	void CMD_DATA_READ_IN_EEPROM(void);
@@ -74,13 +75,12 @@
 		
 		l=i/10000;
 		a0=i%10000;
-	        a=a0/1000;
+		a=a0/1000;
 		z=i%1000;
 		b=z/100;
 		i=z%100;
 		c=i/10;
 		d=i%10;
-		
 		R_UART2_SEND_User(0x30+l);
 		R_UART2_SEND_User(0x30+a);
 		R_UART2_SEND_User(0x30+b);
@@ -90,7 +90,6 @@
 	}
 
 	/* End user code. Do not edit comment generated here */
-	void R_MAIN_UserInit(void);
 
 	/***********************************************************************************************************************
 	* Function Name: main
@@ -106,14 +105,18 @@
 	    {	
 			if(TEMP_PROF != 0)
 			{
-            			MANUAL_NET(TEMP_PROF - '0');
+				MANUAL_NET(TEMP_PROF - '0');
+				i2c_writen(0xA0, 0xFE, 60, TEMP_PROF);
+        			MS_TIMER(50);
 				TEMP_PROF = 0;
-				
 			}
 				
-			/////if(GPS_STANDBY==OFF){WATCHDOG_ON();
-			//GET_GPS_DATA();
-			//WATCHDOG_OFF();}
+			if(GPS_STANDBY==OFF)
+			{
+				WATCHDOG_ON();
+				GET_GPS_DATA();
+				WATCHDOG_OFF();
+			}
 			if(GPS_DIRECTION_DATA_VALID==ON && GPS_STANDBY==OFF)
 			{
 				WATCHDOG_ON();
@@ -163,7 +166,6 @@
 	    R_TAU0_Channel2_Start();
 	    WATCH_DOG_FORCE_KILL=OFF;
 	    WATCH_DOG_KILL=CLR;
-	    //MS_TIMER(1000);
 	    P0_bit.no0=P0_bit.no1=ON;
 	    WATCHDOG_ON();
 	    WDTE = 0xACU;
@@ -225,10 +227,8 @@
 	    VLT_STARTUP=ON;
 	    //ACC_GRY_INTZ();
 	    //ACC_GYRO_READ();
-
-
-
-		R_UART2_SEND("AT\r\n");ACK_RX(20,2,10,1);
+		R_UART2_SEND("AT\r\n");
+	    ACK_RX(20,2,10,1);
 	    MS_TIMER(200);
 		R_UART2_SEND("AT+CBC\r\n");ACK_RX(20,2,10,1);
 	    MS_TIMER(200);
@@ -243,22 +243,12 @@
 	    MS_TIMER(200);
 	    R_UART2_SEND("AT+COPS=?\r\n");
 	    MS_TIMER(2000);
-	      R_UART2_SEND("AT+CREG?\r\n");
+		R_UART2_SEND("AT+CREG?\r\n");
 	    MS_TIMER(200);
-	    // GET_IMEI();  // REDUNDANT - Commented (1st call)
-	   
-	   // R_UART2_SEND("AT+GSN\r\n");
-	   //  MS_TIMER(300);
-	   GSM_INTZ(SMS_MODE);
-	   GSM_SMS_DIAG();
-	    // GET_IMEI();  // REDUNDANT - Commented (2nd call)
-	     //R_UART2_SEND("AT\r\n");ACK_RX(20,2,10,1);
-	    //MS_TIMER(300);
-	     //R_UART2_SEND("AT\r\n");ACK_RX(20,2,10,1);
-	    //MS_TIMER(300);
-	         // GET_IMEI();  // REDUNDANT - Commented (3rd call)
-		  GET_IMEI();  // KEPT - Final IMEI read before EEPROM
-	   CMD_DATA_READ_IN_EEPROM();
+	   	GSM_INTZ(SMS_MODE);
+	   	GSM_SMS_DIAG();
+		GET_IMEI();  // KEPT - Final IMEI read before EEPROM
+	   	CMD_DATA_READ_IN_EEPROM();
 	//    
 	    //R_UART1_Start();
 	    t_count=0;

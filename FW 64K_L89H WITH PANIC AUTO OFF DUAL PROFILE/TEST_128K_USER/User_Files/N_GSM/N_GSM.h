@@ -3,7 +3,15 @@
 
 #include "r_cg_userdefine.h"
 
-void SEND_AIS140_PVT(void);
+#define DATA_BUFFER_SIZE 256
+
+extern char DATA_BUFFER[DATA_BUFFER_SIZE];
+extern unsigned int DATA_BUFFER_INDEX;
+extern char apn_is_default;
+extern char default_apn[25];
+void BUFFER_APPEND_CHAR(char c);
+void BUFFER_APPEND_STR(const char *s);
+
 void ACK_RX(unsigned int ct,unsigned int ack,unsigned int REDIAL,unsigned int WAIT_TIME);
 void GSM_UART_RX(unsigned char UART0_BUFFER);
 void GSM_INTZ(char MODE);
@@ -32,9 +40,9 @@ void GET_MCC_MNC_LAC_CELL_ID(void);
 void Auto_Read_Message_Intz(void);
 void NEW_SMS_READ(void);
 void BATTERY_PERCENTAGE_CALCULATE(void);
-void BOOT_STRING(void);
+//void BOOT_STRING(void);
 //void //DEVICE_REPLY_IN_SMS(unsigned char REPLY);
-void PIN_CHECK(char x,char z);
+//void PIN_CHECK(char x,char z);
 void CMD_DATA_WRITE_IN_EEROM(char D);
 void CMD_DATA_READ_IN_EEPROM(void);
 //void DATA_TO_ARRAY(void);
@@ -60,4 +68,5 @@ void InitM95(void);
 //void IsSTKInit(unsigned int k);
 void IsSTKInit(void);
 //void SMS_CMD_DATA_UPL(unsigned int MSET);
+void GET_TIME(void);
 #endif

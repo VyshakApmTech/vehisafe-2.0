@@ -235,7 +235,7 @@
  static void __near intad_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
-    (*RAM_INTAD_ISR)();
+	    (*RAM_INTAD_ISR)();
     /* End user code. Do not edit comment generated here */
 }
 

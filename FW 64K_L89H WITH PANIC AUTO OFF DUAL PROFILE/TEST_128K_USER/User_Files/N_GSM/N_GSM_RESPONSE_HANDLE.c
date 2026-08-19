@@ -27,7 +27,7 @@ const unsigned char SET_HACL_FRAME[] = {"SET HACL "}; //9 chars
 const unsigned char SET_HBRK_FRAME[] = {"SET HBRK "}; //9 chars
 const unsigned char SET_HTRN_FRAME[] = {"SET HTRN "}; //9 chars
 const unsigned char SET_LBAT_FRAME[] = {"SET LBAT "}; //9 chars
-const unsigned char SET_APN_FRAME2[] = {"SET APN "}; //8 chars
+const unsigned char SET_APN_FRAME[] = {"SET APN "}; uint8_t APNLEN=0;//8 chars
 const unsigned char MODEM_TIME_FRAME[8] = {"+CCLK: \""}; // 8 chars: +CCLK: "  (includes opening quote)
 
 // Store complete AT+CCLK response
@@ -111,7 +111,7 @@ extern const char SET_TCP_FRAME[8],SETTING_CMD_FRAME[13],GET_IN_SMS[4],CONNECT_A
 extern const char FILE_DOWNLOAD_ACK[8],HTTP_DOWNLOAD[8],FTP_ADDRESS_ACK[8],FILE_DOWNLOAD_ACK[8],FIRM_UPDATE_CTRL[3],PANIC_CTRL[4];
 extern const char ENGINEER_MODE_FRAME_2[10],NEW_SMS_FRAME[11],PHONE_NUMBER_OF_SENDER_FRAME[23],GET_IMEI_SMS_CMD[12],DEVICE_RESET_CMD_FRAME[13]; 
 extern const char NW_NAME_ACK[5];
-extern const char ALREADY_CONNECT_ACK[15],SET_APN_FRAME[8],SET_IP_FRAME[8],SET_RP_NO_FRAME[8],REPLY_MOBILE_NUMBER_ACK[8],DEVICE_CLEAR_CMD_FRAME[14],HARSH_ACCEL_CMD_FRAME[9],HARSH_TURN_CMD_FRAME[8],HARSH_BRAKE_CMD_FRAME[9],QST_CMD_FRAME[8];
+extern const char ALREADY_CONNECT_ACK[15],SET_IP_FRAME[8],SET_RP_NO_FRAME[8],REPLY_MOBILE_NUMBER_ACK[8],DEVICE_CLEAR_CMD_FRAME[14],HARSH_ACCEL_CMD_FRAME[9],HARSH_TURN_CMD_FRAME[8],HARSH_BRAKE_CMD_FRAME[9],QST_CMD_FRAME[8];
 extern const char PANIC_ON_DURATON_FRAME[9],HEALTH_ON_DURATON_FRAME[9],PANIC_ON_DURATON_S_FRAME[4],HEALTH_ON_DURATON_S_FRAME[4],LOW_BAT_LEVEL_FRAME[9],APN_S_FRAME[6],GET_SMS_FRAME[13],GET_ACT_MESSAGE[5];
 extern const char GET_PIP_S_FRAME[4],GET_SIP_S_FRAME[5],GET_SLEEP_TIME_FRAME[5],GET_PPN_S_FRAME[11],GET_SPN_S_FRAME[11],SET_PIP_PN_FRAME[11],SET_SIP_PN_FRAME[11],GET_DEVICE_CLEAR_S_FRAME[9];
 extern const char GET_GPS_CLEAR_S_FRAME[9],PANIC_MOBILE_NUMBER_ACK[5],CONNECT_FAIL_ACK[12],GET_HEALTH_MESSAGE_FRAME[5],PNET_CMD_FRAME[9],SNET_CMD_FRAME[9],NWA_CMD_FRAME[10],NWS_CMD_FRAME[10],GET_OVER_SPEED_FRAME[10];
@@ -127,7 +127,7 @@ extern _Bool GPS_RST_FLAG,ALREADY_CONNECT,HTTP_DOWNLOAD_ACK,FTP_ACK,FTP_DOWNLOAD
 extern _Bool GPS_STANDBY,WATCH_DOG_FORCE_KILL,GET_MCC_MNC_LAC_CELL_ID_RX,SEND_IMEI,SET_EMERGENCY_NUMBER_FRAME_CMD,UPDATE_APN,UPDATE_REGISTRATION_NUMBER,UPDATE_INTERVAL_TIME_FOR_IGNITION_ON_CMD,UPDATE_INTERVAL_TIME_FOR_IGNITION_OFF_CMD,DEVICE_CLEAR_CMD_FRAME_RX,PRI_IP_PN_SMS,SEC_IP_PN_SMS,OVER_SPEED_CMD,ACTIVATION_CMD,HEALTH_CMD2;
 extern unsigned int TEMP_3,IGNITION_ON_UPDATE_TIME,IGNITION_OFF_UPDATE_TIME,UPDATE_TIME_ON_TIME,UPDATE_TIME_OFF_TIME,HEALTH_ON_DURATON_LEVEL,P_D_L,PANIC_ALERT_TIME,HEALTH_ALERT_TIME,HARSH_ACCEL_LEVEL,HT_LEVEL,HB_LEVEL,EMGT_TIME;
 extern int AD;
-extern char p1,p2,p3,p4,UPDATE_INTERVAL_CMD,APN_LENGTH,TEMP_IP[15],SET_IP_FRAME_RX,IGNITION_ON_TIME_RX,APN_S_RX,TEMP_APN2[255],TEMP_SET[255],TEMP_TCP[255],GET_PIP_S_RX,SET_PIP_PN_RX;
+extern char p1,p2,p3,p4,UPDATE_INTERVAL_CMD,APN_LENGTH,TEMP_IP[15],SET_IP_FRAME_RX,IGNITION_ON_TIME_RX,APN_S_RX,TEMP_APN2[25],TEMP_SET[255],TEMP_TCP[255],GET_PIP_S_RX,SET_PIP_PN_RX;
 extern char TEMP_RP_NO[12];
 extern char VV;
 extern char HEALTH_CMD_FRAME_RX,SETTING_CMD_FRAME_RX,PANIC_CTRL_RX,PANIC_CONTROL_STATE,PANIC_CONTROL_RX,FIRM_UPDATE_CTRL_RX,FIRM_UPDATE_CONTROL_STATE,FIRM_UPDATE_CONTROL_RX,NEW_SMS_INBOX_ADDRESS[20],NEW_SMS;
@@ -144,7 +144,7 @@ extern char MCC_1[5],MNC[5],LAC[5],CELL_ID[5],MCC_DATA_LENGTH,MNC_DATA_LENGTH,LA
 extern char TEMP_EMERGENCY_NUMBER[55];
 extern char FOR_7,DBM_DATA_LENGTH[5],LAC_DATA_LENGTH[5],CELL_ID_DATA_LENGTH[5];
 extern _Bool ALREADY_CONNECT_FLAG,VERSION_CMD_SET,GET_VLT_IMEI_PH_CMD,SMS_CMD_REPLY,PHONE_NUMBER_OF_SENDER_RX,SERVER_UPDATE_TIME_CMD_FRAME_RX,UPDATE_RP_NO,HARSH_BRAKE_CMD,HARSH_TURN_CMD,HARSH_ACCEL_CMD,PRIMARY_IP,SECONDARY_IP,GET_PPN_CMD,PRIMARY_PN,SECONDARY_PN;
-extern char PHONE_NUMBER_OF_SENDER[12],GET_IMEI_SMS_CMD_RX,TEMP_REGN_NUMBER[15],TEMP_APN[15],SET_APN_FRAME_RX;
+extern char PHONE_NUMBER_OF_SENDER[12],GET_IMEI_SMS_CMD_RX,TEMP_REGN_NUMBER[15],TEMP_APN[25],SET_APN_FRAME_RX;
 char G,PIN_COUNT_CHECK,Y,V,U,SNET_CMD_FRAME_RX,PNET_CMD_FRAME_RX,NWA_CMD_FRAME_RX,NWS_CMD_FRAME_RX;
 extern _Bool GSM_NW_REG_CHECK,GPRS_REG_CHECK,GET_SIGNAL_STRENGTH_CHECK,CPIN_READY_CHECK;
 extern const char VODAFONE_ACK[15],IGNITION_ON_TIME_ACK[11],IGNITION_OFF_TIME_ACK[12];
@@ -491,7 +491,8 @@ void CMD_DATA_READ_IN_EEPROM(void)
 		}
 	}
 	
-	APN_TEMP=i2c_readn(0xA0,0XFE,199);MS_TIMER(2);
+	APN_TEMP=i2c_readn(0xA0,0XFE,199);
+	MS_TIMER(2);
 	if(APN_TEMP<=20)
 	{
 		APN_LENGTH=APN_TEMP;
@@ -499,34 +500,60 @@ void CMD_DATA_READ_IN_EEPROM(void)
 		A=CLR;
 		for(B=200;B<=APN_TEMP;B++)
 		{
-		MS_TIMER(1);
-		TEMP_APN[A]=i2c_readn(0xA0,0XFE,B);MS_TIMER(1);
-		if(TEMP_APN[A]>=0x30 && TEMP_APN[A]<=0x39 || TEMP_APN[A]>=0x61 && TEMP_APN[A]<=0x7A)
-		{
-		TEMP_APN[A]=i2c_readn(0xA0,0XFE,B);MS_TIMER(1);
-		}
-		else
-		{
-			goto DEFAULT;
-		}
-		A++;
+			MS_TIMER(1);
+			TEMP_APN[A]=i2c_readn(0xA0,0XFE,B);
+			MS_TIMER(1);
+			if(TEMP_APN[A]>=0x30 && TEMP_APN[A]<=0x39 || TEMP_APN[A]>=0x61 && TEMP_APN[A]<=0x7A)
+			{
+				/* value already correct, nothing to do */
+			}
+			else
+			{
+				goto DEFAULT;
+			}
+			A++;
 		}
 	}
 	else
 	{
 		DEFAULT:
-		TEMP_APN[0]='s';
-		TEMP_APN[1]='e';
-		TEMP_APN[2]='n';
-		TEMP_APN[3]='s';
-		TEMP_APN[4]='e';
-		TEMP_APN[5]='m';
-		TEMP_APN[6]='2';
-		TEMP_APN[7]='m';
-		TEMP_APN[8]='m';
-		TEMP_APN[9]='s';
-		APN_LENGTH=7;
-		CMD_DATA_WRITE_IN_EEROM(4);
+			TEMP_APN[0]  = 'n';
+			TEMP_APN[1]  = 'a';
+			TEMP_APN[2]  = 'v';
+			TEMP_APN[3]  = 's';
+			TEMP_APN[4]  = 'p';
+			TEMP_APN[5]  = 'i';
+			TEMP_APN[6]  = 'r';
+			TEMP_APN[7]  = 'e';
+			TEMP_APN[8]  = 'i';
+			TEMP_APN[9]  = 'o';
+			TEMP_APN[10] = 't';
+			TEMP_APN[11] = '.';
+			TEMP_APN[12] = 'c';
+			TEMP_APN[13] = 'o';
+			TEMP_APN[14] = 'm';
+			TEMP_APN[15] = '\0';
+
+			APN_LENGTH = 15;
+
+			TEMP_APN2[0]  = 'n';
+			TEMP_APN2[1]  = 'a';
+			TEMP_APN2[2]  = 'v';
+			TEMP_APN2[3]  = 's';
+			TEMP_APN2[4]  = 'p';
+			TEMP_APN2[5]  = 'i';
+			TEMP_APN2[6]  = 'r';
+			TEMP_APN2[7]  = 'e';
+			TEMP_APN2[8]  = 'i';
+			TEMP_APN2[9]  = 'o';
+			TEMP_APN2[10] = 't';
+			TEMP_APN2[11] = '.';
+			TEMP_APN2[12] = 'c';
+			TEMP_APN2[13] = 'o';
+			TEMP_APN2[14] = 'm';
+			TEMP_APN2[15] = '\0';
+
+			CMD_DATA_WRITE_IN_EEROM(4);
 			
 	}
 	TEMP_OVS_LEVEL=((i2c_readn(0xA0,0XFE,110))*10);MS_TIMER(2);
@@ -579,60 +606,60 @@ void CMD_DATA_READ_IN_EEPROM(void)
 }
 
 
-void PIN_CHECK(char x,char z)
-{
-    if(PIN_COUNT_CHECK==0)
-    {
-        if(x==IMEI[12])
-            PIN_COUNT_CHECK=1;
-    }
+// void PIN_CHECK(char x,char z)
+// {
+//     if(PIN_COUNT_CHECK==0)
+//     {
+//         if(x==IMEI[12])
+//             PIN_COUNT_CHECK=1;
+//     }
 
-    else if(PIN_COUNT_CHECK==1)
-    {
-        if(x==IMEI[13])
-            PIN_COUNT_CHECK=2;
-        else
-            PIN_COUNT_CHECK=0;
-    }
+//     else if(PIN_COUNT_CHECK==1)
+//     {
+//         if(x==IMEI[13])
+//             PIN_COUNT_CHECK=2;
+//         else
+//             PIN_COUNT_CHECK=0;
+//     }
 
-    else if(PIN_COUNT_CHECK==2)
-    {
-        if(x==IMEI[14])
-            PIN_COUNT_CHECK=3;
-        else
-            PIN_COUNT_CHECK=0;
-    }
+//     else if(PIN_COUNT_CHECK==2)
+//     {
+//         if(x==IMEI[14])
+//             PIN_COUNT_CHECK=3;
+//         else
+//             PIN_COUNT_CHECK=0;
+//     }
 
-    else if(PIN_COUNT_CHECK==3)
-    {
-        if(x==IMEI[15])
-        {
-            if(z==1)        DEVICE_RESET_CMD=ON;
-            else if(z==2)   UPDATE_INTERVAL_CMD=ON;
-            else if(z==3)   UPDATE_INTERVAL_CMD_2=ON;
-            else if(z==4)   SET_EMERGENCY_NUMBER_FRAME_CMD=ON;
-            else if(z==5)   SET_REGN_NUMBER_FRAME_CMD=ON;
-            else if(z==6)   SET_APN_FRAME_CMD=ON;
-            else if(z==7)   SET_IP_FRAME_CMD=ON;
-            else if(z==8)   SET_RP_NO_FRAME_CMD=ON;
-            else if(z==9)   DEVICE_CLEAR_CMD=SET;
-            else if(z==10)  HARSH_ACCEL_CMD=SET;
-            else if(z==11)  HARSH_BRAKE_CMD=SET;
-            else if(z==12)  HARSH_TURN_CMD=ON;
-            else if(z==13)  PANIC_ON_DURATON_CMD=SET;
-            else if(z==14)  HEALTH_ON_DURATON_CMD=SET;
-            else if(z==15)  LOW_BAT_LEVEL_CMD=SET;
-            else if(z==16)  GET_SMS_CMD=SET;
+//     else if(PIN_COUNT_CHECK==3)
+//     {
+//         if(x==IMEI[15])
+//         {
+//             if(z==1)        DEVICE_RESET_CMD=ON;
+//             else if(z==2)   UPDATE_INTERVAL_CMD=ON;
+//             else if(z==3)   UPDATE_INTERVAL_CMD_2=ON;
+//             else if(z==4)   SET_EMERGENCY_NUMBER_FRAME_CMD=ON;
+//             else if(z==5)   SET_REGN_NUMBER_FRAME_CMD=ON;
+//             else if(z==6)   SET_APN_FRAME_CMD=ON;
+//             else if(z==7)   SET_IP_FRAME_CMD=ON;
+//             else if(z==8)   SET_RP_NO_FRAME_CMD=ON;
+//             else if(z==9)   DEVICE_CLEAR_CMD=SET;
+//             else if(z==10)  HARSH_ACCEL_CMD=SET;
+//             else if(z==11)  HARSH_BRAKE_CMD=SET;
+//             else if(z==12)  HARSH_TURN_CMD=ON;
+//             else if(z==13)  PANIC_ON_DURATON_CMD=SET;
+//             else if(z==14)  HEALTH_ON_DURATON_CMD=SET;
+//             else if(z==15)  LOW_BAT_LEVEL_CMD=SET;
+//             else if(z==16)  GET_SMS_CMD=SET;
 
-            PIN_COUNT_CHECK=0;
-        }
-        else
-        {
-            SMS_PIN_WRONG=SET;
-            PIN_COUNT_CHECK=0;
-        }
-    }
-}
+//             PIN_COUNT_CHECK=0;
+//         }
+//         else
+//         {
+//             SMS_PIN_WRONG=SET;
+//             PIN_COUNT_CHECK=0;
+//         }
+//     }
+// }
 
 
 
@@ -685,7 +712,7 @@ void CMD_DATA_WRITE_IN_EEROM(char D)
 
 		K = 200;
 
-		for(FOR_5=0;FOR_5<=APN_LENGTH;FOR_5++)
+		for(FOR_5=0; FOR_5 < APN_LENGTH; FOR_5++)  // ✅ Now writes 0→14 (exactly 15 bytes)
 		{
 			i2c_writen(0xA0,0XFE,K,TEMP_APN2[FOR_5]);
 			MS_TIMER(2);
@@ -1299,10 +1326,10 @@ if(UART0_BUFFER==CONNECT_FAIL_ACK[I[76]])
 		     if(UART0_BUFFER=='"')
 		     {
 		     NW_NAME_RX=2;t=0;
-		     NETWORK_NAME[0]=NETWORK_NAME[1]=NETWORK_NAME[2]=NETWORK_NAME[3]=NETWORK_NAME[4]=NETWORK_NAME[5]=NETWORK_NAME[6]=NETWORK_NAME[7]='0';
+		     NETWORK_NAME[0]=NETWORK_NAME[1]=NETWORK_NAME[2]=NETWORK_NAME[3]=NETWORK_NAME[4]=NETWORK_NAME[5]=NETWORK_NAME[6]=NETWORK_NAME[7]=' '; /* Init to spaces */
 		     }
 		     }
-	        //else if(NW_NAME_RX==2 && UART0_BUFFER=='"'){NW_NAME_RX=0;}
+	        else if(NW_NAME_RX==2 && UART0_BUFFER=='"'){NW_NAME_RX=0;}
 		else if(NW_NAME_RX==2 && UART0_BUFFER==' ')
 		{
 		NW_NAME_RX=0;
@@ -1659,17 +1686,22 @@ if(UART0_BUFFER==PHONE_NUMBER_OF_SENDER_FRAME[I[29]] || PHONE_NUMBER_OF_SENDER_R
 		{
 		PHONE_NUMBER_OF_SENDER_RX=CLR;
 		I[29]=CLR;
+		G=0;                              /* FIX: reset index once number capture ends */
 		}
 		if(PHONE_NUMBER_OF_SENDER_RX==SET)
 		{
-		     PHONE_NUMBER_OF_SENDER[G]=UART0_BUFFER;
-		     G++;
+		     if(G < 11)                        /* FIX: bounds-check before write */
+		     {
+		         PHONE_NUMBER_OF_SENDER[G]=UART0_BUFFER;
+		         G++;
+		     }
                 }
 		
 		if(I[29]>=23)
 		{
 		PHONE_NUMBER_OF_SENDER_RX=SET;
 		I[29]=0;
+		G=0;                                   /* FIX: also reset on entering capture mode */
 		}
 		
 	}
@@ -1734,7 +1766,7 @@ if (UART0_BUFFER == DEVICE_RESET_CMD_FRAME[I[31]] || DEVICE_RESET_CMD_FRAME_RX =
 
     if (DEVICE_RESET_CMD_FRAME_RX == SET)
     {
-        PIN_CHECK(UART0_BUFFER, 1);
+        //PIN_CHECK(UART0_BUFFER, 1);
 
         if (DEVICE_RESET_CMD == SET || SMS_PIN_WRONG == SET)
         {
@@ -1877,19 +1909,19 @@ else if(HARSH_ACCEL_CMD == SET) // Check for PIN in the value part
 {
 	if(PIN_COUNT_CHECK == 0)
 	{
-		PIN_CHECK(UART0_BUFFER, 0);
+		//PIN_CHECK(UART0_BUFFER, 0);
 	}
 	else if(PIN_COUNT_CHECK == 1)
 	{
-		PIN_CHECK(UART0_BUFFER, 1);
+		//PIN_CHECK(UART0_BUFFER, 1);
 	}
 	else if (PIN_COUNT_CHECK == 2)
 	{
-		PIN_CHECK(UART0_BUFFER, 2);
+		//PIN_CHECK(UART0_BUFFER, 2);
 	}
 	else if (PIN_COUNT_CHECK == 3)
 	{
-		PIN_CHECK(UART0_BUFFER, 3);
+		//PIN_CHECK(UART0_BUFFER, 3);
 	}
 	
 
@@ -2082,7 +2114,7 @@ if (UART0_BUFFER == SET_HEALTH_FRAME[I[87]] || HEALTH_CMD_FRAME_RX == SET)
     if (HEALTH_CMD_FRAME_RX == SET)
     {
         // PIN verification phase - expecting "2202"
-        PIN_CHECK(UART0_BUFFER, 14);  // z=14 for health duration
+        //PIN_CHECK(UART0_BUFFER, 14);  // z=14 for health duration
 
         if (HEALTH_ON_DURATON_CMD == SET)
         {
@@ -2186,9 +2218,7 @@ else{I[68]=0;}
 
 
 ///*************************************************************************************************************************************************************/
-
 //				SET SERVER1 NETWORK COMMAND SMS // IDEA P
-
 ///*************************************************************************************************************************************************************/
 if(UART0_BUFFER == SET_SERVER1_FRAME[I[69]] || PNET_CMD_FRAME_RX >= 1)
 {
@@ -2209,24 +2239,24 @@ if(UART0_BUFFER == SET_SERVER1_FRAME[I[69]] || PNET_CMD_FRAME_RX >= 1)
     {
         if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
         {
-            TEMP_PIP2[i] = '\0';
-            TEMP_PPN2[0] = '\0';
+            TEMP_PIP[i] = '\0';
+            TEMP_PPN[0] = '\0';
             PNET_CMD_REPLY = SET;
             PNET_CMD_FRAME_RX = 0;
             i = 0;
         }
         else if(UART0_BUFFER == ',')
         {
-            TEMP_PIP2[i] = '\0';    // null terminate IP
+            TEMP_PIP[i] = '\0';    // null terminate IP
             PNET_CMD_FRAME_RX = 2;  // move to port
             i = 0;
             // Do NOT store comma, do NOT fall into port block this cycle
         }
         else
         {
-            if(i < 15)
+            if(i < 29)
             {
-                TEMP_PIP2[i] = UART0_BUFFER;
+                TEMP_PIP[i] = UART0_BUFFER;
                 i++;
             }
         }
@@ -2236,7 +2266,7 @@ if(UART0_BUFFER == SET_SERVER1_FRAME[I[69]] || PNET_CMD_FRAME_RX >= 1)
     {
         if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
         {
-            TEMP_PPN2[i] = '\0';    // null terminate port
+            TEMP_PPN[i] = '\0';    // null terminate port
             PNET_CMD_REPLY = SET;
             PNET_CMD_FRAME_RX = 0;
             i = 0;
@@ -2245,7 +2275,7 @@ if(UART0_BUFFER == SET_SERVER1_FRAME[I[69]] || PNET_CMD_FRAME_RX >= 1)
         {
             if(i < 5)
             {
-                TEMP_PPN2[i] = UART0_BUFFER;
+                TEMP_PPN[i] = UART0_BUFFER;
                 i++;
             }
         }
@@ -2277,23 +2307,23 @@ if(UART0_BUFFER == SET_SERVER2_FRAME[I[70]] || SNET_CMD_FRAME_RX >= 1)
     {
         if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
         {
-            TEMP_SIP2[i] = '\0';
-            TEMP_SPN2[0] = '\0';
+            TEMP_SIP[i] = '\0';
+            TEMP_SPN[0] = '\0';
             SNET_CMD_REPLY = SET;
             SNET_CMD_FRAME_RX = 0;
             i = 0;
         }
         else if(UART0_BUFFER == ',')
         {
-            TEMP_SIP2[i] = '\0';     // null terminate IP
+            TEMP_SIP[i] = '\0';     // null terminate IP
             SNET_CMD_FRAME_RX = 2;  // move to port
             i = 0;
         }
         else
         {
-            if(i < 15)
+            if(i < 29)
             {
-                TEMP_SIP2[i] = UART0_BUFFER;
+                TEMP_SIP[i] = UART0_BUFFER;
                 i++;
             }
         }
@@ -2303,7 +2333,7 @@ if(UART0_BUFFER == SET_SERVER2_FRAME[I[70]] || SNET_CMD_FRAME_RX >= 1)
     {
         if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n')
         {
-            TEMP_SPN2[i] = '\0';     // null terminate port
+            TEMP_SPN[i] = '\0';     // null terminate port
             SNET_CMD_REPLY = SET;
             SNET_CMD_FRAME_RX = 0;
             i = 0;
@@ -2312,7 +2342,7 @@ if(UART0_BUFFER == SET_SERVER2_FRAME[I[70]] || SNET_CMD_FRAME_RX >= 1)
         {
             if(i < 5)
             {
-                TEMP_SPN2[i] = UART0_BUFFER;
+                TEMP_SPN[i] = UART0_BUFFER;
                 i++;
             }
         }
@@ -2631,7 +2661,7 @@ if(UART0_BUFFER==SETTING_CMD_FRAME[I[27]] || SETTING_CMD_FRAME_RX>=1)
 		}
 		else if(SETTING_CMD_FRAME_RX==SET)
 		{
-		PIN_CHECK(UART0_BUFFER,8);
+		//PIN_CHECK(UART0_BUFFER,8);
 		if(SET_RP_NO_FRAME_CMD==ON)
 		{
 			SETTING_CMD_FRAME_RX=2;
@@ -2684,57 +2714,45 @@ if(UART0_BUFFER==SETTING_CMD_FRAME[I[27]] || SETTING_CMD_FRAME_RX>=1)
 	}	
 	
 ///*************************************************************************************************************************************************************/
-//				SET APN IMEI 2202=  (NEW FORMAT - NO PIN CHECK)
+//				SET APN COMMAND SMS
 ///*************************************************************************************************************************************************************/
-
-if(UART0_BUFFER == SET_APN_FRAME2[I[86]] || SET_APN_FRAME_RX >= 1)  // Using new index I[86]
+if(UART0_BUFFER == SET_APN_FRAME[I[86]] || SET_APN_FRAME_RX == 1)
 {
-    I[86]++;
-    
-    // Check if we've received the full "SET APN IMEI 2202=" string (18 characters)
-    if(I[86] >= 18 && SET_APN_FRAME_RX == CLR)
+    if(SET_APN_FRAME_RX == 0)
     {
-        SET_APN_FRAME_RX = 1;  // Move to APN collection mode
-        I[86] = CLR;
-        VV = CLR;  // Reset counter for APN value
+        I[86]++;
+        if(I[86] >= 8)
+        {
+            SET_APN_FRAME_RX = 1;
+            I[86] = 0;
+            APN_INDEX = 0;  // Use dedicated APN_INDEX instead of VV
+        }
     }
     else if(SET_APN_FRAME_RX == 1)
     {
-        // We're now collecting the APN value
-        
-        // End of APN detected
         if(UART0_BUFFER == '\r' || UART0_BUFFER == '\n' || UART0_BUFFER == 0x00)
         {
-            SET_APN_FRAME_RX = CLR;  // Reset state machine
-            I[86] = CLR;
-            
-            // Store the APN length
-            APN_LENGTH = VV;
-            
-            // Set the flag that will trigger APN update in NEW_SMS_READ()
-            UPDATE_APN = SET;
+            TEMP_APN2[APN_INDEX] = '\0';   // null terminate
+            APN_LENGTH = APN_INDEX;        // <-- FIX: record actual length
+            SET_APN_FRAME_RX = 0;
+            I[86] = 0;              // <-- FIX: prevent stale OOB index next byte
+	    UPDATE_APN  = SET;      // <-- FIX: set flag to process APN in main loop
         }
         else
-        {
-            // Store APN characters (including dots!)
-            TEMP_APN2[VV] = UART0_BUFFER;
-            VV++;
-            
-            // Prevent buffer overflow
-            if(VV >= 254) VV = 254;
+        {	
+            if(APN_INDEX < 24)              // <-- FIX: bounds check (array is size 25)
+            {
+                TEMP_APN2[APN_INDEX] = UART0_BUFFER;
+                APN_INDEX++;
+            }
         }
     }
 }
 else
 {
-    // Only reset if not in APN collection mode
-    if(SET_APN_FRAME_RX != 1)
-    {
-        I[86] = 0;
-        SET_APN_FRAME_RX = CLR;
-    }
+    I[86] = 0;
+    SET_APN_FRAME_RX = CLR;
 }
-	
 ///*************************************************************************************************************************************************************/
 
 //				SET TCP IMEI= //
@@ -2755,7 +2773,7 @@ else
 		}
 		else if(SET_TCP_FRAME_RX==SET)
 		{
-		PIN_CHECK(UART0_BUFFER,6);
+		//PIN_CHECK(UART0_BUFFER,6);
 		if(SET_IP_FRAME_CMD==ON)
 		{
 			SET_TCP_FRAME_RX=2;

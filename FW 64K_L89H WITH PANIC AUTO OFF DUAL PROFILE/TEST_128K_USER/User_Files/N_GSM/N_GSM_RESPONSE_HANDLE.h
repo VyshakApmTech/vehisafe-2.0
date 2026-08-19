@@ -66,11 +66,11 @@ extern unsigned int TEMP_SOS_INTVL;    // SOS interval
 extern unsigned int TEMP_STD_INTVL;    // standby interval
 extern unsigned int TEMP_HLT_INTVL;    // health interval
 
-
+extern char APN_INDEX;  // Dedicated index for APN reception (prevents VV collision)
 
 void GSM_UART_RX(unsigned char UART0_BUFFER);
 void ACK_RX(unsigned int ct,unsigned int ack,unsigned int REDIAL,unsigned int WAIT_TIME);
-void PIN_CHECK(char x,char z);
+//void PIN_CHECK(char x,char z);
 void CMD_DATA_WRITE_IN_EEROM(char D);
 void CMD_DATA_READ_IN_EEPROM(void);
 #endif

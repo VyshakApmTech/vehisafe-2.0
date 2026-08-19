@@ -105,6 +105,7 @@ void SYSTEM_STATUS(void)
         IGNITION_ON_PACKET=OFF;  // Clear stuck ON flag when ignition opens
         IGNITION_ON_PACKET_SENT=OFF;  // Reset gate so IN packet can be sent on next ON event
         IGNITION_OFF_PACKET=ON;
+        
         if(VLT_STARTUP==SET && NORMAL_PACKET==ON)
         {
             NORMAL_PACKET=OFF;
@@ -150,7 +151,7 @@ void VLT_RUNNING_MODE(void)
     {
         //UPDATE_TIME_ON_TIME=5;
         GPRS_PS_EN=ON1;
-        MS_TIMER(1500);
+        //MS_TIMER(1500);
 
         //R_UART2_SEND("AT+STKTR=\"810301250082028281830100\"\r\n ");  // ← REMOVED: Hardcoded network switch
         //MS_TIMER(500);
@@ -210,7 +211,10 @@ void VLT_RUNNING_MODE(void)
         {
             UPDATE_ONLINE_DATA_FRAME();   // DATA_PRINT will select IF,08
             R_TAU0_Channel0_Start();
-            GPRS_DISCONNECT();
+            if(PANIC_ALERT==OFF && PANIC_ALERT_PACKET==OFF)
+            {
+                GPRS_DISCONNECT(); // Set gate so OFF packet is not sent again until next OFF event
+            }
         }
         
         if(MINUTE>=180) //3 minutes 
@@ -231,7 +235,10 @@ void VLT_RUNNING_MODE(void)
             MINUTE=I_HOURS=CLR;
             UPDATE_ONLINE_DATA_FRAME();
             R_TAU0_Channel0_Start();
-            GPRS_DISCONNECT();
+            if(PANIC_ALERT==OFF && PANIC_ALERT_PACKET==OFF)
+            {
+                GPRS_DISCONNECT(); // Set gate so OFF packet is not sent again until next OFF event
+            }
             INTERNET_CONNECTED=OFF;
             GPRS_PS_EN=OFF1;
             R_TAU0_Channel0_Start();
@@ -307,19 +314,22 @@ void SYSTEM_ALERT_CHECK(void)
         MS_TIMER(1);
         //GSM_INTZ(SMS_MODE);  // ← Commented: SMS via phone numbers
         PANIC_CONTROL_STATE = ON;  // Set ON for packets 1-5 (EMR type)
-        for (i = 1; i <= 5; i++)
+        for (i = 1; i <= 6; i++)
         {
             GSM_INTZ(DATA_MODE);          // ← EPB via TCP (packets 1-5: EMR)
             UPDATE_ONLINE_DATA_FRAME();   // ← PVT via TCP (packets 1-5: EA,10)
         }
         // Send 6th packet separately to guarantee execution
-        PANIC_CONTROL_STATE = OFF;       // 6th packet: SEM type
-        PANIC_CONTROL_STATE_1 = ON;      // 6th packet: EA,11 type
-        GSM_INTZ(DATA_MODE);             // ← 6th EPB: SEM
-        UPDATE_ONLINE_DATA_FRAME();      // ← 6th PVT: EA,11 (clears PANIC_TIME_START)
-        PANIC_ALERT=0;
-        PANIC_ALERT_PACKET=OFF;
-        WATCHDOG_OFF();
+        if(PANIC_CONTROL_STATE == OFF && PANIC_CONTROL_STATE_1 == ON)       // 6th packet: SEM type
+        {
+            PANIC_CONTROL_STATE_1 = ON;      // 6th packet: EA,11 type
+            GSM_INTZ(DATA_MODE);             // ← 6th EPB: SEM
+            UPDATE_ONLINE_DATA_FRAME();      // ← 6th PVT: EA,11 (clears PANIC_TIME_START)
+            PANIC_ALERT=0;
+            PANIC_ALERT_PACKET=OFF;
+            WATCHDOG_OFF();
+        }
+        
     }
     
     if(IGNITION_ON_PACKET==ON || IGNITION_OFF_PACKET==ON)
@@ -327,9 +337,13 @@ void SYSTEM_ALERT_CHECK(void)
         WATCHDOG_ON();
         //GPRS_PS_EN=ON1;
         MS_TIMER(1);
-        if(INTERNET_CONNECTED==NONE){GSM_INTZ(SMS_MODE);}
+        if(INTERNET_CONNECTED==NONE)
+        {
+            GSM_INTZ(SMS_MODE);
+        }
         WATCHDOG_OFF();	
     }
+
     if(GPS_RST_FLAG==ON)
     {
         R_UART1_Stop();
@@ -403,12 +417,6 @@ void SYSTEM_ALERT_CHECK(void)
         BATTERY_CHARGED_PACKET=CLR;
         WATCHDOG_OFF();
     }
-
-
-
-
-
-
 
     if(SYSTEM_READY==OFF)
     {
@@ -496,6 +504,7 @@ void SYSTEM_ALERT_CHECK(void)
         WATCHDOG_OFF();	
     }
 }
+
 void BATTERY_PERCENTAGE_CALC(void)
 {
 BATTERY_MEASUREMENT=ON;MS_TIMER(10);
